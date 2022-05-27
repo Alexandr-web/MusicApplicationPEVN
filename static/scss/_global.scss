@@ -1,0 +1,9 @@
+@import "../../node_modules/normalize.css/normalize.css";
+@import "./_vars";
+
+*,
+*::after,
+*::before {
+  padding: 0;
+  margin: 0;
+}
