@@ -1,4 +1,4 @@
-# spotifyClone
+# Clone Spotify PEVN
 
 ## Build Setup
 
