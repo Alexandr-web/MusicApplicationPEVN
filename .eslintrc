@@ -37,13 +37,7 @@
     "no-unused-vars": "warn",
     "no-alert": "off",
     "prefer-destructuring": "off",
-    "max-len": [
-      "error",
-      150,
-      {
-        "ignoreUrls": true
-      }
-    ],
+    "max-len": "off",
     "function-paren-newline": "off",
     "function-call-argument-newline": "off",
     "no-trailing-spaces": "off",
@@ -85,6 +79,9 @@
     "no-param-reassign": "off",
     "no-empty-pattern": "off",
     "no-useless-catch": "off",
-    "consistent-return": "off"
+    "consistent-return": "off",
+    "no-useless-escape": "off",
+    "import/no-dynamic-require": "off",
+    "global-require": "off"
   }
 }

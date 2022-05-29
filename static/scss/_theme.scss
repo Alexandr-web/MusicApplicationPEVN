@@ -7,8 +7,6 @@ body {
 
     .auth {
       &__form {
-        background: $darkTheme_backgroundFormAuth;
-
         &-block-avatar {
           box-shadow: inset $darkTheme_boxShadowBlockAvatar 0 0 30px 4px;
         }
@@ -40,6 +38,43 @@ body {
               color: $darkTheme_colorActiveLinkAuth;
             }
           }
+        }
+      }
+    }
+
+    .sidebar {
+      background: $darkTheme_backgroundSidebar;
+
+      &__list {
+        &-icon {
+          fill: $darkTheme_backgroundDisabledSidebarIcon;
+        }
+
+        &-link {
+          color: $darkTheme_colorDisabledSidebarLink;
+
+          &--active {
+            color: $darkTheme_colorActiveSidebarLink;
+
+            &>svg {
+              fill: $darkTheme_backgroundActiveSidebarIcon;
+            }
+          }
+        }
+      }
+    }
+
+    .header {
+      background: $darkTheme_backgroundHeader;
+
+      &__list {
+        &-username {
+          color: $darkTheme_colorUsernameLink;
+        }
+
+        &-search-input {
+          background: $darkTheme_backgroundSearchInput;
+          color: $darkTheme_colorSearchInput;
         }
       }
     }

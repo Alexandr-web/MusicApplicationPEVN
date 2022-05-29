@@ -7,11 +7,8 @@
 </template>
 
 <script>
-import setThemeMixin from "@/mixins/setThemeMixin";
-
 export default { 
   name: "MainPage",
-  mixins: [setThemeMixin],
-  middleware: "checkAuth",
+  layout: "default",
 };
 </script>

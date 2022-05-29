@@ -1,0 +1,70 @@
+<template>
+  <aside class="sidebar">
+    <nav class="sidebar__nav">
+      <ul class="sidebar__list">
+        <li class="sidebar__list-item">
+          <nuxt-link
+            class="sidebar__list-link"
+            to="/"
+            exact-active-class="sidebar__list-link--active"
+          >
+            <vHomeIcon />
+            <h4 class="sidebar__list-title">
+              Главная
+            </h4>
+          </nuxt-link>
+        </li>
+        <li class="sidebar__list-item">
+          <nuxt-link
+            class="sidebar__list-link"
+            :to="`/audio/${userId}`"
+            exact-active-class="sidebar__list-link--active"
+          >
+            <vAudioIcon />
+            <h4 class="sidebar__list-title">
+              Песни
+            </h4>
+          </nuxt-link>
+        </li>
+        <li class="sidebar__list-item">
+          <nuxt-link
+            class="sidebar__list-link"
+            :to="`/playlists/${userId}`"
+            exact-active-class="sidebar__list-link--active"
+          >
+            <vPlaylistIcon />
+            <h4 class="sidebar__list-title">
+              Плейлисты
+            </h4>
+          </nuxt-link>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+</template>
+
+<script>
+  import vAudioIcon from "@/components/icons/vAudioIcon";
+  import vHomeIcon from "@/components/icons/vHomeIcon";
+  import vPlaylistIcon from "@/components/icons/vPlaylistIcon";
+
+  export default { 
+    name: "SidebarComponent",
+    components: {
+      vAudioIcon,
+      vHomeIcon,
+      vPlaylistIcon,
+    },
+    data() {
+      return { userId: null, };
+    },
+    async fetch() {
+      try {
+        const res = await this.$store.dispatch("auth/getUser");
+        this.userId = res.user.id;
+      } catch (err) {
+        throw err;
+      }
+    },
+  };
+</script>

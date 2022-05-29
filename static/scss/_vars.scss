@@ -4,7 +4,7 @@ $darkTheme_colorItems: #ffffff;
 $darkTheme_backgroundSpaceAuth: #c2c2c2;
 $darkTheme_colorActiveLinkAuth: #ffffff;
 $darkTheme_colorDisabledLinkAuth: #c2c2c2;
-$darkTheme_boxShadowBlockAvatar: #222222;
+$darkTheme_boxShadowBlockAvatar: #000000;
 $darkTheme_colorFileText: #c2c2c2;
 $darkTheme_colorDisabledBorderInput: #c2c2c2;
 $darkTheme_colorActiveBorderInput: #ffffff;
@@ -12,8 +12,16 @@ $darkTheme_colorDisabledInput: #c2c2c2;
 $darkTheme_colorActiveInput: #ffffff;
 $darkTheme_colorFieldTitle: #50C878;
 $darkTheme_backgroundSubmitAuth: #50C878;
+$darkTheme_backgroundHeader: #000000;
+$darkTheme_backgroundSidebar: #000000;
 $darkTheme_colorSubmitAuth: #ffffff;
-$darkTheme_backgroundFormAuth: linear-gradient(125deg, #3F3F3F, #222222);
+$darkTheme_colorUsernameLink: #ffffff;
+$darkTheme_backgroundSearchInput: #fefefe;
+$darkTheme_colorSearchInput: #222222;
+$darkTheme_colorDisabledSidebarLink: #c2c2c2;
+$darkTheme_colorActiveSidebarLink: #ffffff;
+$darkTheme_backgroundActiveSidebarIcon: #ffffff;
+$darkTheme_backgroundDisabledSidebarIcon: #c2c2c2;
 
 // Basic
 $invalid: #FF033E;

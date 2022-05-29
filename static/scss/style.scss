@@ -1,5 +1,9 @@
 @import "./_global";
 
+.default__layout {
+  display: flex;
+}
+
 .auth {
   &__inner {
     min-height: inherit;
@@ -52,7 +56,6 @@
     display: flex;
     flex-direction: column;
     width: 600px;
-    padding: 25px;
     border-radius: 8px;
 
     &-block-avatar {
@@ -111,6 +114,135 @@
   }
 }
 
+.sidebar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  flex-basis: 10%;
+  height: 100vh;
+  z-index: 999999;
+
+  &__nav {
+    height: 100%;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    padding: 15px 0;
+
+    &-link {
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding: 0 15px;
+
+      &::before {
+        content: "";
+        position: absolute;
+        width: 4px;
+        height: 100%;
+        background: #50C878;
+        top: 0;
+        left: 0;
+        z-index: 9;
+        border-radius: 0 6px 6px 0;
+        display: none;
+      }
+
+      &--active {
+        &::before {
+          display: block;
+        }
+      }
+    }
+
+    &-title {
+      @extend %roboto-300;
+    }
+
+    &-icon {
+      max-width: 25px;
+      margin-right: 5px;
+    }
+
+    &-item {
+      &:not(:last-child) {
+        margin-bottom: 15px;
+      }
+    }
+  }
+}
+
+.main-content {
+  flex-basis: 90%;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 90%;
+  height: 60px;
+  z-index: 9999999;
+  padding: 15px;
+
+  &__nav {
+    height: 100%;
+  }
+
+  &__list {
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    &-user {
+      display: flex;
+      align-items: center;
+    }
+
+    &-avatar {
+      width: 35px;
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &-image {
+        width: 35px;
+        height: 35px;
+      }
+    }
+
+    &-username {
+      padding-left: 10px;
+      font-size: 16px;
+      @extend %roboto-400;
+      max-width: 180px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: break-word;
+    }
+
+    &-search {
+      width: 220px;
+
+      &-input {
+        width: 100%;
+        border: none;
+        border-radius: 8px;
+        padding: 5px;
+        font-size: 15px;
+        @extend %roboto-400;
+      }
+    }
+  }
+}
+
 .input {
   border: none;
   background: none;
@@ -131,6 +263,7 @@
 
 .page {
   min-height: inherit;
+  padding: 70px 10px 10px;
 }
 
 @import "./_media";

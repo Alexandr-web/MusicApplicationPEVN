@@ -17,6 +17,7 @@
 
 body {
   @extend %roboto-400;
+  min-height: 100vh;
 }
 
 img {
@@ -44,8 +45,9 @@ h6 {
 
 #__nuxt,
 #__layout,
-body {
+#__layout>div {
   min-height: 100vh;
+  height: 100%;
 }
 
 .container {
