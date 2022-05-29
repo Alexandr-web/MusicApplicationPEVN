@@ -1,7 +1,7 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: "spotifyClone",
+    title: "Clone Spotify PEVN",
     htmlAttrs: { lang: "en", },
     meta: [
       { charset: "utf-8", },

@@ -1,0 +1,70 @@
+body {
+
+  // Dark theme
+  &[data-theme=dark] {
+    background: $darkTheme_backgroundPage;
+    color: $darkTheme_colorItems;
+
+    .auth {
+      &__form {
+        background: $darkTheme_backgroundFormAuth;
+
+        &-block-avatar {
+          box-shadow: inset $darkTheme_boxShadowBlockAvatar 0 0 30px 4px;
+        }
+
+        &-field {
+          &-title {
+            color: $darkTheme_colorFieldTitle;
+          }
+        }
+
+        &-submit {
+          background: $darkTheme_backgroundSubmitAuth;
+          color: $darkTheme_colorSubmitAuth;
+        }
+      }
+
+      &__header {
+        &-list {
+          &-item {
+            &::after {
+              background: $darkTheme_backgroundSpaceAuth;
+            }
+          }
+
+          &-link {
+            color: $darkTheme_colorDisabledLinkAuth;
+
+            &--active {
+              color: $darkTheme_colorActiveLinkAuth;
+            }
+          }
+        }
+      }
+    }
+
+    .input {
+      border-bottom: 1px solid $darkTheme_colorDisabledBorderInput;
+      color: $darkTheme_colorDisabledInput;
+
+      &--invalid {
+        border-color: $invalid;
+      }
+
+      &:focus {
+        color: $darkTheme_colorActiveInput;
+        border-color: $darkTheme_colorActiveBorderInput;
+      }
+
+      &__file {
+        &-style {
+          color: $darkTheme_colorFileText;
+        }
+      }
+    }
+  }
+
+  // Light theme
+  &[data-theme=light] {}
+}

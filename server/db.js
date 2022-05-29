@@ -10,4 +10,4 @@ const data = {
   },
 };
 
-module.exports = new Sequelize(...data);
+module.exports = new Sequelize(...Object.values(data));

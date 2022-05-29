@@ -1,0 +1,35 @@
+// Dark theme
+$darkTheme_backgroundPage: #222222;
+$darkTheme_colorItems: #ffffff;
+$darkTheme_backgroundSpaceAuth: #c2c2c2;
+$darkTheme_colorActiveLinkAuth: #ffffff;
+$darkTheme_colorDisabledLinkAuth: #c2c2c2;
+$darkTheme_boxShadowBlockAvatar: #222222;
+$darkTheme_colorFileText: #c2c2c2;
+$darkTheme_colorDisabledBorderInput: #c2c2c2;
+$darkTheme_colorActiveBorderInput: #ffffff;
+$darkTheme_colorDisabledInput: #c2c2c2;
+$darkTheme_colorActiveInput: #ffffff;
+$darkTheme_colorFieldTitle: #50C878;
+$darkTheme_backgroundSubmitAuth: #50C878;
+$darkTheme_colorSubmitAuth: #ffffff;
+$darkTheme_backgroundFormAuth: linear-gradient(125deg, #3F3F3F, #222222);
+
+// Basic
+$invalid: #FF033E;
+
+// Fonts
+%roboto-300 {
+  font-weight: 300;
+  font-family: "Roboto", sans-serif;
+}
+
+%roboto-400 {
+  font-weight: 400;
+  font-family: "Roboto", sans-serif;
+}
+
+%roboto-500 {
+  font-weight: 500;
+  font-family: "Roboto", sans-serif;
+}

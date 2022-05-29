@@ -1,3 +1,137 @@
 @import "./_global";
 
+.auth {
+  &__inner {
+    min-height: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__center {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__header {
+    padding-bottom: 25px;
+
+    &-list {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &-item {
+        padding: 0 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:not(:last-child) {
+          position: relative;
+
+          &::after {
+            content: "";
+            width: 1px;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 99;
+          }
+        }
+      }
+
+      &-link {
+        font-size: 25px;
+      }
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    padding: 25px;
+    border-radius: 8px;
+
+    &-block-avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      padding: 10px;
+      position: relative;
+      z-index: 1;
+      margin: 0 auto;
+    }
+
+    &-avatar {
+      border-radius: inherit;
+      object-fit: cover;
+      z-index: -1;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+    }
+
+    &-input {
+      width: 100%;
+    }
+
+    &-field {
+      width: 100%;
+
+      &:not(:last-child) {
+        margin-bottom: 25px;
+      }
+
+      &-title {
+        text-transform: uppercase;
+        padding-bottom: 15px;
+        font-size: 12px;
+        @extend %roboto-400;
+      }
+    }
+
+    &-submit {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      border-radius: 8px;
+      margin: 10px auto 0;
+      cursor: pointer;
+    }
+  }
+}
+
+.input {
+  border: none;
+  background: none;
+  padding-bottom: 8px;
+  transition: border-color, color, .4s;
+  @extend %roboto-300;
+
+  &__file {
+    display: none;
+
+    &-style {
+      font-size: 12px;
+      text-align: center;
+      @extend %roboto-300;
+    }
+  }
+}
+
+.page {
+  min-height: inherit;
+}
+
 @import "./_media";
+@import "./_supports";
