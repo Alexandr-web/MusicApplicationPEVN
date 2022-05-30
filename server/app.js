@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const sequelize = require("./db");
 const authRoute = require("./routers/auth.router");
+const profileRoute = require("./routers/profile.router");
 
 require("dotenv").config();
 require("./models/index");
@@ -28,5 +29,6 @@ const connectToDatabase = async () => {
 connectToDatabase();
 
 app.use("/auth", authRoute);
+app.use("/profile", profileRoute);
 
 module.exports = app;

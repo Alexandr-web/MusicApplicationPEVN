@@ -15,7 +15,7 @@
         <li class="header__list-item">
           <nuxt-link
             class="header__list-user"
-            :to="`/profile/${user.id}`"
+            :to="`/profile/${user.id}?tab=settings`"
             :title="user.name"
           >
             <div class="header__list-avatar">

@@ -1,23 +1,18 @@
 <template>
   <form
-    class="form auth__form" 
-    enctype="multipart/form-data"
+    class="form profile__form"
     method="POST"
-    @submit.prevent="$emit('registration', {
-      name: $v.name.$model,
-      email: $v.email.$model,
-      password: $v.password.$model,
-      avatar: avatar.file
-    })"
+    enctype="multipart/form-data"
+    @submit.prevent="edit"
   >
-    <div class="form__field auth__form-field">
+    <div class="form__field profile__form-field">
       <label
-        class="form__label form__block-avatar auth__form-label auth__form-block-avatar"
+        class="form__label form__block-avatar profile__form-label profile__form-block-avatar"
         for="avatar"
       >
         <input
           id="avatar"
-          class="form__input auth__form-file input__file"
+          class="form__input profile__form-file input__file"
           type="file"
           accept="image/jpeg,image/png,image/jpg,image/webp"
           name="avatar"
@@ -25,28 +20,28 @@
         >
         <span
           v-if="!avatar.src"
-          class="form__file-style auth__form-file-style input__file-style"
+          class="form__file-style profile__form-file-style input__file-style"
         >
           Загрузить фотографию
         </span>
         <img
           v-if="avatar.src"
-          class="form__avatar auth__form-avatar"
+          class="form__avatar profile__form-avatar"
           :src="avatar.src"
           alt=""
         >
       </label>
     </div>
-    <div class="form__field auth__form-field">
+    <div class="form__field profile__form-field">
       <label
-        class="form__label auth__form-label"
+        class="form__label profile__form-label"
         for="username"
       >
-        <h4 class="form__field-title auth__form-field-title">Имя пользователя</h4>
+        <h4 class="form__field-title profile__form-field-title">Имя пользователя</h4>
         <input
           id="username"
           v-model.trim="$v.name.$model"
-          class="form__input auth__form-input input"
+          class="form__input profile__form-input input"
           type="text"
           placeholder="Написать имя"
           name="name"
@@ -54,16 +49,16 @@
         >
       </label>
     </div>
-    <div class="form__field auth__form-field">
+    <div class="form__field profile__form-field">
       <label
-        class="form__label auth__form-label"
+        class="form__label profile__form-label"
         for="email"
       >
-        <h4 class="form__field-title auth__form-field-title">Email пользователя</h4>
+        <h4 class="form__field-title profile__form-field-title">Email пользователя</h4>
         <input
           id="email"
           v-model.trim="$v.email.$model"
-          class="form__input auth__form-input input"
+          class="form__input profile__form-input input"
           type="text"
           placeholder="Написать email"
           name="email"
@@ -71,16 +66,16 @@
         >
       </label>
     </div>
-    <div class="form__field auth__form-field">
+    <div class="form__field profile__form-field">
       <label
-        class="form__label auth__form-label"
+        class="form__label profile__form-label"
         for="password"
       >
-        <h4 class="form__field-title auth__form-field-title">Пароль пользователя</h4>
+        <h4 class="form__field-title profile__form-field-title">Пароль пользователя</h4>
         <input
           id="password"
           v-model.trim="$v.password.$model"
-          class="form__input auth__form-input input"
+          class="form__input profile__form-input input"
           type="password"
           placeholder="Написать пароль"
           name="password"
@@ -88,16 +83,16 @@
         >
       </label>
     </div>
-    <div class="form__field auth__form-field">
+    <div class="form__field profile__form-field">
       <label
-        class="form__label auth__form-label"
+        class="form__label profile__form-label"
         for="repeatPassword"
       >
-        <h4 class="form__field-title auth__form-field-title">Повторить пароль</h4>
+        <h4 class="form__field-title profile__form-field-title">Повторить пароль</h4>
         <input
           id="repeatPassword"
-          v-model.trim="$v.repeatPassword.$model"
-          class="form__input auth__form-input input"
+          v-model.trim="$v.password.$model"
+          class="form__input profile__form-input input"
           type="password"
           placeholder="Написать пароль еще раз"
           name="repeatPassword"
@@ -106,18 +101,17 @@
       </label>
     </div>
     <button
-      class="form__submit auth__form-submit"
-      :disabled="pending"
+      class="form__submit profile__form-submit"
       type="submit"
+      :disabled="pending"
     >
-      {{ submitText }}
+      Сохранить
     </button>
   </form>
 </template>
 
 <script>
   import {
-    required,
     minLength,
     maxLength,
     email,
@@ -125,35 +119,29 @@
   } from "vuelidate/lib/validators";
 
   export default {
-    name: "RegistrationFormComponent",
-    props: { pending: { type: Boolean, required: true, }, },
+    name: "ProfileSettingsFormComponent",
+    props: {
+      pending: {
+        type: Boolean,
+        required: true,
+      },
+    },
+    validations: {
+      name: {
+        maxLength: maxLength(16),
+        minLength: minLength(6),
+      },
+      email: { email, },
+      password: { minLength: minLength(6), },
+      repeatPassword: { sameAs: sameAs("password"), },
+    },
     data() {
       return {
-        submitText: "Зарегистрироваться",
         avatar: {
           file: {},
           src: "",
         },
       };
-    },
-    validations: {
-      name: {
-        required,
-        maxLength: maxLength(16),
-        minLength: minLength(6),
-      },
-      email: {
-        required,
-        email,
-      },
-      password: {
-        required,
-        minLength: minLength(6),
-      },
-      repeatPassword: {
-        required,
-        sameAs: sameAs("password"),
-      },
     },
     methods: {
       loadAvatar(e) {
@@ -176,6 +164,23 @@
           }
         } else {
           alert("В вашем браузере не поддерживается FileReader. Обновите его до последней версии или установите более современный");
+        }
+      },
+
+      edit() {
+        this.$v.$touch();
+
+        console.log(this.$v);
+        
+        if (!this.$v.$invalid) {
+          this.$emit("edit", {
+            name: this.$v.name.$model,
+            email: this.$v.email.$model,
+            password: this.$v.password.$model,
+            avatar: this.avatar.file,
+          });
+        } else {
+          alert("Все поля должны быть заполнены верно");
         }
       },
     },

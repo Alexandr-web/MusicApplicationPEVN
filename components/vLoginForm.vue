@@ -1,21 +1,21 @@
 <template>
   <form
-    class="auth__form" 
+    class="form auth__form" 
     @submit.prevent="$emit('login', {
       email: $v.email.$model,
       password: $v.password.$model,
     })"
   >
-    <div class="auth__form-field">
+    <div class="form__field auth__form-field">
       <label
-        class="auth__form-label"
+        class="form__label auth__form-label"
         for="email"
       >
-        <h4 class="auth__form-field-title">Email пользователя</h4>
+        <h4 class="form__field-title auth__form-field-title">Email пользователя</h4>
         <input
           id="email"
           v-model.trim="$v.email.$model"
-          class="auth__form-input input"
+          class="form__input auth__form-input input"
           type="text"
           placeholder="Написать email"
           name="email"
@@ -23,16 +23,16 @@
         >
       </label>
     </div>
-    <div class="auth__form-field">
+    <div class="form__field auth__form-field">
       <label
-        class="auth__form-label"
+        class="form__label auth__form-label"
         for="password"
       >
-        <h4 class="auth__form-field-title">Пароль пользователя</h4>
+        <h4 class="form__field-title auth__form-field-title">Пароль пользователя</h4>
         <input
           id="password"
           v-model.trim="$v.password.$model"
-          class="auth__form-input input"
+          class="form__input auth__form-input input"
           type="password"
           placeholder="Написать пароль"
           name="password"
@@ -41,7 +41,7 @@
       </label>
     </div>
     <button
-      class="auth__form-submit"
+      class="form__submit auth__form-submit"
       :disabled="pending"
       type="submit"
     >

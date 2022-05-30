@@ -2,7 +2,7 @@ import jwtDecode from "jwt-decode";
 
 const { User, } = require("../models/index");
 
-export default async (req, res, next) => {
+module.exports = async (req, res, next) => {
   try {
     const auth = req.headers.authorization;
 

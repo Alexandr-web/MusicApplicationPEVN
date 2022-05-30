@@ -1,25 +1,32 @@
 <template>
   <div class="profile page">
-    <code>
-      {{ user }}
-    </code>
+    <div class="profile__inner">
+      <vProfileHeader :user="user" />
+      <vProfileMain :tab="$route.query.tab" />
+    </div>
   </div>
 </template>
 
 <script>
   import getValidURLForAvatar from "@/getValidURLForAvatar/index";
+  import vProfileHeader from "@/components/vProfileHeader";
+  import vProfileMain from "@/components/vProfileMain";
 
   export default {
     name: "ProfilePage",
+    components: { 
+      vProfileHeader,
+      vProfileMain,
+    },
     layout: "default",
     middleware: "checkAuth",
-    validate({ params: { id, }, store, }) {
+    validate({ params: { id, }, store, query: { tab, }, }) {
       const res = store.dispatch("auth/getUser", id);
 
       return res.then((data) => {
         this.user = data.user;
 
-        return Boolean(data.user);
+        return Boolean(data.user) && ["settings", "audio", "playlists", "artists"].includes(tab);
       }).catch((err) => {
         throw err;
       });

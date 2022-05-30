@@ -5,6 +5,10 @@
 }
 
 .auth {
+  &__form {
+    width: 600px;
+  }
+
   &__inner {
     min-height: inherit;
     display: flex;
@@ -51,74 +55,13 @@
       }
     }
   }
-
-  &__form {
-    display: flex;
-    flex-direction: column;
-    width: 600px;
-    border-radius: 8px;
-
-    &-block-avatar {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      padding: 10px;
-      position: relative;
-      z-index: 1;
-      margin: 0 auto;
-    }
-
-    &-avatar {
-      border-radius: inherit;
-      object-fit: cover;
-      z-index: -1;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      position: absolute;
-    }
-
-    &-input {
-      width: 100%;
-    }
-
-    &-field {
-      width: 100%;
-
-      &:not(:last-child) {
-        margin-bottom: 25px;
-      }
-
-      &-title {
-        text-transform: uppercase;
-        padding-bottom: 15px;
-        font-size: 12px;
-        @extend %roboto-400;
-      }
-    }
-
-    &-submit {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 10px;
-      border-radius: 8px;
-      margin: 10px auto 0;
-      cursor: pointer;
-    }
-  }
 }
 
 .sidebar {
   position: sticky;
   top: 0;
   left: 0;
-  flex-basis: 10%;
+  flex-basis: 15%;
   height: 100vh;
   z-index: 999999;
 
@@ -136,6 +79,7 @@
       align-items: center;
       position: relative;
       padding: 0 15px;
+      transition: color, .4s;
 
       &::before {
         content: "";
@@ -164,6 +108,7 @@
     &-icon {
       max-width: 25px;
       margin-right: 5px;
+      transition: fill .4s;
     }
 
     &-item {
@@ -175,14 +120,14 @@
 }
 
 .main-content {
-  flex-basis: 90%;
+  flex-basis: 85%;
 }
 
 .header {
   position: fixed;
   top: 0;
   right: 0;
-  width: 90%;
+  width: 85%;
   height: 60px;
   z-index: 9999999;
   padding: 15px;
@@ -261,9 +206,168 @@
   }
 }
 
+.profile {
+  &__form {
+    width: 700px;
+  }
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__header {
+    &-inner {
+      display: flex;
+      flex-direction: column;
+      padding: 15px 0;
+    }
+
+    &-info {
+      padding-bottom: 25px;
+      display: flex;
+      align-items: center;
+    }
+
+    &-avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+    }
+
+    &-username {
+      padding-left: 10px;
+      font-size: 40px;
+      @extend %roboto-300;
+    }
+
+    &-nav {
+      padding-top: 25px;
+    }
+
+    &-list {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &-item {
+        &:not(:last-child) {
+          margin-right: 25px;
+        }
+      }
+
+      &-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: uppercase;
+        position: relative;
+        transition: color .4s;
+
+        &:hover::after {
+          opacity: 1;
+          visibility: visible;
+        }
+
+        &::after {
+          content: "";
+          width: 100%;
+          height: 1px;
+          bottom: -8px;
+          position: absolute;
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity, visibility, .4s;
+        }
+
+        &--active {
+          &::after {
+            opacity: 1;
+            visibility: visible;
+          }
+        }
+      }
+    }
+  }
+
+  &__main {
+    padding: 25px 0;
+    height: 100%;
+  }
+
+  &__tab-block {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__tab-settings {
+    align-items: center;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+
+  &__block-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    position: relative;
+    z-index: 1;
+    margin: 0 auto;
+  }
+
+  &__avatar {
+    border-radius: inherit;
+    object-fit: cover;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+
+  &__input {
+    width: 100%;
+  }
+
+  &__field {
+    width: 100%;
+
+    &:not(:last-child) {
+      margin-bottom: 25px;
+    }
+
+    &-title {
+      text-transform: uppercase;
+      padding-bottom: 15px;
+      font-size: 12px;
+      @extend %roboto-400;
+    }
+  }
+
+  &__submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 10px auto 0;
+    cursor: pointer;
+  }
+}
+
 .page {
   min-height: inherit;
-  padding: 70px 10px 10px;
+  padding: 60px 0 10px;
 }
 
 @import "./_media";
