@@ -5,6 +5,18 @@ body {
     background: $darkTheme_backgroundPage;
     color: $darkTheme_colorItems;
 
+    .artists {
+      &__list {
+        &-link {
+          color: $darkTheme_colorArtistsDisabledLink;
+
+          &:hover {
+            color: $darkTheme_colorArtistsActiveLink;
+          }
+        }
+      }
+    }
+
     .form {
       &__block-avatar {
         box-shadow: inset $darkTheme_boxShadowBlockAvatar 0 0 30px 4px;

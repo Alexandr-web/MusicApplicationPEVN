@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import vLoginForm from "@/components/vLoginForm";
+import vLoginForm from "@/components/auth/vLoginForm";
 
 export default {
   name: "LoginPage",
@@ -23,8 +23,10 @@ export default {
 
         this.pendingLogin = true;
 
-        res.then(({ ok, }) => {
+        res.then(({ ok, message, }) => {
           this.pendingLogin = false;
+
+          alert(message);
 
           if (ok) {
             this.$router.push("/");

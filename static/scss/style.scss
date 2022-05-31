@@ -119,6 +119,27 @@
   }
 }
 
+.artists {
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    &-link {
+      width: 100%;
+      height: 100%;
+      padding: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 40px;
+      @extend %roboto-300;
+      text-transform: uppercase;
+      transition: color, .4s;
+      text-align: center;
+    }
+  }
+}
+
 .main-content {
   flex-basis: 85%;
 }
@@ -362,6 +383,18 @@
     border-radius: 8px;
     margin: 10px auto 0;
     cursor: pointer;
+  }
+}
+
+.nothing {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__text {
+    opacity: .8;
+    text-align: center;
+    @extend %roboto-300;
   }
 }
 

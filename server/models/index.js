@@ -21,10 +21,6 @@ const Song = sequelize.define("song", {
   author: { type: DataTypes.TEXT, },
   audio: { type: DataTypes.TEXT, },
   poster: { type: DataTypes.TEXT, },
-  favorite: {
-    type: DataTypes.ARRAY(DataTypes.INTEGER),
-    defaultValue: [],
-  },
   likes: {
     type: DataTypes.ARRAY(DataTypes.INTEGER),
     defaultValue: [],

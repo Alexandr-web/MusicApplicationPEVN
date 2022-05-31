@@ -18,5 +18,21 @@ export default {
         throw err;
       }
     },
+
+    async getAudio({ }, { userId, token, }) {
+      try {
+        const res = await fetch(`${host}/profile/audio/${userId}`, {
+          method: "GET",
+          headers: {
+            "Accept-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        return res.json();
+      } catch (err) {
+        throw err;
+      }
+    },
   },
 };

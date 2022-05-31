@@ -5,8 +5,10 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const sequelize = require("./db");
+
 const authRoute = require("./routers/auth.router");
 const profileRoute = require("./routers/profile.router");
+const audioRoute = require("./routers/audio.router");
 
 require("dotenv").config();
 require("./models/index");
@@ -30,5 +32,6 @@ connectToDatabase();
 
 app.use("/auth", authRoute);
 app.use("/profile", profileRoute);
+app.use("/audio", audioRoute);
 
 module.exports = app;

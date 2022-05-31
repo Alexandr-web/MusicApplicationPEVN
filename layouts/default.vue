@@ -10,8 +10,8 @@
 
 <script>
 import setThemeMixin from "@/mixins/setThemeMixin";
-import vHeader from "@/components/vHeader";
-import vSidebar from "@/components/vSidebar";
+import vHeader from "@/components/general/vHeader";
+import vSidebar from "@/components/general/vSidebar";
 
 export default {
   name: "DefaultLayout",

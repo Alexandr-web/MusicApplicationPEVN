@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import vRegistrationForm from "@/components/vRegistrationForm";
+import vRegistrationForm from "@/components/auth/vRegistrationForm";
 
 export default {
   name: "RegistrationPage",
@@ -27,9 +27,11 @@ export default {
 
         this.pendingRegistration = true;
 
-        res.then(({ ok, }) => {
+        res.then(({ ok, message, }) => {
           this.pendingRegistration = false;
           
+          alert(message);
+
           if (ok) {
             this.$router.push("/auth/login");
           }

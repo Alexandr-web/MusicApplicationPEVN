@@ -2,15 +2,18 @@
   <div class="profile page">
     <div class="profile__inner">
       <vProfileHeader :user="user" />
-      <vProfileMain :tab="$route.query.tab" />
+      <vProfileMain
+        :tab="$route.query.tab"
+        :user="user"
+      />
     </div>
   </div>
 </template>
 
 <script>
   import getValidURLForAvatar from "@/getValidURLForAvatar/index";
-  import vProfileHeader from "@/components/vProfileHeader";
-  import vProfileMain from "@/components/vProfileMain";
+  import vProfileHeader from "@/components/profile/vProfileHeader";
+  import vProfileMain from "@/components/profile/vProfileMain";
 
   export default {
     name: "ProfilePage",

@@ -82,6 +82,7 @@
     "consistent-return": "off",
     "no-useless-escape": "off",
     "import/no-dynamic-require": "off",
-    "global-require": "off"
+    "global-require": "off",
+    "array-callback-return": "off"
   }
 }
