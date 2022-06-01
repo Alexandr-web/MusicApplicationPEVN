@@ -8,7 +8,7 @@
             to="/"
             exact-active-class="sidebar__list-link--active"
           >
-            <vHomeIcon />
+            <vHomeIcon :class-names="['sidebar__list-icon']" />
             <h4 class="sidebar__list-title">
               Главная
             </h4>
@@ -20,7 +20,7 @@
             :to="`/audio/${userId}`"
             exact-active-class="sidebar__list-link--active"
           >
-            <vAudioIcon />
+            <vAudioIcon :class-names="['sidebar__list-icon']" />
             <h4 class="sidebar__list-title">
               Песни
             </h4>
@@ -32,7 +32,7 @@
             :to="`/playlists/${userId}`"
             exact-active-class="sidebar__list-link--active"
           >
-            <vPlaylistIcon />
+            <vPlaylistIcon :class-names="['sidebar__list-icon']" />
             <h4 class="sidebar__list-title">
               Плейлисты
             </h4>

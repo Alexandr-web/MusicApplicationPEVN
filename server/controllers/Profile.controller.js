@@ -1,4 +1,4 @@
-const { User, Song, } = require("../models/index");
+const { User, Song, Playlist, } = require("../models/index");
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
@@ -74,9 +74,32 @@ class Profile {
       }
 
       const songs = await Song.findAll();
-      const userSongs = songs.filter(({ dataValues, }) => dataValues.id === id);
+      const userSongs = songs.filter(({ dataValues, }) => dataValues.id === +id);
 
       return res.status(200).json({ ok: true, songs: userSongs, });
+    } catch (err) {
+      console.log(err);
+
+      return res.status(500).json({ ok: false, message: "Произошла ошибка сервера", });
+    }
+  }
+
+  async getPlaylists(req, res) {
+    try {
+      const { id, } = req.params;
+
+      if (!req.isAuth) {
+        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+      }
+
+      if (req.userId !== +id) {
+        return res.status(403).json({ ok: false, message: "Для выполнения данной операции необходимо осуществить ее на аккаунте, у которого хотите получить песни", });
+      }
+
+      const playlists = await Playlist.findAll();
+      const userPlaylists = playlists.filter(({ dataValues, }) => dataValues.id === +id);
+
+      return res.status(200).json({ ok: true, playlists: userPlaylists, });
     } catch (err) {
       console.log(err);
 

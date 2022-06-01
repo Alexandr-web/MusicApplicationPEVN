@@ -4,7 +4,11 @@
       v-if="artists.length"
       class="artists__list"
     >
-      <li class="artists__list-item">
+      <li
+        v-for="(artist, index) in artists"
+        :key="index"
+        class="artists__list-item"
+      >
         <nuxt-link
           class="artists__list-link"
           :to="`/?search=${artist.name}`"
@@ -13,18 +17,16 @@
         </nuxt-link>
       </li>
     </ul>
-    <div
-      v-else
-      class="nothing"
-    >
-      <span class="nothing__text">Ничего нет</span>
-    </div>
+    <vNothing v-else />
   </div>
 </template>
 
 <script>
+  import vNothing from "@/components/general/vNothing";
+
   export default {
     name: "ProfileArtistsComponent",
+    components: { vNothing, },
     props: {
       user: {
         type: Object,

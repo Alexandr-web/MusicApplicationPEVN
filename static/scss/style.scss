@@ -386,6 +386,178 @@
   }
 }
 
+.audio {
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    &-item {
+      margin: 15px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    &-songtime {
+      letter-spacing: .5px;
+      font-size: 14px;
+      @extend %roboto-300;
+      padding-right: 15px;
+    }
+
+    &-data,
+    &-info,
+    &-favorite {
+      display: flex;
+      align-items: center;
+    }
+
+    &-info {
+      flex-basis: 60%;
+    }
+
+    &-data {
+      flex-basis: 30%;
+    }
+
+    &-options {
+      flex-basis: 10%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &-btn {
+        cursor: pointer;
+        border: none;
+        background: none;
+        display: flex;
+        flex-direction: column;
+
+        &::before,
+        &::after {
+          content: "";
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          display: block;
+        }
+
+        &::before {
+          margin-bottom: 3px;
+        }
+      }
+    }
+
+    &-poster {
+      width: 60px;
+      height: 60px;
+      border-radius: 20px;
+      margin-right: 8px;
+    }
+
+    &-info-song {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &-author {
+      &-name {
+        font-size: 12px;
+        @extend %roboto-300;
+      }
+
+      &-songname {
+        font-size: 18px;
+        padding-bottom: 5px;
+        @extend %roboto-300;
+      }
+    }
+
+    &-favorite {
+      &-count {
+        font-size: 14px;
+        padding-left: 2px;
+      }
+    }
+
+    &-block {
+      width: 100%;
+
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+
+    &-favorite {
+      &-icon {
+        width: 20px;
+      }
+    }
+  }
+}
+
+.playlists {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: flex-start;
+
+  &__item {
+    cursor: pointer;
+    margin: 15px;
+
+    &:hover &-poster-image {
+      transform: scale(1.1);
+    }
+
+    &:hover &-poster::before {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    &-poster {
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+
+      &::before {
+        content: "Слушать";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        @extend %roboto-300;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity, visibility, .4s;
+      }
+
+      &-image {
+        transition: transform .4s;
+      }
+    }
+
+    &-name {
+      text-transform: uppercase;
+      @extend %roboto-300;
+      text-align: center;
+      max-width: 80%;
+      margin: 0 auto;
+      transition: color .4s;
+    }
+  }
+}
+
 .nothing {
   display: flex;
   justify-content: center;

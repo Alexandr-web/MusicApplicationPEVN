@@ -4,11 +4,11 @@ const { DataTypes, } = require("sequelize");
 const User = sequelize.define("user", {
   name: { type: DataTypes.STRING, },
   password: { type: DataTypes.TEXT, },
+  avatar: { type: DataTypes.TEXT, },
   email: {
     type: DataTypes.STRING,
     unique: true,
   },
-  avatar: { type: DataTypes.TEXT, },
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -21,6 +21,7 @@ const Song = sequelize.define("song", {
   author: { type: DataTypes.TEXT, },
   audio: { type: DataTypes.TEXT, },
   poster: { type: DataTypes.TEXT, },
+  time: { type: DataTypes.STRING, },
   likes: {
     type: DataTypes.ARRAY(DataTypes.INTEGER),
     defaultValue: [],
@@ -33,6 +34,8 @@ const Song = sequelize.define("song", {
 }, { tableName: "song", });
 
 const Playlist = sequelize.define("playlist", {
+  name: { type: DataTypes.STRING, },
+  poster: { type: DataTypes.TEXT, },
   songs: {
     type: DataTypes.ARRAY(DataTypes.INTEGER),
     defaultValue: [],

@@ -34,5 +34,21 @@ export default {
         throw err;
       }
     },
+
+    async getPlaylists({ }, { userId, token, }) {
+      try {
+        const res = await fetch(`${host}/profile/playlists/${userId}`, {
+          method: "GET",
+          headers: {
+            "Accept-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        return res.json();
+      } catch (err) {
+        throw err;
+      }
+    },
   },
 };

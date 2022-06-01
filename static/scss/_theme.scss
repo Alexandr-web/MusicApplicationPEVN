@@ -5,6 +5,64 @@ body {
     background: $darkTheme_backgroundPage;
     color: $darkTheme_colorItems;
 
+    .audio {
+      &__list {
+        &-item {
+          background: $darkTheme_backgroundAudio;
+        }
+
+        &-favorite {
+          &-icon {
+            fill: $darkTheme_colorActiveStar;
+          }
+
+          &-count {
+            color: $darkTheme_colorAudioFavoriteCount;
+          }
+        }
+
+        &-options {
+          &-btn {
+
+            &::before,
+            &::after {
+              background: $darkTheme_colorAudioOptionsDots;
+            }
+          }
+        }
+
+        &-author {
+          &-songname {
+            color: $darkTheme_colorAudioName;
+          }
+
+          &-name {
+            color: $darkTheme_colorAudioAuthor;
+          }
+        }
+
+        &-songtime {
+          color: $darkTheme_colorAudioTime;
+        }
+      }
+    }
+
+    .playlists {
+      &__item {
+        &:hover &-name {
+          color: $darkTheme_colorActivePlaylistName;
+        }
+
+        &-poster {
+          background: $darkTheme_backgroundPlaylistPoster;
+
+          &::before {
+            background: $darkTheme_backgroundPlaylistAreaPoster;
+          }
+        }
+      }
+    }
+
     .artists {
       &__list {
         &-link {

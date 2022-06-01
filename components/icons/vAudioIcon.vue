@@ -2,7 +2,7 @@
   <svg
     viewBox="0 0 24 24"
     xmlns="http://www.w3.org/2000/svg"
-    class="sidebar__list-icon"
+    :class="classNames.join(' ')"
   >
     <title />
     <path
@@ -12,5 +12,13 @@
 </template>
 
 <script>
-  export default { name: "AudioIconComponent", };
+  export default {
+    name: "AudioIconComponent",
+    props: {
+      classNames: {
+        type: Array,
+        default: () => [],
+      },
+    },
+  };
 </script>
