@@ -21,7 +21,13 @@
         </h3>
       </li>
     </ul>
-    <vNothing v-else />
+    <vNothing
+      v-else
+      :link="{
+        to: '/playlists/create',
+        text: 'Добавить'
+      }"
+    />
   </div>
 </template>
 

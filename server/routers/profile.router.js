@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage, });
 
 router.put("/edit/:id", isAuth, upload.single("avatar"), ProfileController.edit);
-router.get("/audio/:id", isAuth, ProfileController.getAudio);
-router.get("/playlists/:id", isAuth, ProfileController.getPlaylists);
+router.get("/api/audio/:id", isAuth, ProfileController.getAudio);
+router.get("/api/playlists/:id", isAuth, ProfileController.getPlaylists);
 
 module.exports = router;

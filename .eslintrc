@@ -83,6 +83,9 @@
     "no-useless-escape": "off",
     "import/no-dynamic-require": "off",
     "global-require": "off",
-    "array-callback-return": "off"
+    "array-callback-return": "off",
+    "no-return-assign": "off",
+    "radix": "off",
+    "prefer-template": "off"
   }
 }

@@ -5,6 +5,12 @@ body {
     background: $darkTheme_backgroundPage;
     color: $darkTheme_colorItems;
 
+    .nothing {
+      &__link {
+        color: $darkTheme_colorNothingLink;
+      }
+    }
+
     .audio {
       &__list {
         &-item {
@@ -78,6 +84,11 @@ body {
     .form {
       &__block-avatar {
         box-shadow: inset $darkTheme_boxShadowBlockAvatar 0 0 30px 4px;
+      }
+
+      &__block-poster,
+      &__block-audio {
+        border-color: $darkTheme_colorBorderFile;
       }
 
       &__field {

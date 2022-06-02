@@ -11,9 +11,10 @@
 </template>
 
 <script>
-  import getValidURLForAvatar from "@/getValidURLForAvatar/index";
+  import getValidURLForAvatarMixin from "@/mixins/getValidURLForAvatarMixin";
   import vProfileHeader from "@/components/profile/vProfileHeader";
   import vProfileMain from "@/components/profile/vProfileMain";
+  import setThemeMixin from "@/mixins/setThemeMixin";
 
   export default {
     name: "ProfilePage",
@@ -21,6 +22,7 @@
       vProfileHeader,
       vProfileMain,
     },
+    mixins: [setThemeMixin, getValidURLForAvatarMixin],
     layout: "default",
     middleware: "checkAuth",
     validate({ params: { id, }, store, query: { tab, }, }) {
@@ -41,7 +43,7 @@
       try {
         const { id, } = this.$route.params;
         const res = await this.$store.dispatch("auth/getUser", id);
-        const user = { ...res.user, avatar: await getValidURLForAvatar(res.user.avatar), };
+        const user = { ...res.user, avatar: await this.getValidAvatarUrl(res.user.avatar), };
 
         this.user = user;
       } catch (err) {

@@ -89,7 +89,7 @@ export default {
     async getUser({ }, id) {
       try {
         const sendReq = async (userId) => {
-          const res = await fetch(`${host}/auth/users/${userId}`, {
+          const res = await fetch(`${host}/auth/api/users/${userId}`, {
             method: "GET",
             headers: { "Accept-Type": "application/json", },
           });

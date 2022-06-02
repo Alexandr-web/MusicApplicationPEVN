@@ -35,10 +35,11 @@
 </template>
 
 <script>
-  import getValidURLForAvatar from "@/getValidURLForAvatar/index";
+  import getValidURLForAvatarMixin from "@/mixins/getValidURLForAvatarMixin";
 
   export default {
     name: "HeaderComponent",
+    mixins: [getValidURLForAvatarMixin],
     data() {
       return {
         search: "",
@@ -48,7 +49,7 @@
     async fetch() {
       try {
         const res = await this.$store.dispatch("auth/getUser");
-        const user = { ...res.user, avatar: await getValidURLForAvatar(res.user.avatar), };
+        const user = { ...res.user, avatar: await this.getValidAvatarUrl(res.user.avatar), };
         
         this.user = user;
       } catch (err) {

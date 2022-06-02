@@ -6,38 +6,38 @@
 </template>
 
 <script>
-import vLoginForm from "@/components/auth/vLoginForm";
+  import vLoginForm from "@/components/auth/vLoginForm";
 
-export default {
-  name: "LoginPage",
-  components: { vLoginForm, },
-  layout: "auth",
-  middleware: "checkAlreadyAuth",
-  data() {
-    return { pendingLogin: false, };
-  },
-  methods: {
-    login(data) {
-      if (Object.values(data).every(Boolean)) {
-        const res = this.$store.dispatch("auth/login", data);
-
-        this.pendingLogin = true;
-
-        res.then(({ ok, message, }) => {
-          this.pendingLogin = false;
-
-          alert(message);
-
-          if (ok) {
-            this.$router.push("/");
-          }
-        }).catch((err) => {
-          throw err;
-        });
-      } else {
-        alert("Все поля должны быть заполнены!");
-      }
+  export default {
+    name: "LoginPage",
+    components: { vLoginForm, },
+    layout: "auth",
+    middleware: "checkAlreadyAuth",
+    data() {
+      return { pendingLogin: false, };
     },
-  },
-};
+    methods: {
+      login(data) {
+        if (Object.values(data).every(Boolean)) {
+          const res = this.$store.dispatch("auth/login", data);
+
+          this.pendingLogin = true;
+
+          res.then(({ ok, message, }) => {
+            this.pendingLogin = false;
+
+            alert(message);
+
+            if (ok) {
+              this.$router.push("/");
+            }
+          }).catch((err) => {
+            throw err;
+          });
+        } else {
+          alert("Все поля должны быть заполнены!");
+        }
+      },
+    },
+  };
 </script>

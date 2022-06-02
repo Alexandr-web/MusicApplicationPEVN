@@ -21,7 +21,7 @@ export default {
 
     async getAudio({ }, { userId, token, }) {
       try {
-        const res = await fetch(`${host}/profile/audio/${userId}`, {
+        const res = await fetch(`${host}/profile/api/audio/${userId}`, {
           method: "GET",
           headers: {
             "Accept-Type": "application/json",
@@ -37,7 +37,7 @@ export default {
 
     async getPlaylists({ }, { userId, token, }) {
       try {
-        const res = await fetch(`${host}/profile/playlists/${userId}`, {
+        const res = await fetch(`${host}/profile/api/playlists/${userId}`, {
           method: "GET",
           headers: {
             "Accept-Type": "application/json",

@@ -15,7 +15,7 @@ const upload = multer({ storage, });
 
 router.post("/registration", upload.single("avatar"), AuthController.registration);
 router.post("/login", AuthController.login);
-router.get("/users", AuthController.getAll);
-router.get("/users/:id", AuthController.getOne);
+router.get("/api/users", AuthController.getAll);
+router.get("/api/users/:id", AuthController.getOne);
 
 module.exports = router;
