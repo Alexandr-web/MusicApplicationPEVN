@@ -1,4 +1,4 @@
-const { Song, } = require("../models/index");
+const { Song, User, } = require("../models/index");
 
 class Audio {
   async getOne(req, res) {
@@ -40,7 +40,8 @@ class Audio {
         return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
-      const audioData = { ...req.body, };
+      const user = await User.findOne({ where: { id: req.userId, }, });
+      const audioData = { ...req.body, author: user.dataValues.name, authorId: req.userId, };
 
       if (req.files) {
         Object.keys(req.files).map((key) => audioData[key] = req.files[key][0].filename);
@@ -48,7 +49,7 @@ class Audio {
 
       await Song.create(audioData);
 
-      return res.status(200).json({ ok: true, message: "Трек был добавлен", });
+      return res.status(200).json({ ok: true, message: "Трек добавлен", });
     } catch (err) {
       console.log(err);
 

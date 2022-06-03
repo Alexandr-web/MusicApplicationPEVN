@@ -23,23 +23,6 @@
     </div>
     <div class="audio__form-field form__field">
       <label
-        class="audio__form-label form__label"
-        for="author"
-      >
-        <h4 class="audio__form-title form__field-title">Автор</h4>
-        <input
-          id="author"
-          v-model.trim="$v.author.$model"
-          name="author"
-          class="audio__form-input form__input input"
-          type="text"
-          placeholder="Написать автора"
-          :class="{ 'input--invalid': $v.author.$invalid }"
-        >
-      </label>
-    </div>
-    <div class="audio__form-field form__field">
-      <label
         class="audio__form-label audio__form-block-poster form__label form__block-poster"
         for="poster"
       >
@@ -115,11 +98,6 @@
         minLength: minLength(3),
         maxLength: maxLength(30),
       },
-      author: {
-        required,
-        minLength: minLength(3),
-        maxLength: maxLength(20),
-      },
     },
     data() {
       return {
@@ -163,7 +141,6 @@
         audio.addEventListener("loadedmetadata", () => {
           this.$emit("add", {
             name: this.$v.name.$model,
-            author: this.$v.author.$model,
             poster: this.poster.file,
             audio: this.audio.file,
             time: this.getValidTime(audio.duration),

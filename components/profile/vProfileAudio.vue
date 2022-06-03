@@ -44,7 +44,7 @@
         const { id, } = this.user;
         const token = this.$store.getters["auth/getToken"];
         const { ok, songs, } = await this.$store.dispatch("profile/getAudio", { userId: id, token, });
-      
+        
         if (ok) {
           this.songs = songs;
         }

@@ -326,6 +326,187 @@
   }
 }
 
+.audioplayer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 999999;
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+
+  &__inner {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-basis: 20%;
+    height: 100%;
+
+    &-column {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+
+  &__controls {
+    flex-basis: 60%;
+    display: flex;
+    flex-direction: column;
+
+    &-top {
+      padding-bottom: 5px;
+    }
+
+    &-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &-btn {
+      cursor: pointer;
+      border: none;
+      background: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+
+    &-icon {
+      width: 20px;
+    }
+
+    &-play,
+    &-pause {
+      width: 45px;
+    }
+  }
+
+  &__time {
+    font-size: 14px;
+    @extend %roboto-300;
+  }
+
+  &__progressbar {
+    cursor: pointer;
+    position: relative;
+    height: 4px;
+    border-radius: 6px;
+    width: 100%;
+    margin: 0 10px;
+    overflow: hidden;
+
+    &-line {
+      position: absolute;
+      width: 25%;
+      left: 0;
+      top: 0;
+      height: 100%;
+    }
+  }
+
+  &__volume {
+    flex-basis: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &-slider {
+      position: relative;
+      width: 60%;
+      height: 4px;
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+
+      &-line {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 25%;
+        height: 100%;
+      }
+    }
+
+    &-btn {
+      cursor: pointer;
+      background: none;
+      border: none;
+      margin-right: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &-icon {
+      width: 25px;
+    }
+  }
+
+  &__section {
+    height: 100%;
+
+    &:not(:last-child) {
+      padding-right: 15px;
+    }
+  }
+
+  &__songname {
+    padding-bottom: 5px;
+    font-size: 18px;
+    @extend %roboto-400;
+  }
+
+  &__authorname {
+    font-size: 15px;
+    @extend %roboto-300;
+  }
+
+  &__poster {
+    margin-right: 6px;
+    height: 100%;
+
+    &-image {
+      height: 100%;
+    }
+  }
+
+  &__favorite {
+    &-btn {
+      margin-left: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+      cursor: pointer;
+      background: none;
+      width: 25px;
+    }
+
+    &-icon {
+      transition: fill .4s;
+    }
+  }
+}
+
 .form {
   display: flex;
   flex-direction: column;

@@ -74,7 +74,7 @@ class Profile {
       }
 
       const songs = await Song.findAll();
-      const userSongs = songs.filter(({ dataValues, }) => dataValues.id === +id);
+      const userSongs = songs.filter(({ dataValues, }) => dataValues.authorId === +id);
 
       return res.status(200).json({ ok: true, songs: userSongs, });
     } catch (err) {

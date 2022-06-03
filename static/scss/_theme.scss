@@ -11,6 +11,64 @@ body {
       }
     }
 
+    .audioplayer {
+      background: $darkTheme_backgroundAudioplayer;
+
+      &__progressbar {
+        background: $darkTheme_backgroundAudioplayerProgressbar;
+
+        &-line {
+          background: $darkTheme_backgroundAudioplayerProgressbarLine;
+        }
+      }
+
+      &__volume {
+        &-slider {
+          background: $darkTheme_backgroundAudioplayerVolumeSlider;
+
+          &-line {
+            background: $darkTheme_backgroundAudioplayerVolumeLine;
+          }
+        }
+
+        &-icon {
+          fill: $darkTheme_colorAudioplayerVolumeIcon;
+        }
+      }
+
+      &__songname {
+        color: $darkTheme_colorAudioplayerSong;
+      }
+
+      &__authorname {
+        color: $darkTheme_colorAudioplayerAuthor;
+      }
+
+      &__favorite {
+        &-icon {
+          fill: $darkTheme_colorDisabledStar;
+        }
+      }
+
+      &__controls {
+        &-play {
+          fill: $darkTheme_colorAudioplayerPlay;
+        }
+
+        &-pause {
+          fill: $darkTheme_colorAudioplayerPause;
+        }
+
+        &-prev {
+          fill: $darkTheme_colorAudioplayerPrev;
+        }
+
+        &-next {
+          fill: $darkTheme_colorAudioplayerNext;
+        }
+      }
+    }
+
     .audio {
       &__list {
         &-item {
