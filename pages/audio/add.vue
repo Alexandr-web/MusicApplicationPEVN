@@ -13,14 +13,10 @@
 
 <script>
   import vAudioFormAdd from "@/components/audio/vAudioFormAdd";
-  import setThemeMixin from "@/mixins/setThemeMixin";
 
   export default {
     name: "AudioAddPage",
     components: { vAudioFormAdd, },
-    mixins: [setThemeMixin],
-    layout: "default",
-    middleware: "checkAuth",
     data() {
       return { pendingAdd: false, };
     },

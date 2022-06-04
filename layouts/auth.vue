@@ -37,10 +37,11 @@
 </template>
 
 <script>
-import setThemeMixin from "@/mixins/setThemeMixin";
+  import setThemeMixin from "@/mixins/setThemeMixin";
 
-export default {
-  name: "EmptyLayout",
-  mixins: [setThemeMixin],
-};
+  export default {
+    name: "EmptyLayout",
+    mixins: [setThemeMixin],
+    middleware: "checkAlreadyAuth",
+  };
 </script>

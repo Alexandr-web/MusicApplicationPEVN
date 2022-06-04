@@ -2,24 +2,44 @@ import host from "../server/host";
 
 export default {
   state() {
-    return { audio: null, };
+    return {
+      audioData: null,
+      play: false,
+      currentTime: 0,
+      volume: 1,
+    };
   },
   mutations: {
-    setAudio(state, val) {
-      state.audio = val;
+    setAudioData(state, val) {
+      state.audioData = val;
     },
-    play(state) {
-      if (state.audio) {
-        state.audio.play();
+    setPlay(state, val) {
+      state.play = val;
+    },
+    setCurrentTime(state, val) {
+      state.currentTime = val;
+    },
+    setVolume(state, val) {
+      state.volume = val;
+    },
+    setAudioProp(state, { key, val, }) {
+      if (state.audioData) {
+        state.audioData.audio[key] = val;
       }
     },
-    pause(state) {
-      if (state.audio) {
-        state.audio.pause();
+    stopAudio(state) {
+      if (state.audioData) {
+        state.audioData.audio.currentTime = 0;
+        state.audioData.audio.pause();
       }
     },
   },
-  getters: { getAudio: (state) => state.audio, },
+  getters: {
+    getAudioData: (state) => state.audioData,
+    getPlay: (state) => state.play,
+    getCurrentTime: (state) => state.currentTime,
+    getVolume: (state) => state.volume,
+  },
   actions: {
     async add({ }, { token, fd, }) {
       try {

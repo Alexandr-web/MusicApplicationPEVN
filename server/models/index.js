@@ -19,10 +19,10 @@ const User = sequelize.define("user", {
 const Song = sequelize.define("song", {
   name: { type: DataTypes.TEXT, },
   author: { type: DataTypes.TEXT, },
-  authorId: { type: DataTypes.INTEGER, },
   audio: { type: DataTypes.TEXT, },
   poster: { type: DataTypes.TEXT, },
   time: { type: DataTypes.STRING, },
+  duration: { type: DataTypes.REAL, },
   likes: {
     type: DataTypes.ARRAY(DataTypes.INTEGER),
     defaultValue: [],
@@ -37,7 +37,6 @@ const Song = sequelize.define("song", {
 const Playlist = sequelize.define("playlist", {
   name: { type: DataTypes.STRING, },
   poster: { type: DataTypes.TEXT, },
-  authorId: { type: DataTypes.INTEGER, },
   songs: {
     type: DataTypes.ARRAY(DataTypes.INTEGER),
     defaultValue: [],

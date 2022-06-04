@@ -434,7 +434,6 @@
       width: 60%;
       height: 4px;
       border-radius: 6px;
-      overflow: hidden;
       cursor: pointer;
 
       &-line {
@@ -443,6 +442,22 @@
         left: 0;
         width: 25%;
         height: 100%;
+        border-radius: inherit;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        z-index: 99;
+      }
+
+      &-end {
+        border: none;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        position: absolute;
+        right: -5px;
+        cursor: pointer;
+        z-index: 99;
       }
     }
 

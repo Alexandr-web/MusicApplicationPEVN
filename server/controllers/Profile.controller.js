@@ -74,7 +74,7 @@ class Profile {
       }
 
       const songs = await Song.findAll();
-      const userSongs = songs.filter(({ dataValues, }) => dataValues.authorId === +id);
+      const userSongs = songs.filter(({ dataValues, }) => dataValues.userId === +id);
 
       return res.status(200).json({ ok: true, songs: userSongs, });
     } catch (err) {
@@ -97,7 +97,7 @@ class Profile {
       }
 
       const playlists = await Playlist.findAll();
-      const userPlaylists = playlists.filter(({ dataValues, }) => dataValues.id === +id);
+      const userPlaylists = playlists.filter(({ dataValues, }) => dataValues.userId === +id);
 
       return res.status(200).json({ ok: true, playlists: userPlaylists, });
     } catch (err) {

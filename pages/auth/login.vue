@@ -12,7 +12,6 @@
     name: "LoginPage",
     components: { vLoginForm, },
     layout: "auth",
-    middleware: "checkAlreadyAuth",
     data() {
       return { pendingLogin: false, };
     },

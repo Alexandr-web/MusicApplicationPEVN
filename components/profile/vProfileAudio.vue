@@ -8,6 +8,7 @@
         v-for="(audio, index) in songs"
         :key="index"
         :audio="audio"
+        @setActiveAudio="setAudio"
       />
     </ul>
     <vNothing
@@ -23,6 +24,8 @@
 <script>
   import vNothing from "@/components/general/vNothing";
   import vAudio from "@/components/general/vAudio";
+  import getValidAudioAndPosterUrlMixin from "@/mixins/getValidAudioAndPosterUrlMixin";
+  import audioControlsMixin from "@/mixins/audioControlsMixin";
 
   export default {
     name: "ProfileArtistsComponent",
@@ -30,6 +33,7 @@
       vNothing,
       vAudio,
     },
+    mixins: [getValidAudioAndPosterUrlMixin, audioControlsMixin],
     props: {
       user: {
         type: Object,
@@ -51,6 +55,11 @@
       } catch (err) {
         throw err;
       }
+    },
+    computed: {
+      getAudioData() {
+        return this.$store.getters["audio/getAudioData"];
+      },
     },
   };
 </script>

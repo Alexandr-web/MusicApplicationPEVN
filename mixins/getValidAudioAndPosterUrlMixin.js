@@ -7,6 +7,10 @@ export default {
 
       const url = await require(`@/audio/${path}`);
 
+      if (url.default) {
+        return /^\/\_nuxt\//.test(url.default) ? url.default : "";
+      }
+
       return /^\/\_nuxt\//.test(url) ? url : "";
     },
   },

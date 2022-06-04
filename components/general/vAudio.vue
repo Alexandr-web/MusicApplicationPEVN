@@ -1,5 +1,8 @@
 <template>
-  <li class="audio__list-item">
+  <li
+    class="audio__list-item"
+    @click="$emit('setActiveAudio', audio)"
+  >
     <div class="audio__list-block audio__list-info">
       <img
         class="audio__list-poster"
@@ -20,7 +23,7 @@
         {{ audio.time }}
       </div>
       <div class="audio__list-favorite">
-        <vStar :class-names="['audio__list-favorite-icon']" />
+        <vStarIcon :class-names="['audio__list-favorite-icon']" />
         <span class="audio__list-favorite-count">{{ audio.likes.length }}</span>
       </div>
     </div>
@@ -32,11 +35,11 @@
 
 <script>
   import getValidAudioAndPosterUrlMixin from "@/mixins/getValidAudioAndPosterUrlMixin";
-  import vStar from "@/components/icons/vStar";
+  import vStarIcon from "@/components/icons/vStarIcon";
 
   export default {
     name: "AudioComponent",
-    components: { vStar, },
+    components: { vStarIcon, },
     mixins: [getValidAudioAndPosterUrlMixin],
     props: {
       audio: {

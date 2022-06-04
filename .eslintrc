@@ -86,6 +86,7 @@
     "array-callback-return": "off",
     "no-return-assign": "off",
     "radix": "off",
-    "prefer-template": "off"
+    "prefer-template": "off",
+    "no-confusing-arrow": "off"
   }
 }

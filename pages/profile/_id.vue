@@ -14,7 +14,6 @@
   import getValidURLForAvatarMixin from "@/mixins/getValidURLForAvatarMixin";
   import vProfileHeader from "@/components/profile/vProfileHeader";
   import vProfileMain from "@/components/profile/vProfileMain";
-  import setThemeMixin from "@/mixins/setThemeMixin";
 
   export default {
     name: "ProfilePage",
@@ -22,9 +21,8 @@
       vProfileHeader,
       vProfileMain,
     },
-    mixins: [setThemeMixin, getValidURLForAvatarMixin],
+    mixins: [getValidURLForAvatarMixin],
     layout: "default",
-    middleware: "checkAuth",
     validate({ params: { id, }, store, query: { tab, }, }) {
       const res = store.dispatch("auth/getUser", id);
 

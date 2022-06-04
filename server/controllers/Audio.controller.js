@@ -41,7 +41,7 @@ class Audio {
       }
 
       const user = await User.findOne({ where: { id: req.userId, }, });
-      const audioData = { ...req.body, author: user.dataValues.name, authorId: req.userId, };
+      const audioData = { ...req.body, author: user.dataValues.name, userId: req.userId, };
 
       if (req.files) {
         Object.keys(req.files).map((key) => audioData[key] = req.files[key][0].filename);

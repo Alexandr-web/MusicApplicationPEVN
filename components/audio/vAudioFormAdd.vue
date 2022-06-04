@@ -144,6 +144,7 @@
             poster: this.poster.file,
             audio: this.audio.file,
             time: this.getValidTime(audio.duration),
+            duration: audio.duration,
           });
         });
       },

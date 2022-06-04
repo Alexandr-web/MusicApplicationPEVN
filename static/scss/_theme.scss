@@ -29,6 +29,10 @@ body {
           &-line {
             background: $darkTheme_backgroundAudioplayerVolumeLine;
           }
+
+          &-end {
+            background: $darkTheme_backgroundAudioplayerVolumeSliderEnd;
+          }
         }
 
         &-icon {
@@ -47,6 +51,10 @@ body {
       &__favorite {
         &-icon {
           fill: $darkTheme_colorDisabledStar;
+
+          &--active {
+            fill: $darkTheme_colorActiveStar;
+          }
         }
       }
 

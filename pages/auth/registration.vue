@@ -12,7 +12,6 @@ export default {
   name: "RegistrationPage",
   components: { vRegistrationForm, },
   layout: "auth",
-  middleware: "checkAlreadyAuth",
   data() {
     return { pendingRegistration: false, };
   },
