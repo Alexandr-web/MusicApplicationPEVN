@@ -73,6 +73,7 @@
         <div
           class="audioplayer__volume-slider"
           @click="setVolume($event)"
+          @mousedown="touchSlider($event)"
         >
           <div
             class="audioplayer__volume-slider-line"
@@ -125,7 +126,14 @@
       },
     },
     data() {
-      return { user: {}, };
+      return {
+        user: {},
+        touch: false,
+        range: {
+          x: null,
+          width: null,
+        },
+      };
     },
     async fetch() {
       try {
@@ -135,6 +143,22 @@
       } catch (err) {
         throw err;
       }
+    },
+    mounted() {
+      document.documentElement.addEventListener("mousemove", (e) => {
+        if ([...Object.values(this.range), this.touch].every(Boolean)) {
+          const pageX = e.pageX;
+          
+          if (this.range.x <= pageX && pageX <= this.range.x + this.range.width) {
+            const percent = Math.ceil(((pageX - this.range.x) / this.range.width) * 100);
+            const volume = (percent * 1) / 100;
+
+            this.$emit("setVolume", volume);
+          }
+        }
+      });
+
+      document.documentElement.addEventListener("mouseup", () => (this.touch = false));
     },
     methods: {
       isFavoriteSong() {
@@ -147,10 +171,20 @@
         this.$emit("setTime", (percent * this.audioData.duration) / 100);
       },
       setVolume(e) {
-        const width = e.currentTarget.offsetWidth;
-        const percent = Math.ceil((e.layerX / width) * 100);
+        if (e.target.classList.contains("audioplayer__volume-slider") || e.target.classList.contains("audioplayer__volume-slider-line")) {
+          const width = e.currentTarget.offsetWidth;
+          const percent = Math.ceil((e.layerX / width) * 100);
 
-        this.$emit("setVolume", (percent * 1) / 100);
+          this.$emit("setVolume", (percent * 1) / 100);
+        }
+      },
+      touchSlider(e) {
+        this.touch = true;
+        this.range.x = e.currentTarget.getBoundingClientRect().x;
+        this.range = {
+          x: e.currentTarget.offsetLeft,
+          width: e.currentTarget.offsetWidth,
+        };
       },
     },
   };
