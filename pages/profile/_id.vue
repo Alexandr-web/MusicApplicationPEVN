@@ -14,6 +14,7 @@
   import getValidURLForAvatarMixin from "@/mixins/getValidURLForAvatarMixin";
   import vProfileHeader from "@/components/profile/vProfileHeader";
   import vProfileMain from "@/components/profile/vProfileMain";
+  import audioControlsMixin from "@/mixins/audioControlsMixin";
 
   export default {
     name: "ProfilePage",
@@ -21,7 +22,7 @@
       vProfileHeader,
       vProfileMain,
     },
-    mixins: [getValidURLForAvatarMixin],
+    mixins: [getValidURLForAvatarMixin, audioControlsMixin],
     layout: "default",
     validate({ params: { id, }, store, query: { tab, }, }) {
       const res = store.dispatch("auth/getUser", id);

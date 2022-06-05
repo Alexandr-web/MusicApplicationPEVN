@@ -1,6 +1,7 @@
 <template>
   <li
     class="audio__list-item"
+    :class="{ 'audio__list-item--active': isActiveAudio }"
     @click="$emit('setActiveAudio', audio)"
   >
     <div class="audio__list-block audio__list-info">
@@ -49,6 +50,14 @@
     },
     data() {
       return { posterUrl: "", };
+    },
+    computed: {
+      getAudioData() {
+        return this.$store.getters["audio/getAudioData"];
+      },
+      isActiveAudio() {
+        return this.getAudioData && this.getAudioData.id === this.audio.id;
+      },
     },
     async mounted() {
       const { poster, } = this.audio;

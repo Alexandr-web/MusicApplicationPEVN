@@ -81,6 +81,12 @@ body {
       &__list {
         &-item {
           background: $darkTheme_backgroundAudio;
+
+          &--active {
+            &::before {
+              background: $darkTheme_backgroundActiveAudio;
+            }
+          }
         }
 
         &-favorite {

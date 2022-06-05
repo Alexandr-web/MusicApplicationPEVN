@@ -9,10 +9,12 @@
 
 <script>
   import vProfileSettingsForm from "@/components/profile/vProfileSettingsForm";
+  import audioControlsMixin from "@/mixins/audioControlsMixin";
 
   export default { 
     name: "ProfileSettingsComponent",
     components: { vProfileSettingsForm, },
+    mixins: [audioControlsMixin],
     data() {
       return { pendingEdit: false, };
     },

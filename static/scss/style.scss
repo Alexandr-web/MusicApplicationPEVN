@@ -498,6 +498,7 @@
   &__poster {
     margin-right: 6px;
     height: 100%;
+    max-width: 120px;
 
     &-image {
       height: 100%;
@@ -631,6 +632,34 @@
       cursor: pointer;
       padding: 10px;
       border-radius: 8px;
+      position: relative;
+      z-index: 1;
+
+      &::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        opacity: 1;
+        visibility: visible;
+        width: 50%;
+        height: 100%;
+        border-radius: 8px 0 0 8px;
+        transition: background, opacity, visibility, .4s;
+        left: 0;
+        top: 0;
+      }
+
+      &--active {
+        &::before {
+          opacity: 1;
+          visibility: visible;
+        }
+
+        .audio__list-poster {
+          animation: rotate360 infinite linear 5s;
+          border-radius: 50%;
+        }
+      }
     }
 
     &-songtime {
@@ -688,6 +717,7 @@
       height: 60px;
       border-radius: 20px;
       margin-right: 8px;
+      transition: border-radius, .4s;
     }
 
     &-info-song {
@@ -812,7 +842,17 @@
 
 .page {
   min-height: inherit;
-  padding: 60px 0 10px;
+  padding: 60px 0 110px;
+}
+
+@keyframes rotate360 {
+  0% {
+    transform: rotateZ(0deg);
+  }
+
+  100% {
+    transform: rotateZ(360deg);
+  }
 }
 
 @import "./_media";

@@ -33,10 +33,12 @@
 
 <script>
   import vNothing from "@/components/general/vNothing";
+  import audioControlsMixin from "@/mixins/audioControlsMixin";
 
   export default {
     name: "ProfilePlaylistsComponent",
     components: { vNothing, },
+    mixins: [audioControlsMixin],
     props: {
       user: {
         type: Object,

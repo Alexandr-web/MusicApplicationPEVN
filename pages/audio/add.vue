@@ -13,10 +13,12 @@
 
 <script>
   import vAudioFormAdd from "@/components/audio/vAudioFormAdd";
+  import audioControlsMixin from "@/mixins/audioControlsMixin";
 
   export default {
     name: "AudioAddPage",
     components: { vAudioFormAdd, },
+    mixins: [audioControlsMixin],
     data() {
       return { pendingAdd: false, };
     },
