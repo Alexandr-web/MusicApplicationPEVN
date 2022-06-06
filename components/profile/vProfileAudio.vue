@@ -25,7 +25,6 @@
   import vNothing from "@/components/general/vNothing";
   import vAudio from "@/components/general/vAudio";
   import getValidAudioAndPosterUrlMixin from "@/mixins/getValidAudioAndPosterUrlMixin";
-  import audioControlsMixin from "@/mixins/audioControlsMixin";
 
   export default {
     name: "ProfileArtistsComponent",
@@ -33,7 +32,7 @@
       vNothing,
       vAudio,
     },
-    mixins: [getValidAudioAndPosterUrlMixin, audioControlsMixin],
+    mixins: [getValidAudioAndPosterUrlMixin],
     props: {
       user: {
         type: Object,
@@ -59,6 +58,23 @@
     computed: {
       getAudioData() {
         return this.$store.getters["audio/getAudioData"];
+      },
+      getPlay() {
+        return this.$store.getters["audio/getPlay"];
+      },
+    },
+    methods: {
+      async setAudio(audioData) {
+        if (this.getAudioData && this.getAudioData.id === audioData.id) {
+          this.$store.commit("audio/setPlay", !this.getPlay);
+        } else {
+          const poster = await this.getValidAudioAndPosterUrl(audioData.poster);
+          const audio = await this.getValidAudioAndPosterUrl(audioData.audio);
+
+          this.$store.commit("audio/setAudioData", { ...audioData, poster, });
+          this.$store.commit("audio/setAudio", audio);
+          this.$store.commit("audio/setPlay", true);
+        }
       },
     },
   };

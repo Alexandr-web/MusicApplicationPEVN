@@ -23,7 +23,6 @@
   import vProfileArtists from "@/components/profile/vProfileArtists";
   import vProfilePlaylists from "@/components/profile/vProfilePlaylists";
   import vProfileAudio from "@/components/profile/vProfileAudio";
-  import audioControlsMixin from "@/mixins/audioControlsMixin";
 
   export default {
     name: "ProfileMainComponent",
@@ -33,7 +32,6 @@
       vProfilePlaylists,
       vProfileAudio,
     },
-    mixins: [audioControlsMixin],
     props: {
       tab: {
         type: String,

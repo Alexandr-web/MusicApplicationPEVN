@@ -7,12 +7,6 @@
       <vAudioplayer
         v-if="getAudioData"
         :audio-data="getAudioData"
-        :play="getPlay"
-        :current-time="getCurrentTime"
-        :volume="getVolume"
-        @stateAudio="stateAudio"
-        @setTime="setTime"
-        @setVolume="setVolume"
       />
     </main>
   </div>
@@ -36,26 +30,6 @@
     computed: {
       getAudioData() {
         return this.$store.getters["audio/getAudioData"];
-      },
-      getPlay() {
-        return this.$store.getters["audio/getPlay"];
-      },
-      getCurrentTime() {
-        return this.$store.getters["audio/getCurrentTime"];
-      },
-      getVolume() {
-        return this.$store.getters["audio/getVolume"];
-      },
-    },
-    methods: {
-      stateAudio(val) {
-        this.$store.commit("audio/setPlay", val);
-      },
-      setTime(val) {
-        this.$store.commit("audio/setAudioProp", { key: "currentTime", val, });
-      },
-      setVolume(val) {
-        this.$store.commit("audio/setVolume", val);
       },
     },
   };

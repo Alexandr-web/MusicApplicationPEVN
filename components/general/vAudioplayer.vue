@@ -4,6 +4,13 @@
     class="audioplayer"
   >
     <div class="audioplayer__inner">
+      <audio
+        v-if="getAudio"
+        ref="audio"
+        class="audioplayer__audio"
+        :src="getAudio"
+        @timeupdate="ontimeupdate"
+      ></audio>
       <div class="audioplayer__section audioplayer__info">
         <div class="audioplayer__poster">
           <img
@@ -32,10 +39,10 @@
             </button>
             <button
               class="audioplayer__controls-btn"
-              @click="$emit('stateAudio', !play)"
+              @click="$store.commit('audio/setPlay', !getPlay)"
             >
               <vPlayIcon
-                v-if="!play"
+                v-if="!getPlay"
                 :class-names="['audioplayer__controls-icon', 'audioplayer__controls-play']"
               />
               <vPauseIcon
@@ -50,7 +57,7 @@
         </div>
         <div class="audioplayer__controls-bottom">
           <div class="audioplayer__time">
-            {{ getValidTime(currentTime) }}
+            {{ getValidTime(getCurrentTime) }}
           </div>
           <div
             class="audioplayer__progressbar"
@@ -58,7 +65,7 @@
           >
             <div
               class="audioplayer__progressbar-line"
-              :style="`width: ${Math.ceil((currentTime / audioData.duration) * 100)}%`"
+              :style="`width: ${Math.ceil((getCurrentTime / audioData.duration) * 100)}%`"
             ></div>
           </div>
           <div class="audioplayer__time">
@@ -77,7 +84,7 @@
         >
           <div
             class="audioplayer__volume-slider-line"
-            :style="`width: ${Math.ceil((volume / 1) * 100)}%`"
+            :style="`width: ${Math.ceil((getVolume / 1) * 100)}%`"
           >
             <button class="audioplayer__volume-slider-end"></button>
           </div>
@@ -112,18 +119,6 @@
         type: Object,
         required: true,
       },
-      play: {
-        type: Boolean,
-        required: true,
-      },
-      currentTime: {
-        type: Number,
-        required: true,
-      },
-      volume: {
-        type: Number,
-        required: true,
-      },
     },
     data() {
       return {
@@ -144,7 +139,41 @@
         throw err;
       }
     },
+    computed: {
+      getPlay() {
+        return this.$store.getters["audio/getPlay"];
+      },
+      getCurrentTime() {
+        return this.$store.getters["audio/getCurrentTime"];
+      },
+      getVolume() {
+        return this.$store.getters["audio/getVolume"];
+      },
+      getAudio() {
+        return this.$store.getters["audio/getAudio"];
+      },
+    },
+    watch: {
+      async getPlay(val) {
+        await this.$refs.audio[val ? "play" : "pause"]();
+      },
+      getAudio(audio) {
+        if (audio !== undefined) {
+          this.$refs.audio.play().then(() => {
+            this.$refs.audio.play();
+          }).catch((err) => {
+            throw err;
+          });
+        }
+      },
+      getVolume(val) {
+        this.$refs.audio.volume = val;  
+      },
+    },
     mounted() {
+      this.$refs.audio[this.getPlay ? "play" : "pause"]();
+      this.$refs.audio.volume = this.getVolume;
+
       document.documentElement.addEventListener("mousemove", (e) => {
         if ([...Object.values(this.range), this.touch].every(Boolean)) {
           const pageX = e.pageX;
@@ -153,7 +182,7 @@
             const percent = Math.ceil(((pageX - this.range.x) / this.range.width) * 100);
             const volume = (percent * 1) / 100;
 
-            this.$emit("setVolume", volume);
+            this.$store.commit("audio/setVolume", volume);
           }
         }
       });
@@ -167,15 +196,17 @@
       setTime(e) {
         const width = e.currentTarget.offsetWidth;
         const percent = Math.ceil((e.layerX / width) * 100);
+        const audio = this.$refs.audio;
 
-        this.$emit("setTime", (percent * this.audioData.duration) / 100);
+        audio.currentTime = (percent * this.audioData.duration) / 100;
+        this.$store.commit("audio/setCurrentTime", (percent * this.audioData.duration) / 100);
       },
       setVolume(e) {
         if (e.target.classList.contains("audioplayer__volume-slider") || e.target.classList.contains("audioplayer__volume-slider-line")) {
           const width = e.currentTarget.offsetWidth;
           const percent = Math.ceil((e.layerX / width) * 100);
 
-          this.$emit("setVolume", (percent * 1) / 100);
+          this.$store.commit("audio/setVolume", (percent * 1) / 100);
         }
       },
       touchSlider(e) {
@@ -185,6 +216,11 @@
           x: e.currentTarget.offsetLeft,
           width: e.currentTarget.offsetWidth,
         };
+      },
+      ontimeupdate() {
+        const audio = this.$refs.audio;
+
+        this.$store.commit("audio/setCurrentTime", audio.currentTime);
       },
     },
   };

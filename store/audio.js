@@ -7,11 +7,15 @@ export default {
       play: false,
       currentTime: 0,
       volume: 1,
+      audio: null,
     };
   },
   mutations: {
     setAudioData(state, val) {
       state.audioData = val;
+    },
+    setAudio(state, val) {
+      state.audio = val;
     },
     setPlay(state, val) {
       state.play = val;
@@ -22,20 +26,10 @@ export default {
     setVolume(state, val) {
       state.volume = val;
     },
-    setAudioProp(state, { key, val, }) {
-      if (state.audioData) {
-        state.audioData.audio[key] = val;
-      }
-    },
-    stopAudio(state) {
-      if (state.audioData) {
-        state.audioData.audio.currentTime = 0;
-        state.audioData.audio.pause();
-      }
-    },
   },
   getters: {
     getAudioData: (state) => state.audioData,
+    getAudio: (state) => state.audio,
     getPlay: (state) => state.play,
     getCurrentTime: (state) => state.currentTime,
     getVolume: (state) => state.volume,
