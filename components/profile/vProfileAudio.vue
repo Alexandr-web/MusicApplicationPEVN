@@ -25,6 +25,7 @@
   import vNothing from "@/components/general/vNothing";
   import vAudio from "@/components/general/vAudio";
   import getValidAudioAndPosterUrlMixin from "@/mixins/getValidAudioAndPosterUrlMixin";
+  import setNewAudioMixin from "@/mixins/setNewAudioMixin";
 
   export default {
     name: "ProfileArtistsComponent",
@@ -32,7 +33,7 @@
       vNothing,
       vAudio,
     },
-    mixins: [getValidAudioAndPosterUrlMixin],
+    mixins: [getValidAudioAndPosterUrlMixin, setNewAudioMixin],
     props: {
       user: {
         type: Object,
@@ -49,6 +50,7 @@
         const { ok, songs, } = await this.$store.dispatch("profile/getAudio", { userId: id, token, });
         
         if (ok) {
+          this.$store.commit("audio/setPlaylist", songs);
           this.songs = songs;
         }
       } catch (err) {
@@ -62,18 +64,16 @@
       getPlay() {
         return this.$store.getters["audio/getPlay"];
       },
+      getPlaylist() {
+        return this.$store.getters["audio/getPlaylist"];
+      },
     },
     methods: {
       async setAudio(audioData) {
         if (this.getAudioData && this.getAudioData.id === audioData.id) {
           this.$store.commit("audio/setPlay", !this.getPlay);
         } else {
-          const poster = await this.getValidAudioAndPosterUrl(audioData.poster);
-          const audio = await this.getValidAudioAndPosterUrl(audioData.audio);
-
-          this.$store.commit("audio/setAudioData", { ...audioData, poster, });
-          this.$store.commit("audio/setAudio", audio);
-          this.$store.commit("audio/setPlay", true);
+          this.setActiveAudio(audioData);
         }
       },
     },

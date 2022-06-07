@@ -8,11 +8,15 @@ export default {
       currentTime: 0,
       volume: 1,
       audio: null,
+      playlist: null,
     };
   },
   mutations: {
     setAudioData(state, val) {
       state.audioData = val;
+    },
+    setPlaylist(state, val) {
+      state.playlist = val;
     },
     setAudio(state, val) {
       state.audio = val;
@@ -33,6 +37,7 @@ export default {
     getPlay: (state) => state.play,
     getCurrentTime: (state) => state.currentTime,
     getVolume: (state) => state.volume,
+    getPlaylist: (state) => state.playlist,
   },
   actions: {
     async add({ }, { token, fd, }) {

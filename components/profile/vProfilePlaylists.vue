@@ -24,7 +24,7 @@
     <vNothing
       v-else
       :link="{
-        to: '/playlists/create',
+        to: '/playlist/add',
         text: 'Добавить'
       }"
     />
@@ -33,10 +33,12 @@
 
 <script>
   import vNothing from "@/components/general/vNothing";
+  import getValidPlaylistPosterMixin from "@/mixins/getValidPlaylistPosterMixin";
 
   export default {
     name: "ProfilePlaylistsComponent",
     components: { vNothing, },
+    mixins: [getValidPlaylistPosterMixin],
     props: {
       user: {
         type: Object,
@@ -53,7 +55,13 @@
         const { ok, playlists, } = await this.$store.dispatch("profile/getPlaylists", { userId: id, token, });
       
         if (ok) {
-          this.playlists = playlists;
+          playlists.map((playlist) => {
+            this.getValidPlaylistPoster(playlist.poster).then((url) => {
+              this.playlists.push({ ...playlist, poster: url, });
+            }).catch((err) => {
+              throw err;
+            });
+          });
         }
       } catch (err) {
         throw err;

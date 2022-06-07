@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="audioData"
+    v-if="getAudioData"
     class="audioplayer"
   >
     <div class="audioplayer__inner">
@@ -15,16 +15,16 @@
         <div class="audioplayer__poster">
           <img
             class="audioplayer__poster-image"
-            :src="audioData.poster"
+            :src="getAudioData.poster"
             alt="2nd hand"
           >
         </div>
         <div class="audioplayer__info-column">
           <h3 class="audioplayer__songname">
-            {{ audioData.name }}
+            {{ getAudioData.name }}
           </h3>
           <h4 class="audioplayer__authorname">
-            {{ audioData.author }}
+            {{ getAudioData.author }}
           </h4>
         </div>
         <button class="audioplayer__favorite-btn">
@@ -34,7 +34,10 @@
       <div class="audioplayer__section audioplayer__controls">
         <div class="audioplayer__controls-top">
           <div class="audioplayer__controls-buttons">
-            <button class="audioplayer__controls-btn">
+            <button
+              class="audioplayer__controls-btn"
+              @click="setNewAudio(true)"
+            >
               <vPrevIcon :class-names="['audioplayer__controls-icon', 'audioplayer__controls-prev']" />
             </button>
             <button
@@ -50,7 +53,10 @@
                 :class-names="['audioplayer__controls-icon', 'audioplayer__controls-pause']"
               />
             </button>
-            <button class="audioplayer__controls-btn">
+            <button
+              class="audioplayer__controls-btn"
+              @click="setNewAudio()"
+            >
               <vNextIcon :class-names="['audioplayer__controls-icon', 'audioplayer__controls-next']" />
             </button>
           </div>
@@ -65,11 +71,11 @@
           >
             <div
               class="audioplayer__progressbar-line"
-              :style="`width: ${Math.ceil((getCurrentTime / audioData.duration) * 100)}%`"
+              :style="`width: ${Math.ceil((getCurrentTime / getAudioData.duration) * 100)}%`"
             ></div>
           </div>
           <div class="audioplayer__time">
-            {{ audioData.time }}
+            {{ getAudioData.time }}
           </div>
         </div>
       </div>
@@ -102,6 +108,7 @@
   import vPrevIcon from "@/components/icons/vPrevIcon";
   import vVolumeIcon from "@/components/icons/vVolumeIcon";
   import getAudioTimeMixin from "@/mixins/getAudioTimeMixin";
+  import setActiveAudioMixin from "@/mixins/setNewAudioMixin";
 
   export default {
     name: "AudioplayerComponent",
@@ -113,13 +120,7 @@
       vPrevIcon,
       vVolumeIcon,
     },
-    mixins: [getAudioTimeMixin],
-    props: {
-      audioData: {
-        type: Object,
-        required: true,
-      },
-    },
+    mixins: [getAudioTimeMixin, setActiveAudioMixin],
     data() {
       return {
         user: {},
@@ -151,6 +152,12 @@
       },
       getAudio() {
         return this.$store.getters["audio/getAudio"];
+      },
+      getAudioData() {
+        return this.$store.getters["audio/getAudioData"];
+      },
+      getPlaylist() {
+        return this.$store.getters["audio/getPlaylist"];
       },
     },
     watch: {
@@ -190,16 +197,35 @@
       document.documentElement.addEventListener("mouseup", () => (this.touch = false));
     },
     methods: {
+      setNewAudio(setPrev) {
+        const { id: activeAudioId, } = this.getAudioData;
+        const findIndexActiveAudio = this.getPlaylist ? this.getPlaylist.findIndex(({ id, }) => id === activeAudioId) : -1;
+
+        if (findIndexActiveAudio !== -1) {
+          this.setActiveAudio(this.getPlaylist[this.checkNumActiveAudio(setPrev ? findIndexActiveAudio - 1 : findIndexActiveAudio + 1)]);
+        }
+      },
+      checkNumActiveAudio(num) {
+        if (num > this.getPlaylist.length - 1) {
+          return 0;
+        }
+
+        if (num < 0) {
+          return this.getPlaylist.length - 1;
+        }
+
+        return num;
+      },
       isFavoriteSong() {
-        return Object.keys(this.user).length && this.audioData.likes.some((id) => id === this.user.dataValues.id);
+        return Object.keys(this.user).length && this.getAudioData.likes.some((id) => id === this.user.dataValues.id);
       },
       setTime(e) {
         const width = e.currentTarget.offsetWidth;
         const percent = Math.ceil((e.layerX / width) * 100);
         const audio = this.$refs.audio;
 
-        audio.currentTime = (percent * this.audioData.duration) / 100;
-        this.$store.commit("audio/setCurrentTime", (percent * this.audioData.duration) / 100);
+        audio.currentTime = (percent * this.getAudioData.duration) / 100;
+        this.$store.commit("audio/setCurrentTime", (percent * this.getAudioData.duration) / 100);
       },
       setVolume(e) {
         if (e.target.classList.contains("audioplayer__volume-slider") || e.target.classList.contains("audioplayer__volume-slider-line")) {

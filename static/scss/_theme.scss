@@ -158,6 +158,35 @@ body {
         box-shadow: inset $darkTheme_boxShadowBlockAvatar 0 0 30px 4px;
       }
 
+      &__data {
+        &-search {
+          color: $darkTheme_colorFormDataDisabledSearch;
+
+          &:focus {
+            color: $darkTheme_colorFormDataActiveSearch;
+          }
+        }
+
+        &-list {
+          &-item {
+            background-color: $darkTheme_backgroundFormDataListItem;
+          }
+
+          &-text {
+            background: $darkTheme_backgroundFormDataListText;
+          }
+
+          &-btn {
+            background: $darkTheme_backgroundFormDataListBtn;
+
+            &::before,
+            &::after {
+              background: $darkTheme_colorFormDataListLineBtn;
+            }
+          }
+        }
+      }
+
       &__block-poster,
       &__block-audio {
         border-color: $darkTheme_colorBorderFile;

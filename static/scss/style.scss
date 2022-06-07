@@ -528,6 +528,99 @@
   flex-direction: column;
   border-radius: 8px;
 
+  &__data {
+    display: flex;
+    flex-direction: column;
+
+    &-main {
+      padding: 10px;
+    }
+
+    &-list {
+      display: flex;
+      flex-direction: column;
+      max-height: 300px;
+      overflow: auto;
+
+      &-item {
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 50px;
+        background-blend-mode: multiply;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-color: transparent;
+        background-position: center;
+        border-radius: 8px;
+
+        &:not(:last-child) {
+          margin-bottom: 10px;
+        }
+      }
+
+      &-btn {
+        cursor: pointer;
+        position: relative;
+        background: none;
+        border: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+
+        &::before,
+        &::after {
+          content: "";
+          position: absolute;
+          width: 50%;
+          height: 1px;
+        }
+
+        &--add {
+          &::before {
+            transform: rotateZ(90deg);
+          }
+        }
+
+        &--remove {
+          &::before {
+            transform: rotateZ(45deg);
+          }
+
+          &::after {
+            transform: rotateZ(-45deg);
+          }
+        }
+      }
+
+      &-block {
+        display: flex;
+        align-items: center;
+        position: relative;
+
+        &:not(:last-child) {
+          margin-right: 5px;
+        }
+      }
+
+      &-text {
+        font-size: 13px;
+        max-width: 320px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 8px;
+        border-radius: 8px;
+        display: inline-block;
+      }
+    }
+  }
+
   &__block-avatar {
     width: 150px;
     height: 150px;
@@ -552,10 +645,6 @@
     border-radius: 25px;
     border: 2px dashed;
     padding: 10px;
-  }
-
-  &__block-poster {
-    width: 250px;
   }
 
   &__poster {
@@ -758,6 +847,14 @@
         width: 20px;
       }
     }
+  }
+}
+
+.playlist {
+  &__form {
+    padding: 10px 0;
+    width: 600px;
+    margin: 0 auto;
   }
 }
 

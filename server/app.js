@@ -9,6 +9,7 @@ const sequelize = require("./db");
 const authRoute = require("./routers/auth.router");
 const profileRoute = require("./routers/profile.router");
 const audioRoute = require("./routers/audio.router");
+const playlistRoute = require("./routers/playlist.router");
 
 require("dotenv").config();
 require("./models/index");
@@ -33,5 +34,6 @@ connectToDatabase();
 app.use("/auth", authRoute);
 app.use("/profile", profileRoute);
 app.use("/audio", audioRoute);
+app.use("/playlist", playlistRoute);
 
 module.exports = app;
