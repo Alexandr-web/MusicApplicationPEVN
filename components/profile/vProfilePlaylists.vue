@@ -8,6 +8,7 @@
         v-for="(item, index) in playlists"
         :key="index"
         class="playlists__item"
+        @click="setPlaylist(item)"
       >
         <div class="playlists__item-poster">
           <img
@@ -28,17 +29,28 @@
         text: 'Добавить'
       }"
     />
+    <vPlaylistModal
+      v-if="Object.keys(objectPlaylist).length"
+      :playlist="objectPlaylist"
+      :show="showPlaylistModal"
+      @hide="showPlaylistModal = false"
+    />
   </div>
 </template>
 
 <script>
   import vNothing from "@/components/general/vNothing";
+  import vPlaylistModal from "@/components/playlist/vPlaylistModal";
   import getValidPlaylistPosterMixin from "@/mixins/getValidPlaylistPosterMixin";
+  import setNewAudioMixin from "@/mixins/setNewAudioMixin";
 
   export default {
     name: "ProfilePlaylistsComponent",
-    components: { vNothing, },
-    mixins: [getValidPlaylistPosterMixin],
+    components: {
+      vNothing,
+      vPlaylistModal,
+    },
+    mixins: [getValidPlaylistPosterMixin, setNewAudioMixin],
     props: {
       user: {
         type: Object,
@@ -46,7 +58,11 @@
       },
     },
     data() {
-      return { playlists: [], };
+      return {
+        playlists: [],
+        objectPlaylist: {},
+        showPlaylistModal: false,
+      };
     },
     async fetch() {
       try {
@@ -66,6 +82,26 @@
       } catch (err) {
         throw err;
       }
+    },
+    watch: {
+      showPlaylistModal(val) {
+        document.documentElement.style.overflow = val ? "hidden" : "visible";
+      },
+    },
+    methods: {
+      setPlaylist(playlist) {
+       const playlistAudioFetch = this.$store.dispatch("playlist/getAudio", { playlistId: playlist.id, });
+        
+        playlistAudioFetch.then(({ ok, audio, }) => {
+          if (ok) {
+            this.$store.commit("audio/setPlaylist", audio);
+            this.objectPlaylist = playlist;
+            this.showPlaylistModal = true;
+          }
+        }).catch((err) => {
+          throw err;
+        });
+      },
     },
   };
 </script>

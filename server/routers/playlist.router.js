@@ -16,6 +16,7 @@ const upload = multer({ storage, });
 
 router.get("/api/:id", PlaylistController.getOne);
 router.get("/api", PlaylistController.getAll);
+router.get("/api/:id/audio", PlaylistController.getAudio);
 router.post("/add", isAuth, upload.single("poster"), PlaylistController.add);
 
 module.exports = router;

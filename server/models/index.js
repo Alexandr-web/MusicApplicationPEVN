@@ -37,7 +37,7 @@ const Song = sequelize.define("song", {
 const Playlist = sequelize.define("playlist", {
   name: { type: DataTypes.STRING, },
   poster: { type: DataTypes.TEXT, },
-  songs: {
+  audio: {
     type: DataTypes.ARRAY(DataTypes.INTEGER),
     defaultValue: [],
   },

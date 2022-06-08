@@ -81,9 +81,11 @@
     minLength,
     maxLength,
   } from "vuelidate/lib/validators";
+  import getAudioTimeMixin from "@/mixins/getAudioTimeMixin";
 
   export default {
     name: "AudioFormAddComponent",
+    mixins: [getAudioTimeMixin],
     props: {
       pending: {
         type: Boolean,

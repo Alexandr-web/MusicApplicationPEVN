@@ -10,6 +10,7 @@
         class="audioplayer__audio"
         :src="getAudio"
         @timeupdate="ontimeupdate"
+        @ended="endAudio"
       ></audio>
       <div class="audioplayer__section audioplayer__info">
         <div class="audioplayer__poster">
@@ -197,6 +198,9 @@
       document.documentElement.addEventListener("mouseup", () => (this.touch = false));
     },
     methods: {
+      endAudio() {
+        this.$store.commit("audio/setPlay", false);
+      },
       setNewAudio(setPrev) {
         const { id: activeAudioId, } = this.getAudioData;
         const findIndexActiveAudio = this.getPlaylist ? this.getPlaylist.findIndex(({ id, }) => id === activeAudioId) : -1;

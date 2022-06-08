@@ -35,7 +35,7 @@ class Playlist {
       const playlistData = { ...req.body, userId: req.userId, };
       const songs = await Song.findAll();
 
-      playlistData.audio = songs.filter(({ dataValues: { id, }, }) => req.body.audio.includes(id)).map(({ dataValues, }) => dataValues);
+      playlistData.audio = songs.filter(({ dataValues: { id, }, }) => req.body.audio.includes(id)).map(({ dataValues, }) => dataValues.id);
 
       if (req.file) {
         playlistData.poster = req.file.filename;
@@ -44,6 +44,26 @@ class Playlist {
       await ModelPlaylist.create(playlistData);
 
       return res.status(200).json({ ok: true, message: "Плейлист добавлен", });
+    } catch (err) {
+      console.log(err);
+
+      return res.status(500).json({ ok: false, message: "Произошла ошибка сервера", });
+    }
+  }
+
+  async getAudio(req, res) {
+    try {
+      const { id, } = req.params;
+      const songs = await Song.findAll();
+      const playlist = await ModelPlaylist.findOne({ where: { id, }, });
+
+      if (!playlist) {
+        return res.status(404).json({ ok: false, message: "Такого плейлиста не существует", });
+      }
+
+      const playlistAudio = songs.filter((audio) => playlist.dataValues.audio.includes(audio.dataValues.id));
+
+      return res.status(200).json({ ok: true, audio: playlistAudio, });
     } catch (err) {
       console.log(err);
 

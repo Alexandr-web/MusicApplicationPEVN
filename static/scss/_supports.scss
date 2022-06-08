@@ -8,4 +8,10 @@
       }
     }
   }
+
+  .playlist-modal {
+    &__main {
+      backdrop-filter: blur(5px);
+    }
+  }
 }

@@ -2,10 +2,11 @@
   <li
     class="audio__list-item"
     :class="{ 'audio__list-item--active': isActiveAudio }"
-    @click="$emit('setActiveAudio', audio)"
+    @click.stop="$emit('setActiveAudio', audio)"
   >
     <div class="audio__list-block audio__list-info">
       <img
+        v-if="!noPoster"
         class="audio__list-poster"
         :src="posterUrl"
         alt=""
@@ -46,6 +47,10 @@
       audio: {
         type: Object,
         required: true,
+      },
+      noPoster: {
+        type: Boolean,
+        default: false,
       },
     },
     data() {

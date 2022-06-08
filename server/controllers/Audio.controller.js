@@ -1,4 +1,4 @@
-const { Song, User, } = require("../models/index");
+const { Song, User, Playlist, } = require("../models/index");
 
 class Audio {
   async getOne(req, res) {
@@ -50,6 +50,46 @@ class Audio {
       await Song.create(audioData);
 
       return res.status(200).json({ ok: true, message: "Трек добавлен", });
+    } catch (err) {
+      console.log(err);
+
+      return res.status(500).json({ ok: false, message: "Произошла ошибка сервера", });
+    }
+  }
+
+  async addToPlaylist(req, res) {
+    try {
+      if (!req.isAuth) {
+        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+      }
+
+      const { id: playlistId, } = req.params;
+      const { audioId, } = req.body;
+      const playlist = await Playlist.findOne({ where: { id: playlistId, }, });
+      const audio = await Song.findOne({ where: { id: audioId, }, });
+
+      if (!playlist) {
+        return res.status(404).json({ ok: false, message: "Такого плейлиста не существует", });
+      }
+
+      if (!audio) {
+        return res.status(404).json({ ok: false, message: "Такой песни не существует", });
+      }
+
+      const copyAudioPlaylist = [...playlist.dataValues.audio];
+
+      if (copyAudioPlaylist.includes(audioId)) {
+        await playlist.update({ audio: copyAudioPlaylist.filter((id) => id !== audioId), });
+
+        return res.status(200).json({ ok: true, message: "Аудиозапись удалена из плейлиста", have: false, });
+      }
+
+      copyAudioPlaylist.unshift(audioId);
+
+      await playlist.update({ audio: copyAudioPlaylist, });
+      await playlist.save();
+
+      return res.status(200).json({ ok: true, message: "Аудиозапись добавлена в плейлист", have: true, });
     } catch (err) {
       console.log(err);
 

@@ -69,7 +69,7 @@
       },
     },
     methods: {
-      async setAudio(audioData) {
+      setAudio(audioData) {
         if (this.getAudioData && this.getAudioData.id === audioData.id) {
           this.$store.commit("audio/setPlay", !this.getPlay);
         } else {

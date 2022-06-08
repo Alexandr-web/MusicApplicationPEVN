@@ -18,5 +18,17 @@ export default {
         throw err;
       }
     },
+    async getAudio({ }, { playlistId, }) {
+      try {
+        const res = await fetch(`${host}/playlist/api/${playlistId}/audio`, {
+          method: "GET",
+          headers: { "Accept-Type": "application/json", },
+        });
+
+        return res.json();
+      } catch (err) {
+        throw err;
+      }
+    },
   },
 };

@@ -11,6 +11,14 @@ body {
       }
     }
 
+    .playlist-modal {
+      background: $darkTheme_backgroundPlaylistModal;
+
+      &__main {
+        background: $darkTheme_backgroundPlaylistModalMain;
+      }
+    }
+
     .audioplayer {
       background: $darkTheme_backgroundAudioplayer;
 
