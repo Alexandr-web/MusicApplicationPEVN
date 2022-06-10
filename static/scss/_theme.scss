@@ -5,6 +5,10 @@ body {
     background: $darkTheme_backgroundPage;
     color: $darkTheme_colorItems;
 
+    a {
+      color: $darkTheme_colorItems;
+    }
+
     .nothing {
       &__link {
         color: $darkTheme_colorNothingLink;

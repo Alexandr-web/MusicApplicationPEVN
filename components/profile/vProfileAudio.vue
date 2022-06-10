@@ -10,6 +10,14 @@
         :audio="audio"
         @setActiveAudio="setAudio"
       />
+      <li class="audio__list-item--add">
+        <nuxt-link
+          class="audio__list-item-link"
+          to="/audio/add"
+        >
+          Добавить
+        </nuxt-link>
+      </li>
     </ul>
     <vNothing
       v-else

@@ -21,6 +21,14 @@
           {{ item.name }}
         </h3>
       </li>
+      <li class="playlists__item--add">
+        <nuxt-link
+          class="playlists__item-link"
+          to="/playlist/add"
+        >
+          Добавить
+        </nuxt-link>
+      </li>
     </ul>
     <vNothing
       v-else
@@ -90,8 +98,11 @@
     },
     methods: {
       setPlaylist(playlist) {
-       const playlistAudioFetch = this.$store.dispatch("playlist/getAudio", { playlistId: playlist.id, });
-        
+        const playlistAudioFetch = this.$store.dispatch("playlist/getAudio", { playlistId: playlist.id, });
+
+        this.$store.commit("audio/setPlaylist", []);
+        this.objectPlaylist = {};
+
         playlistAudioFetch.then(({ ok, audio, }) => {
           if (ok) {
             this.$store.commit("audio/setPlaylist", audio);

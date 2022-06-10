@@ -489,11 +489,19 @@
   &__songname {
     padding-bottom: 5px;
     font-size: 18px;
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     @extend %roboto-400;
   }
 
   &__authorname {
     font-size: 15px;
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     @extend %roboto-300;
   }
 
@@ -786,6 +794,16 @@
         top: 0;
       }
 
+      &--add {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      &-link {
+        @extend %roboto-300;
+      }
+
       &--active {
         &::before {
           opacity: 1;
@@ -857,6 +875,7 @@
     &-poster {
       width: 60px;
       height: 60px;
+      object-fit: cover;
       border-radius: 20px;
       margin-right: 8px;
       transition: border-radius, .4s;
@@ -870,12 +889,20 @@
     &-author {
       &-name {
         font-size: 12px;
+        max-width: 140px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         @extend %roboto-300;
       }
 
       &-songname {
         font-size: 18px;
         padding-bottom: 5px;
+        max-width: 140px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         @extend %roboto-300;
       }
     }
@@ -966,6 +993,17 @@
     &:hover &-poster::before {
       opacity: 1;
       visibility: visible;
+    }
+
+    &--add {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      align-self: center;
+    }
+
+    &-link {
+      @extend %roboto-300;
     }
 
     &-poster {

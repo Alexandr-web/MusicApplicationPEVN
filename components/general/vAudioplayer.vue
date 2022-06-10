@@ -7,8 +7,8 @@
       <audio
         v-if="getAudio"
         ref="audio"
-        class="audioplayer__audio"
         :src="getAudio"
+        class="audioplayer__audio"
         @timeupdate="ontimeupdate"
         @ended="endAudio"
       ></audio>
@@ -29,7 +29,7 @@
           </h4>
         </div>
         <button class="audioplayer__favorite-btn">
-          <vStarIcon :class-names="['audioplayer__favorite-icon', isFavoriteSong() && 'audioplayer__favorite-icon']" />
+          <vStarIcon :class-names="['audioplayer__favorite-icon', isFavoriteSong && 'audioplayer__favorite-icon']" />
         </button>
       </div>
       <div class="audioplayer__section audioplayer__controls">
@@ -160,26 +160,23 @@
       getPlaylist() {
         return this.$store.getters["audio/getPlaylist"];
       },
+      isFavoriteSong() {
+        return Object.keys(this.user).length && this.getAudioData.likes.some((id) => id === this.user.dataValues.id);
+      },
     },
     watch: {
-      async getPlay(val) {
-        await this.$refs.audio[val ? "play" : "pause"]();
+      getPlay(play) {
+        this.setAudioState(play);
       },
-      getAudio(audio) {
-        if (audio !== undefined) {
-          this.$refs.audio.play().then(() => {
-            this.$refs.audio.play();
-          }).catch((err) => {
-            throw err;
-          });
-        }
+      getAudio() {
+        this.setAudioState(this.getPlay);
       },
       getVolume(val) {
-        this.$refs.audio.volume = val;  
+        this.$refs.audio.volume = val;
       },
     },
     mounted() {
-      this.$refs.audio[this.getPlay ? "play" : "pause"]();
+      this.setAudioState(this.getPlay);
       this.$refs.audio.volume = this.getVolume;
 
       document.documentElement.addEventListener("mousemove", (e) => {
@@ -198,8 +195,24 @@
       document.documentElement.addEventListener("mouseup", () => (this.touch = false));
     },
     methods: {
+      setAudioState(play) {
+        const audio = this.$refs.audio;
+        const promise = fetch(audio.src)
+          .then((res) => res.blob())
+          .then(() => audio.play());
+
+        if (promise !== undefined) {
+          promise.then(() => {
+            audio[play ? "play" : "pause"]();
+          })
+          .catch((err) => {
+            throw err;
+          });
+        }
+      },
       endAudio() {
         this.$store.commit("audio/setPlay", false);
+        this.setNewAudio();
       },
       setNewAudio(setPrev) {
         const { id: activeAudioId, } = this.getAudioData;
@@ -219,9 +232,6 @@
         }
 
         return num;
-      },
-      isFavoriteSong() {
-        return Object.keys(this.user).length && this.getAudioData.likes.some((id) => id === this.user.dataValues.id);
       },
       setTime(e) {
         const width = e.currentTarget.offsetWidth;

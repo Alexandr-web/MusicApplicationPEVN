@@ -26,7 +26,6 @@
             v-for="(song, index) in getPlaylist"
             :key="index"
             :audio="song"
-            :no-poster="true"
             @setActiveAudio="setAudio"
           />
         </ul>
