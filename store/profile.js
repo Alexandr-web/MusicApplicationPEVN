@@ -8,7 +8,7 @@ export default {
           method: "PUT",
           headers: {
             "Accept-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token || ""}`,
           },
           body: fd,
         });
@@ -25,7 +25,7 @@ export default {
           method: "GET",
           headers: {
             "Accept-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token || ""}`,
           },
         });
 
@@ -41,7 +41,7 @@ export default {
           method: "GET",
           headers: {
             "Accept-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token || ""}`,
           },
         });
 

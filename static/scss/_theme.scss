@@ -9,17 +9,33 @@ body {
       color: $darkTheme_colorItems;
     }
 
-    .nothing {
-      &__link {
-        color: $darkTheme_colorNothingLink;
-      }
-    }
-
     .playlist-modal {
       background: $darkTheme_backgroundPlaylistModal;
 
       &__main {
         background: $darkTheme_backgroundPlaylistModalMain;
+      }
+
+      &__controls {
+        &-link {
+          &--edit {
+            color: $darkTheme_colorPlaylistModalEditControls;
+          }
+        }
+
+        &-item {
+          background: $darkTheme_backgroundPlaylistModalControlsItems;
+
+          &--remove {
+            color: $invalid;
+          }
+        }
+      }
+    }
+
+    .nothing {
+      &__link {
+        color: $darkTheme_colorNothingLink;
       }
     }
 

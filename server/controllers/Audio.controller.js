@@ -3,7 +3,7 @@ const { Song, User, Playlist, } = require("../models/index");
 class Audio {
   async getOne(req, res) {
     try {
-      if (!req.isAuht) {
+      if (!req.isAuth) {
         return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 

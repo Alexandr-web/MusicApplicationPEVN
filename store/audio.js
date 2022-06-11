@@ -46,7 +46,7 @@ export default {
           method: "POST",
           headers: {
             "Accept-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token || ""}`,
           },
           body: fd,
         });
@@ -63,7 +63,7 @@ export default {
           headers: {
             "Accept-Type": "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token || ""}`,
           },
           body: JSON.stringify({ audioId, }),
         });

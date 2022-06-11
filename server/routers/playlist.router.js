@@ -14,9 +14,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage, });
 
-router.get("/api/:id", PlaylistController.getOne);
-router.get("/api", PlaylistController.getAll);
+router.get("/api/:id", isAuth, PlaylistController.getOne);
+router.get("/api", isAuth, PlaylistController.getAll);
 router.get("/api/:id/audio", PlaylistController.getAudio);
 router.post("/add", isAuth, upload.single("poster"), PlaylistController.add);
+router.delete("/:id/remove", isAuth, PlaylistController.remove);
 
 module.exports = router;

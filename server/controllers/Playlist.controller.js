@@ -1,8 +1,14 @@
 const { Playlist: ModelPlaylist, Song, } = require("../models/index");
+const fs = require("fs");
+const path = require("path");
 
 class Playlist {
   async getOne(req, res) {
     try {
+      if (!req.isAuth) {
+        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+      }
+
       const { id, } = req.params;
       const playlist = await ModelPlaylist.findOne({ where: { id, }, });
 
@@ -16,6 +22,10 @@ class Playlist {
 
   async getAll(req, res) {
     try {
+      if (!req.isAuth) {
+        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+      }
+
       const playlists = await ModelPlaylist.findAll();
 
       return res.status(200).json({ ok: true, playlists, });
@@ -29,7 +39,7 @@ class Playlist {
   async add(req, res) {
     try {
       if (!req.isAuth) {
-        res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
       const playlistData = { ...req.body, userId: req.userId, };
@@ -64,6 +74,45 @@ class Playlist {
       const playlistAudio = songs.filter((audio) => playlist.dataValues.audio.includes(audio.dataValues.id));
 
       return res.status(200).json({ ok: true, audio: playlistAudio, });
+    } catch (err) {
+      console.log(err);
+
+      return res.status(500).json({ ok: false, message: "Произошла ошибка сервера", });
+    }
+  }
+
+  async remove(req, res) {
+    try {
+      if (!req.isAuth) {
+        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+      }
+
+      const { id, } = req.params;
+      const playlist = await ModelPlaylist.findOne({ where: { id, }, });
+
+      if (!playlist) {
+        return res.status(404).json({ ok: false, message: "Данного плейлиста не существует", });
+      }
+
+      if (playlist.dataValues.userId !== req.userId) {
+        return res.status(403).json({ ok: false, message: "Для выполнения данной операции необходимо осуществить ее на аккаунте, у которого хотите удалить плейлист", });
+      }
+
+      const filePath = path.resolve(__dirname, "../../", "playlistPosters", playlist.poster.replace(/^\/\_nuxt\/avatars\//, ""));
+
+      if (await fs.existsSync(filePath)) {
+        fs.unlink(filePath, (err) => {
+          if (err) {
+            console.log(err);
+
+            return res.status(500).json({ ok: false, message: "Произошла ошибка при удалении фото", });
+          }
+        });
+      }
+
+      await playlist.destroy();
+
+      return res.status(200).json({ ok: true, message: "Плейлист был удален", });
     } catch (err) {
       console.log(err);
 

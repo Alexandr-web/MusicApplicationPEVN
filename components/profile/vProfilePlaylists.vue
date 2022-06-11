@@ -42,6 +42,7 @@
       :playlist="objectPlaylist"
       :show="showPlaylistModal"
       @hide="showPlaylistModal = false"
+      @removePlaylist="removePlaylist"
     />
   </div>
 </template>
@@ -77,7 +78,7 @@
         const { id, } = this.user;
         const token = this.$store.getters["auth/getToken"];
         const { ok, playlists, } = await this.$store.dispatch("profile/getPlaylists", { userId: id, token, });
-      
+
         if (ok) {
           playlists.map((playlist) => {
             this.getValidPlaylistPoster(playlist.poster).then((url) => {
@@ -112,6 +113,21 @@
         }).catch((err) => {
           throw err;
         });
+      },
+      async removePlaylist(playlist) {
+        try {
+          const token = this.$store.getters["auth/getToken"];
+          const { id: playlistId, } = playlist;
+          const { ok, message, } = await this.$store.dispatch("playlist/remove", { token, playlistId, });
+
+          alert(message);
+
+          if (ok) {
+            this.$router.go(0);
+          }
+        } catch (err) {
+          throw err;
+        }
       },
     },
   };

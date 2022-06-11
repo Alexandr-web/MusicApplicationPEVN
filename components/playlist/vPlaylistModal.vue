@@ -13,9 +13,27 @@
             alt=""
           >
         </div>
-        <h3 class="playlist-modal__title">
-          {{ playlist.name }}
-        </h3>
+        <div class="playlist-modal__info">
+          <h3 class="playlist-modal__title">
+            {{ playlist.name }}
+          </h3>
+          <ul class="playlist-modal__controls">
+            <li class="playlist-modal__controls-item">
+              <nuxt-link
+                class="playlist-modal__controls-link playlist-modal__controls-link--edit"
+                :to="`/playlist/edit/${playlist.id}`"
+              >
+                Изменить
+              </nuxt-link>
+            </li>
+            <li
+              class="playlist-modal__controls-item playlist-modal__controls-item--remove"
+              @click="$emit('removePlaylist', playlist)"
+            >
+              Удалить
+            </li>
+          </ul>
+        </div>
       </header>
       <main class="playlist-modal__main">
         <ul

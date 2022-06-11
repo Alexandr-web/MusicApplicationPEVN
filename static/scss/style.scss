@@ -939,6 +939,28 @@
   z-index: 999999999;
   overflow: auto;
 
+  &__info {
+    flex-basis: 80%;
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+
+    &-item {
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+      border-radius: 5px;
+
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+  }
+
   &__inner {
     width: 600px;
     margin: 10px auto;
@@ -947,8 +969,8 @@
   }
 
   &__header {
-    display: flex;
     margin-bottom: 15px;
+    display: flex;
   }
 
   &__main {
@@ -958,10 +980,12 @@
   &__title {
     font-size: 30px;
     @extend %roboto-300;
+    padding-bottom: 25px;
   }
 
   &__poster {
-    margin-right: 10px;
+    flex-basis: 20%;
+    padding-right: 10px;
 
     &-image {
       max-width: 200px;

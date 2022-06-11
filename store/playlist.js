@@ -2,13 +2,29 @@ import host from "../server/host";
 
 export default {
   actions: {
+    async getOne({ }, { token, playlistId, }) {
+      try {
+        const res = await fetch(`${host}/playlist/api/${playlistId}`, {
+          method: "GET",
+          headers: {
+            "Accept-Type": "application/json",
+            Authorization: `Bearer ${token || ""}`,
+          },
+        });
+
+        return res.json();
+      } catch (err) {
+        throw err;
+      }
+    },
+
     async add({ }, { token, fd, }) {
       try {
         const res = await fetch(`${host}/playlist/add`, {
           method: "POST",
           headers: {
             "Accept-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token || ""}`,
           },
           body: fd,
         });
@@ -23,6 +39,22 @@ export default {
         const res = await fetch(`${host}/playlist/api/${playlistId}/audio`, {
           method: "GET",
           headers: { "Accept-Type": "application/json", },
+        });
+
+        return res.json();
+      } catch (err) {
+        throw err;
+      }
+    },
+    async remove({ }, { playlistId, token, }) {
+      try {
+        const res = await fetch(`${host}/playlist/${playlistId}/remove`, {
+          method: "DELETE",
+          headers: {
+            "Accept-Type": "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token || ""}`,
+          },
         });
 
         return res.json();
