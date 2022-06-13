@@ -50,5 +50,21 @@ export default {
         throw err;
       }
     },
+
+    async getDataForEditPlaylist({ }, { playlistId, token, userId, }) {
+      try {
+        const res = await fetch(`${host}/profile/api/${userId}/edit/playlist/${playlistId}`, {
+          method: "GET",
+          headers: {
+            "Accept-Type": "application/json",
+            Authorization: `Bearer ${token || ""}`,
+          },
+        });
+
+        return res.json();
+      } catch (err) {
+        throw err;
+      }
+    },
   },
 };

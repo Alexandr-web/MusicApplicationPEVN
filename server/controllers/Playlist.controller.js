@@ -98,7 +98,7 @@ class Playlist {
         return res.status(403).json({ ok: false, message: "Для выполнения данной операции необходимо осуществить ее на аккаунте, у которого хотите удалить плейлист", });
       }
 
-      const filePath = path.resolve(__dirname, "../../", "playlistPosters", playlist.poster.replace(/^\/\_nuxt\/avatars\//, ""));
+      const filePath = path.resolve(__dirname, "../../", "playlistPosters", playlist.poster.replace(/^\/\_nuxt\/playlistPosters\//, ""));
 
       if (await fs.existsSync(filePath)) {
         fs.unlink(filePath, (err) => {
@@ -113,6 +113,50 @@ class Playlist {
       await playlist.destroy();
 
       return res.status(200).json({ ok: true, message: "Плейлист был удален", });
+    } catch (err) {
+      console.log(err);
+
+      return res.status(500).json({ ok: false, message: "Произошла ошибка сервера", });
+    }
+  }
+
+  async edit(req, res) {
+    try {
+      if (!req.isAuth) {
+        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+      }
+
+      const { id: playlistId, } = req.params;
+      const playlist = await ModelPlaylist.findOne({ where: { id: playlistId, }, });
+
+      if (!playlist) {
+        return res.status(404).json({ ok: false, message: "Данного плейлиста не существует", });
+      }
+
+      const { audio, } = req.body;
+      const updates = { ...req.body, };
+
+      if (req.file) {
+        updates.poster = req.file.filename;
+
+        const filePath = path.resolve(__dirname, "../../", "playlistPosters", playlist.poster.replace(/^\/\_nuxt\/playlistPosters\//, ""));
+
+        if (await fs.existsSync(filePath)) {
+          fs.unlink(filePath, (err) => {
+            if (err) {
+              console.log(err);
+
+              return res.status(500).json({ ok: false, message: "Произошла ошибка при удалении фото", });
+            }
+          });
+        }
+      }
+
+      updates.audio = JSON.parse(audio);
+
+      await playlist.update(updates);
+
+      return res.status(200).json({ ok: true, message: "Плейлист изменен", });
     } catch (err) {
       console.log(err);
 

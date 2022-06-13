@@ -17,5 +17,6 @@ const upload = multer({ storage, });
 router.put("/edit/:id", isAuth, upload.single("avatar"), ProfileController.edit);
 router.get("/api/:id/audio", isAuth, ProfileController.getAudio);
 router.get("/api/:id/playlists", isAuth, ProfileController.getPlaylists);
+router.get("/api/:userId/edit/playlist/:playlistId", isAuth, ProfileController.getDataForEditPlaylist);
 
 module.exports = router;

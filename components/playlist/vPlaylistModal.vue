@@ -22,6 +22,7 @@
               <nuxt-link
                 class="playlist-modal__controls-link playlist-modal__controls-link--edit"
                 :to="`/playlist/edit/${playlist.id}`"
+                @click.native="$emit('hide')"
               >
                 Изменить
               </nuxt-link>

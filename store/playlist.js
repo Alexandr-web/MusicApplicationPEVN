@@ -17,7 +17,6 @@ export default {
         throw err;
       }
     },
-
     async add({ }, { token, fd, }) {
       try {
         const res = await fetch(`${host}/playlist/add`, {
@@ -55,6 +54,22 @@ export default {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token || ""}`,
           },
+        });
+
+        return res.json();
+      } catch (err) {
+        throw err;
+      }
+    },
+    async edit({ }, { token, playlistId, fd, }) {
+      try {
+        const res = await fetch(`${host}/playlist/edit/${playlistId}`, {
+          method: "PUT",
+          headers: {
+            "Accept-Type": "application/json",
+            Authorization: `Bearer ${token || ""}`,
+          },
+          body: fd,
         });
 
         return res.json();

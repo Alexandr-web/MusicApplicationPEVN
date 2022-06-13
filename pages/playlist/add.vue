@@ -26,9 +26,7 @@
         const fd = new FormData();
         const token = this.$store.getters["auth/getToken"];
 
-        Object.keys(data).map((key) => key !== "audio" && fd.append(key, data[key]));
-
-        fd.append("audio", JSON.stringify(data.audio));
+        Object.keys(data).map((key) => fd.append(key, data[key]));
         
         const res = this.$store.dispatch("playlist/add", { token, fd, });
 

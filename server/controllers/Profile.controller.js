@@ -106,6 +106,39 @@ class Profile {
       return res.status(500).json({ ok: false, message: "Произошла ошибка сервера", });
     }
   }
+
+  async getDataForEditPlaylist(req, res) {
+    try {
+      if (!req.isAuth) {
+        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+      }
+
+      const { userId, playlistId, } = req.params;
+
+      if (req.userId !== +userId) {
+        return res.status(403).json({ ok: false, message: "Для выполнения данной операции необходимо осуществить ее на аккаунте, у которого хотите получить данные", });
+      }
+
+      const playlist = await Playlist.findOne({ where: { id: playlistId, }, });
+
+      if (!playlist) {
+        return res.status(404).json({ ok: false, message: "Данного плейлиста не существует", });
+      }
+
+      const allAudio = await Song.findAll();
+      const filterAudio = allAudio.map((audio) => {
+        audio.dataValues.have = playlist.dataValues.audio.includes(audio.dataValues.id);
+
+        return audio;
+      });
+
+      return res.status(200).json({ ok: true, audio: filterAudio, playlist, });
+    } catch (err) {
+      console.log(err);
+
+      return res.status(500).json({ ok: false, message: "Произошла ошибка сервера", });
+    }
+  }
 }
 
 module.exports = new Profile();

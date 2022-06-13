@@ -533,6 +533,42 @@
   }
 }
 
+.add-btn {
+  cursor: pointer;
+  position: relative;
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    width: 50%;
+    height: 1px;
+  }
+
+  &--add {
+    &::before {
+      transform: rotateZ(90deg);
+    }
+  }
+
+  &--remove {
+    &::before {
+      transform: rotateZ(45deg);
+    }
+
+    &::after {
+      transform: rotateZ(-45deg);
+    }
+  }
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -571,41 +607,8 @@
       }
 
       &-btn {
-        cursor: pointer;
-        position: relative;
-        background: none;
-        border: none;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
         width: 30px;
         height: 30px;
-        border-radius: 50%;
-
-        &::before,
-        &::after {
-          content: "";
-          position: absolute;
-          width: 50%;
-          height: 1px;
-        }
-
-        &--add {
-          &::before {
-            transform: rotateZ(90deg);
-          }
-        }
-
-        &--remove {
-          &::before {
-            transform: rotateZ(45deg);
-          }
-
-          &::after {
-            transform: rotateZ(-45deg);
-          }
-        }
       }
 
       &-block {
@@ -994,6 +997,111 @@
 }
 
 .playlist {
+  &__edit {
+    width: 800px;
+    margin: 0 auto;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+
+    &-top {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &-column {
+      &:not(:last-child) {
+        padding-right: 15px;
+      }
+
+      &-poster {
+        flex-basis: 30%;
+      }
+
+      &-info {
+        flex-basis: 70%;
+      }
+    }
+
+    &-poster {
+      max-width: 220px;
+
+      &-label {
+        cursor: pointer;
+      }
+    }
+
+    &-info {
+      display: flex;
+      flex-direction: column;
+
+      &-label {
+        width: 100%;
+      }
+    }
+
+    &-field {
+      &:not(:last-child) {
+        margin-bottom: 10px;
+      }
+    }
+
+    &-input {
+      width: 100%;
+    }
+
+    &-bottom {
+      margin-top: 15px;
+    }
+
+    &-audio-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &-audio {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+
+      &:not(:last-child) {
+        margin-bottom: 8px;
+      }
+
+      &-block {
+        display: flex;
+        align-items: center;
+
+        &:not(:last-child) {
+          margin-right: 10px;
+        }
+      }
+
+      &-authorname {
+        margin-right: 5px;
+        font-size: 14px;
+        @extend %roboto-300;
+      }
+
+      &-songname {
+        @extend %roboto-300;
+      }
+
+      &-time {
+        margin-right: 10px;
+        font-size: 14px;
+      }
+
+      &-btn {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
   &__form {
     padding: 10px 0;
     width: 600px;

@@ -70,11 +70,11 @@
                 </div>
                 <div class="form__data-list-block">
                   <button
-                    class="form__data-list-btn"
+                    class="form__data-list-btn add-btn"
                     type="button"
                     :class="{
-                      'form__data-list-btn--remove': audioForPlaylist.includes(song.id),
-                      'form__data-list-btn--add': !audioForPlaylist.includes(song.id),
+                      'add-btn--remove': audioForPlaylist.includes(song.id),
+                      'add-btn--add': !audioForPlaylist.includes(song.id),
                     }"
                     @click="addAudio(song)"
                   ></button>
@@ -156,7 +156,7 @@
           this.$emit("add", {
             poster: this.poster.file,
             name: this.$v.name.$model,
-            audio: this.audioForPlaylist,
+            audio: JSON.stringify(this.audioForPlaylist),
           });
         } else {
           alert("Все поля должны быть заполнены");

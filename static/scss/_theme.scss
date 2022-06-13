@@ -105,6 +105,18 @@ body {
       }
     }
 
+    .playlist {
+      &__edit {
+        &-audio {
+          background: $darkTheme_backgroundAudio;
+
+          &-songname {
+            color: $darkTheme_colorAudioName;
+          }
+        }
+      }
+    }
+
     .audio {
       &__list {
         &-item {
@@ -181,6 +193,15 @@ body {
       }
     }
 
+    .add-btn {
+      background: $darkTheme_backgroundAddBtn;
+
+      &::before,
+      &::after {
+        background: $darkTheme_colorLineAddBtn;
+      }
+    }
+
     .form {
       &__block-avatar {
         box-shadow: inset $darkTheme_boxShadowBlockAvatar 0 0 30px 4px;
@@ -202,15 +223,6 @@ body {
 
           &-text {
             background: $darkTheme_backgroundFormDataListText;
-          }
-
-          &-btn {
-            background: $darkTheme_backgroundFormDataListBtn;
-
-            &::before,
-            &::after {
-              background: $darkTheme_colorFormDataListLineBtn;
-            }
           }
         }
       }

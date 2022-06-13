@@ -18,6 +18,7 @@ router.get("/api/:id", isAuth, PlaylistController.getOne);
 router.get("/api", isAuth, PlaylistController.getAll);
 router.get("/api/:id/audio", PlaylistController.getAudio);
 router.post("/add", isAuth, upload.single("poster"), PlaylistController.add);
+router.put("/edit/:id", isAuth, upload.single("poster"), PlaylistController.edit);
 router.delete("/:id/remove", isAuth, PlaylistController.remove);
 
 module.exports = router;
