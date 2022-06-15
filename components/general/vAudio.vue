@@ -30,7 +30,10 @@
       </div>
     </div>
     <div class="audio__list-block audio__list-options">
-      <button class="audio__list-options-btn"></button>
+      <button
+        class="audio__list-options-btn add-btn add-btn--remove"
+        @click.stop="$emit('remove', audio)"
+      ></button>
     </div>
   </li>
 </template>

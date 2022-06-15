@@ -1,6 +1,5 @@
 const { Playlist: ModelPlaylist, Song, } = require("../models/index");
-const fs = require("fs");
-const path = require("path");
+const removeFile = require("../removeFile");
 
 class Playlist {
   async getOne(req, res) {
@@ -98,17 +97,7 @@ class Playlist {
         return res.status(403).json({ ok: false, message: "Для выполнения данной операции необходимо осуществить ее на аккаунте, у которого хотите удалить плейлист", });
       }
 
-      const filePath = path.resolve(__dirname, "../../", "playlistPosters", playlist.poster.replace(/^\/\_nuxt\/playlistPosters\//, ""));
-
-      if (await fs.existsSync(filePath)) {
-        fs.unlink(filePath, (err) => {
-          if (err) {
-            console.log(err);
-
-            return res.status(500).json({ ok: false, message: "Произошла ошибка при удалении фото", });
-          }
-        });
-      }
+      removeFile([__dirname, "../../", "playlistPosters", playlist.poster.replace(/^\/\_nuxt\/playlistPosters\//, "")], res);
 
       await playlist.destroy();
 
@@ -139,17 +128,7 @@ class Playlist {
       if (req.file) {
         updates.poster = req.file.filename;
 
-        const filePath = path.resolve(__dirname, "../../", "playlistPosters", playlist.poster.replace(/^\/\_nuxt\/playlistPosters\//, ""));
-
-        if (await fs.existsSync(filePath)) {
-          fs.unlink(filePath, (err) => {
-            if (err) {
-              console.log(err);
-
-              return res.status(500).json({ ok: false, message: "Произошла ошибка при удалении фото", });
-            }
-          });
-        }
+        removeFile([__dirname, "../../", "playlistPosters", playlist.poster.replace(/^\/\_nuxt\/playlistPosters\//, "")], res);
       }
 
       updates.audio = JSON.parse(audio);

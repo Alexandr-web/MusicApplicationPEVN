@@ -46,6 +46,7 @@
             :key="index"
             :audio="song"
             @setActiveAudio="setAudio"
+            @remove="removeAudio"
           />
         </ul>
       </main>
@@ -94,6 +95,20 @@
       hideModal(e) {
         if (e.target.classList.contains("playlist-modal")) {
           this.$emit("hide");
+        }
+      },
+      async removeAudio({ id, }) {
+        try {
+          const token = this.$store.getters["auth/getToken"];
+          const { ok, message, } = await this.$store.dispatch("audio/remove", { audioId: id, token, });
+
+          alert(message);
+
+          if (ok) {
+            this.$router.go(0);
+          }
+        } catch (err) {
+          throw err;
         }
       },
     },

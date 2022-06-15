@@ -736,7 +736,9 @@
 
     &-item,
     &-submenu-item {
-      transition: color, background, .3s;
+      transition: color,
+        background,
+        .3s;
       padding: 10px;
       cursor: pointer;
       text-align: center;
@@ -849,29 +851,8 @@
       align-items: center;
 
       &-btn {
-        cursor: pointer;
-        border: none;
-        background: none;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        position: relative;
         width: 30px;
         height: 30px;
-
-        &::before,
-        &::after {
-          content: "";
-          width: 5px;
-          height: 5px;
-          border-radius: 50%;
-          display: block;
-        }
-
-        &::before {
-          margin-bottom: 3px;
-        }
       }
     }
 

@@ -1,6 +1,5 @@
 const { User, Song, Playlist, } = require("../models/index");
-const fs = require("fs");
-const path = require("path");
+const removeFile = require("../removeFile");
 const bcrypt = require("bcrypt");
 
 class Profile {
@@ -37,17 +36,7 @@ class Profile {
       if (req.file) {
         updates.avatar = req.file.filename;
 
-        const filePath = path.resolve(__dirname, "../../", "avatars", candidate.avatar.replace(/^\/\_nuxt\/avatars\//, ""));
-
-        if (await fs.existsSync(filePath)) {
-          fs.unlink(filePath, (err) => {
-            if (err) {
-              console.log(err);
-
-              return res.status(500).json({ ok: false, message: "Произошла ошибка при удалении фото", });
-            }
-          });
-        }
+        removeFile([__dirname, "../../", "avatars", candidate.avatar.replace(/^\/\_nuxt\/avatars\//, "")], res);
       }
 
       await candidate.update(updates);

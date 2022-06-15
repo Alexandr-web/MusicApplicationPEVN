@@ -73,5 +73,21 @@ export default {
         throw err;
       }
     },
+    async remove({ }, { token, audioId, }) {
+      try {
+        const res = await fetch(`${host}/audio/${audioId}/remove`, {
+          method: "DELETE",
+          headers: {
+            "Accept-Type": "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token || ""}`,
+          },
+        });
+
+        return res.json();
+      } catch (err) {
+        throw err;
+      }
+    },
   },
 };
