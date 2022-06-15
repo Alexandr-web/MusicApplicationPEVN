@@ -89,5 +89,22 @@ export default {
         throw err;
       }
     },
+    async setFavorite({ }, { token, audioId, userId, }) {
+      try {
+        const res = await fetch(`${host}/audio/${audioId}/favorite`, {
+          method: "POST",
+          headers: {
+            "Accept-Type": "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token || ""}`,
+          },
+          body: JSON.stringify({ userId, }),
+        });
+
+        return res.json();
+      } catch (err) {
+        throw err;
+      }
+    },
   },
 };

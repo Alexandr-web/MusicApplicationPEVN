@@ -138,6 +138,47 @@ class Audio {
       return res.status(500).json({ ok: false, message: "Произошла ошибка сервера", });
     }
   }
+
+  async setFavorite(req, res) {
+    try {
+      if (!req.isAuth) {
+        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+      }
+
+      const { id: audioId, } = req.params;
+      const audio = await Song.findOne({ where: { id: audioId, }, });
+
+      if (!audio) {
+        return res.status(404).json({ ok: false, message: "Данной аудиозаписи не существует", });
+      }
+
+      const { userId, } = req.body;
+      const user = await User.findOne({ where: { id: userId, }, });
+
+      if (!user) {
+        return res.status(404).json({ ok: false, message: "Данного пользователя не существует", });
+      }
+
+      const isAlreadyFavorite = audio.likes.includes(userId);
+      const copyAudioLikes = [...audio.likes];
+
+      if (isAlreadyFavorite) {
+        await audio.update({ likes: copyAudioLikes.filter((id) => id !== userId), });
+
+        return res.status(200).json({ ok: true, isFavorite: false, });
+      }
+
+      copyAudioLikes.push(userId);
+
+      await audio.update({ likes: copyAudioLikes, });
+
+      return res.status(200).json({ ok: true, isFavorite: true, });
+    } catch (err) {
+      console.log(err);
+
+      return res.status(500).json({ ok: false, message: "Произошла ошибка сервера", });
+    }
+  }
 }
 
 module.exports = new Audio();
