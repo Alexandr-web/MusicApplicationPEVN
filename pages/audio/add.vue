@@ -1,5 +1,5 @@
 <template>
-  <div class="audio page">
+  <div class="audio gaps-t-b">
     <div class="container">
       <div class="audio__inner">
         <vAudioFormAdd
@@ -20,6 +20,7 @@
     data() {
       return { pendingAdd: false, };
     },
+    head: { title: "Добавление аудио", },
     methods: {
       add(data) {
         if (Object.values(data).every(Boolean) && [data.poster, data.audio].every((file) => file instanceof File)) {

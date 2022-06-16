@@ -15,6 +15,7 @@ export default {
   data() {
     return { pendingRegistration: false, };
   },
+  head: { title: "Регистрация", },
   methods: {
     registration(data) {
       if (Object.values(data).every(Boolean) && data.avatar instanceof File) {

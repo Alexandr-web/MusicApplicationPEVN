@@ -1,5 +1,5 @@
 <template>
-  <div class="page playlist">
+  <div class="gaps-t-b playlist">
     <div class="container">
       <div class="playlist__inner">
         <vAddPlaylistForm
@@ -21,6 +21,7 @@
     data() {
       return { pendingAdd: false, };
     },
+    head: { title: "Добавление плейлиста", },
     methods: {
       add(data) {
         const fd = new FormData();

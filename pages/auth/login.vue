@@ -15,6 +15,7 @@
     data() {
       return { pendingLogin: false, };
     },
+    head: { title: "Вход", },
     methods: {
       login(data) {
         if (Object.values(data).every(Boolean)) {

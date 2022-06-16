@@ -17,6 +17,23 @@ export default {
         throw err;
       }
     },
+
+    async getAll({ }, { token, }) {
+      try {
+        const res = await fetch(`${host}/playlist/api`, {
+          method: "GET",
+          headers: {
+            "Accept-Type": "application/json",
+            Authorization: `Bearer ${token || ""}`,
+          },
+        });
+
+        return res.json();
+      } catch (err) {
+        throw err;
+      }
+    },
+
     async add({ }, { token, fd, }) {
       try {
         const res = await fetch(`${host}/playlist/add`, {
@@ -33,6 +50,7 @@ export default {
         throw err;
       }
     },
+
     async getAudio({ }, { playlistId, }) {
       try {
         const res = await fetch(`${host}/playlist/api/${playlistId}/audio`, {
@@ -45,6 +63,7 @@ export default {
         throw err;
       }
     },
+
     async remove({ }, { playlistId, token, }) {
       try {
         const res = await fetch(`${host}/playlist/${playlistId}/remove`, {
@@ -61,6 +80,7 @@ export default {
         throw err;
       }
     },
+
     async edit({ }, { token, playlistId, fd, }) {
       try {
         const res = await fetch(`${host}/playlist/edit/${playlistId}`, {

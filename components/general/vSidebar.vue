@@ -1,7 +1,10 @@
 <template>
   <aside class="sidebar">
     <nav class="sidebar__nav">
-      <ul class="sidebar__list">
+      <ul
+        v-if="userId"
+        class="sidebar__list"
+      >
         <li class="sidebar__list-item">
           <nuxt-link
             class="sidebar__list-link"
@@ -17,7 +20,7 @@
         <li class="sidebar__list-item">
           <nuxt-link
             class="sidebar__list-link"
-            :to="`/audio/${userId}`"
+            :to="`/profile/${userId}?tab=audio`"
             exact-active-class="sidebar__list-link--active"
           >
             <vAudioIcon :class-names="['sidebar__list-icon']" />
@@ -29,7 +32,7 @@
         <li class="sidebar__list-item">
           <nuxt-link
             class="sidebar__list-link"
-            :to="`/playlists/${userId}`"
+            :to="`/profile/${userId}?tab=playlists`"
             exact-active-class="sidebar__list-link--active"
           >
             <vPlaylistIcon :class-names="['sidebar__list-icon']" />
@@ -60,8 +63,11 @@
     },
     async fetch() {
       try {
-        const res = await this.$store.dispatch("auth/getUser");
-        this.userId = res.user.id;
+        const { ok, user, } = await this.$store.dispatch("auth/getUser");
+        
+        if (ok) {
+          this.userId = user.id;
+        }
       } catch (err) {
         throw err;
       }

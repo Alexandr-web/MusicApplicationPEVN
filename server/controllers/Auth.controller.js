@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 class Auth {
   async registration(req, res) {
     try {
-      const { password, email, } = req.body;
+      const { password, email, name, } = req.body;
       const userData = Object.keys(req.body).reduce((acc, key) => {
         if (!["password", "avatar"].includes(key)) {
           acc[key] = req.body[key];
@@ -14,9 +14,10 @@ class Auth {
         return acc;
       }, {});
 
-      const candidate = await User.findOne({ where: { email, }, });
+      const candidateWithEmail = await User.findOne({ where: { email, }, });
+      const candidateWithName = await User.findOne({ where: { name, }, });
 
-      if (candidate) {
+      if (candidateWithName || candidateWithEmail) {
         return res.status(400).json({ ok: false, message: "Такой пользователь уже существует", });
       }
 

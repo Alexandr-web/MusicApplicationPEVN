@@ -111,6 +111,10 @@ class Audio {
         return res.status(404).json({ ok: false, message: "Данной аудиозаписи не существует", });
       }
 
+      if (req.userId !== song.dataValues.userId) {
+        return res.status(403).json({ ok: false, message: "У вас нет прав для удаления этой аудиозаписи", });
+      }
+
       const allPlaylists = await Playlist.findAll();
       const playlistsByAudio = allPlaylists.filter(({ audio, }) => audio.includes(audioId));
 
@@ -152,23 +156,22 @@ class Audio {
         return res.status(404).json({ ok: false, message: "Данной аудиозаписи не существует", });
       }
 
-      const { userId, } = req.body;
-      const user = await User.findOne({ where: { id: userId, }, });
+      const user = await User.findOne({ where: { id: req.userId, }, });
 
       if (!user) {
         return res.status(404).json({ ok: false, message: "Данного пользователя не существует", });
       }
 
-      const isAlreadyFavorite = audio.likes.includes(userId);
+      const isAlreadyFavorite = audio.likes.includes(req.userId);
       const copyAudioLikes = [...audio.likes];
 
       if (isAlreadyFavorite) {
-        await audio.update({ likes: copyAudioLikes.filter((id) => id !== userId), });
+        await audio.update({ likes: copyAudioLikes.filter((id) => id !== req.userId), });
 
         return res.status(200).json({ ok: true, isFavorite: false, });
       }
 
-      copyAudioLikes.push(userId);
+      copyAudioLikes.push(req.userId);
 
       await audio.update({ likes: copyAudioLikes, });
 

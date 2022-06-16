@@ -34,7 +34,7 @@
           accept="image/jpeg,image/png,image/jpg,image/webp"
           @change="loadFile($event, 'poster')"
         >
-        <span class="audio__form-file-style form__file-style input__file-style">Загрузить постер</span>
+        <span class="audio__form-file-style form__file-style input__file-style">Загрузить постер (jpeg, png, jpg, webp)</span>
         <img
           v-if="poster.src"
           class="audio__form-poster form__poster"
@@ -53,10 +53,10 @@
           name="audio"
           class="audio__form-file form__input input__file"
           type="file"
-          accept="audio/mp3"
+          accept="audio/mp3,audio/ogg,audio/wav"
           @change="loadFile($event, 'audio')"
         >
-        <span class="audio__form-file-style form__file-style input__file-style">Загрузить аудио файл (mp3)</span>
+        <span class="audio__form-file-style form__file-style input__file-style">Загрузить аудио файл (mp3, ogg, wav)</span>
         <audio
           v-if="audio.src"
           class="audio__form-audio form__audio"

@@ -4,16 +4,11 @@
       <vProfileSettings v-if="tab === 'settings'" />
       <vProfileArtists
         v-if="tab === 'artists'"
-        :user="user"
       />
       <vProfilePlaylists
         v-if="tab === 'playlists'"
-        :user="user"
       />
-      <vProfileAudio
-        v-if="tab === 'audio'"
-        :user="user"
-      />
+      <vProfileAudio v-if="tab === 'audio'" />
     </div>
   </main>
 </template>

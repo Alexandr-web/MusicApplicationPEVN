@@ -43,24 +43,21 @@
       vAudio,
     },
     mixins: [getValidAudioAndPosterUrlMixin, setNewAudioMixin],
-    props: {
-      user: {
-        type: Object,
-        required: true,
-      },
-    },
     data() {
       return { songs: [], };
     },
     async fetch() {
       try {
-        const { id, } = this.user;
-        const token = this.$store.getters["auth/getToken"];
-        const { ok, songs, } = await this.$store.dispatch("profile/getAudio", { userId: id, token, });
-        
-        if (ok) {
-          this.$store.commit("audio/setPlaylist", songs);
-          this.songs = songs;
+        const { id, } = this.$route.params;
+
+        if (id) {
+          const token = this.$store.getters["auth/getToken"];
+          const { ok, songs, } = await this.$store.dispatch("profile/getAudio", { userId: parseInt(id), token, });
+          
+          if (ok) {
+            this.$store.commit("audio/setPlaylist", songs);
+            this.songs = songs;
+          }
         }
       } catch (err) {
         throw err;

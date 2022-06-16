@@ -1,5 +1,5 @@
 <template>
-  <div class="profile page">
+  <div class="profile gaps-t-b">
     <div class="profile__inner">
       <vProfileHeader :user="user" />
       <vProfileMain
@@ -26,10 +26,14 @@
     validate({ params: { id, }, store, query: { tab, }, }) {
       const res = store.dispatch("auth/getUser", id);
 
-      return res.then((data) => {
-        this.user = data.user;
+      return res.then(({ ok, user, }) => {
+        if (!ok) {
+          return false;
+        }
 
-        return Boolean(data.user) && ["settings", "audio", "playlists", "artists"].includes(tab);
+        this.user = user;
+
+        return Boolean(user) && ["settings", "audio", "playlists", "artists"].includes(tab);
       }).catch((err) => {
         throw err;
       });
@@ -48,5 +52,6 @@
         throw err;
       }
     },
+    head: { title: "Профиль", },
   };
 </script>

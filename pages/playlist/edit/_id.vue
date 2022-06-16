@@ -1,5 +1,5 @@
 <template>
-  <div class="page playlist">
+  <div class="gaps-t-b playlist">
     <div class="container">
       <div class="playlist__inner">
         <vFormEditPlaylist
@@ -28,9 +28,10 @@
     layout: "default",
     validate({ params: { id: playlistId, }, store, }) {
       const token = store.getters["auth/getToken"];
-      const res = store.dispatch("playlist/getOne", { token, playlistId, });
+      const p1 = store.dispatch("playlist/getOne", { token, playlistId, });
+      const p2 = store.dispatch("profile/getDataForEditPlaylist", { token, playlistId, });
 
-      return res.then(({ ok, playlist, }) => ok && Boolean(playlist)).catch((err) => {
+      return Promise.all([p1, p2]).then(([res1, res2]) => res1.ok && Boolean(res1.playlist) && res2.ok).catch((err) => {
         throw err;
       });
     },
@@ -44,9 +45,8 @@
     async fetch() {
       try {
         const { id: playlistId, } = this.$route.params;
-        const { user: { id: userId, }, } = await this.$store.dispatch("auth/getUser");
         const token = this.$store.getters["auth/getToken"];
-        const { ok, audio, playlist, } = await this.$store.dispatch("profile/getDataForEditPlaylist", { token, userId, playlistId, });
+        const { ok, audio, playlist, } = await this.$store.dispatch("profile/getDataForEditPlaylist", { token, playlistId, });
 
         if (ok) {
           this.$store.commit("audio/setPlaylist", audio);
@@ -58,6 +58,7 @@
         throw err;
       }
     },
+    head: { title: "Изменение плейлиста", },
     computed: {
       getAudioData() {
         return this.$store.getters["audio/getAudioData"];

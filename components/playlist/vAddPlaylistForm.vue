@@ -64,6 +64,7 @@
                 :key="index"
                 class="form__data-list-item"
                 :style="`background-image: url(${song.poster})`"
+                @click.stop="setAudio(song)"
               >
                 <div class="form__data-list-block">
                   <span class="form__data-list-text">{{ song.name }}</span>
@@ -76,7 +77,7 @@
                       'add-btn--remove': audioForPlaylist.includes(song.id),
                       'add-btn--add': !audioForPlaylist.includes(song.id),
                     }"
-                    @click="addAudio(song)"
+                    @click.stop="addAudio(song)"
                   ></button>
                 </div>
               </li>
@@ -96,6 +97,7 @@
 </template>
 
 <script>
+  import setNewAudioMixin from "@/mixins/setNewAudioMixin";
   import {
     required,
     minLength,
@@ -112,7 +114,7 @@
         maxLength: maxLength(25),
       },
     },
-    mixins: [getValidAudioAndPosterUrlMixin],
+    mixins: [getValidAudioAndPosterUrlMixin, setNewAudioMixin],
     props: {
       pending: {
         type: Boolean,
@@ -148,7 +150,22 @@
         throw err;
       }
     },
+    computed: {
+      getAudioData() {
+        return this.$store.getters["audio/getAudioData"];
+      },
+      getPlay() {
+        return this.$store.getters["audio/getPlay"];
+      },
+    },
     methods: {
+      setAudio(audioData) {
+        if (this.getAudioData && this.getAudioData.id === audioData.id) {
+          this.$store.commit("audio/setPlay", !this.getPlay);
+        } else {
+          this.setActiveAudio(audioData);
+        }
+      },
       addPlaylist() {
         this.$v.$touch();
 

@@ -18,7 +18,7 @@ class Profile {
       }
 
       if (req.userId !== +id) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной операции необходимо осуществить ее на аккаунте, который хотите отредактировать", });
+        return res.status(403).json({ ok: false, message: "У вас нет доступа для изменения этого аккаунта", });
       }
 
       Object.keys(req.body).map(async (key) => {
@@ -59,7 +59,7 @@ class Profile {
       }
 
       if (req.userId !== +id) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной операции необходимо осуществить ее на аккаунте, у которого хотите получить песни", });
+        return res.status(403).json({ ok: false, message: "У вас нет доступа для получения списка аудио другого пользователя", });
       }
 
       const songs = await Song.findAll();
@@ -82,7 +82,7 @@ class Profile {
       }
 
       if (req.userId !== +id) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной операции необходимо осуществить ее на аккаунте, у которого хотите получить песни", });
+        return res.status(403).json({ ok: false, message: "У вас нет доступа для получения списка плейлистов другого пользователя", });
       }
 
       const playlists = await Playlist.findAll();
@@ -102,23 +102,24 @@ class Profile {
         return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
-      const { userId, playlistId, } = req.params;
-
-      if (req.userId !== +userId) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной операции необходимо осуществить ее на аккаунте, у которого хотите получить данные", });
-      }
-
+      const { playlistId, } = req.params;
       const playlist = await Playlist.findOne({ where: { id: playlistId, }, });
 
       if (!playlist) {
         return res.status(404).json({ ok: false, message: "Данного плейлиста не существует", });
       }
 
-      const allAudio = await Song.findAll();
-      const filterAudio = allAudio.map((audio) => {
-        audio.dataValues.have = playlist.dataValues.audio.includes(audio.dataValues.id);
+      if (req.userId !== playlist.dataValues.userId) {
+        return res.status(403).json({ ok: false, message: "У вас нет доступа для получения данных другого пользователя", });
+      }
 
-        return audio;
+      const allAudio = await Song.findAll();
+      const filterAudio = allAudio.filter((audio) => {
+        if (audio.dataValues.userId === req.userId) {
+          audio.dataValues.have = playlist.dataValues.audio.includes(audio.dataValues.id);
+
+          return audio;
+        }
       });
 
       return res.status(200).json({ ok: true, audio: filterAudio, playlist, });

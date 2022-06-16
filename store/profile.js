@@ -51,9 +51,9 @@ export default {
       }
     },
 
-    async getDataForEditPlaylist({ }, { playlistId, token, userId, }) {
+    async getDataForEditPlaylist({ }, { playlistId, token, }) {
       try {
-        const res = await fetch(`${host}/profile/api/${userId}/edit/playlist/${playlistId}`, {
+        const res = await fetch(`${host}/profile/api/edit/playlist/${playlistId}`, {
           method: "GET",
           headers: {
             "Accept-Type": "application/json",

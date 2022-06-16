@@ -1,5 +1,5 @@
 <template>
-  <div class="auth page">
+  <div class="auth">
     <div class="container">
       <div class="auth__inner">
         <div class="auth__center">

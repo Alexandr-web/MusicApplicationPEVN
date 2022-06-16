@@ -509,6 +509,7 @@
     margin-right: 6px;
     height: 100%;
     max-width: 120px;
+    object-fit: cover;
 
     &-image {
       height: 100%;
@@ -574,10 +575,6 @@
     display: flex;
     flex-direction: column;
 
-    &-main {
-      padding: 10px;
-    }
-
     &-list {
       display: flex;
       flex-direction: column;
@@ -596,6 +593,7 @@
         background-color: transparent;
         background-position: center;
         border-radius: 8px;
+        cursor: pointer;
 
         &:not(:last-child) {
           margin-bottom: 10px;
@@ -710,6 +708,19 @@
   padding-bottom: 25px;
   font-size: 25px;
   @extend %roboto-500;
+}
+
+.home {
+  &__inner {
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__playlists {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+  }
 }
 
 .audio {
@@ -1089,11 +1100,11 @@
 .playlists {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  align-items: flex-start;
 
   &__item {
     cursor: pointer;
     margin: 15px;
+    align-self: start;
 
     &:hover &-poster-image {
       transform: scale(1.1);
@@ -1176,7 +1187,7 @@
   }
 }
 
-.page {
+.gaps-t-b {
   min-height: inherit;
   padding: 60px 0 110px;
 }

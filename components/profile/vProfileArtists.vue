@@ -27,27 +27,24 @@
   export default {
     name: "ProfileArtistsComponent",
     components: { vNothing, },
-    props: {
-      user: {
-        type: Object,
-        required: true,
-      },
-    },
     data() {
       return { artists: [], };
     },
-    async fetch() {
-      try {
-        const { id, } = this.user;
-        const token = this.$store.getters["auth/getToken"];
-        const { ok, songs, } = await this.$store.dispatch("profile/getAudio", { userId: id, token, });
-      
-        if (ok) {
-          this.artists = songs.map(({ author, }) => author);
-        }
-      } catch (err) {
-        throw err;
-      }
-    },
+    // async fetch() {
+    //   try {
+    //     const { id, } = this.$route.params;
+
+    //     if (id) {
+    //       const token = this.$store.getters["auth/getToken"];
+    //       const { ok, songs, } = await this.$store.dispatch("profile/getAudio", { userId: parseInt(id), token, });
+        
+    //       if (ok) {
+    //         this.artists = ;
+    //       }
+    //     }
+    //   } catch (err) {
+    //     throw err;
+    //   }
+    // },
   };
 </script>

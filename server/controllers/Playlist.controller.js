@@ -94,7 +94,7 @@ class Playlist {
       }
 
       if (playlist.dataValues.userId !== req.userId) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной операции необходимо осуществить ее на аккаунте, у которого хотите удалить плейлист", });
+        return res.status(403).json({ ok: false, message: "У вас нет доступа для удаления этого плейлиста", });
       }
 
       removeFile([__dirname, "../../", "playlistPosters", playlist.poster.replace(/^\/\_nuxt\/playlistPosters\//, "")], res);
@@ -120,6 +120,10 @@ class Playlist {
 
       if (!playlist) {
         return res.status(404).json({ ok: false, message: "Данного плейлиста не существует", });
+      }
+
+      if (req.userId !== playlist.dataValues.userId) {
+        return res.status(403).json({ ok: false, message: "У вас нет доступа для изменения этого плейлиста", });
       }
 
       const { audio, } = req.body;

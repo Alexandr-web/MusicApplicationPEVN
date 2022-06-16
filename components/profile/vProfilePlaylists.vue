@@ -4,23 +4,12 @@
       v-if="playlists.length"
       class="playlists"
     >
-      <li
-        v-for="(item, index) in playlists"
+      <vPlaylist
+        v-for="(playlist, index) in playlists"
         :key="index"
-        class="playlists__item"
-        @click="setPlaylist(item)"
-      >
-        <div class="playlists__item-poster">
-          <img
-            class="playlists__item-poster-image"
-            :src="item.poster"
-            :alt="item.name"
-          >
-        </div>
-        <h3 class="playlists__item-name">
-          {{ item.name }}
-        </h3>
-      </li>
+        :playlist="playlist"
+        @setPlaylist="setPlaylist"
+      />
       <li class="playlists__item--add">
         <nuxt-link
           class="playlists__item-link"
@@ -50,6 +39,7 @@
 <script>
   import vNothing from "@/components/general/vNothing";
   import vPlaylistModal from "@/components/playlist/vPlaylistModal";
+  import vPlaylist from "@/components/general/vPlaylist";
   import getValidPlaylistPosterMixin from "@/mixins/getValidPlaylistPosterMixin";
   import setNewAudioMixin from "@/mixins/setNewAudioMixin";
 
@@ -58,14 +48,9 @@
     components: {
       vNothing,
       vPlaylistModal,
+      vPlaylist,
     },
     mixins: [getValidPlaylistPosterMixin, setNewAudioMixin],
-    props: {
-      user: {
-        type: Object,
-        required: true,
-      },
-    },
     data() {
       return {
         playlists: [],
@@ -75,18 +60,21 @@
     },
     async fetch() {
       try {
-        const { id, } = this.user;
-        const token = this.$store.getters["auth/getToken"];
-        const { ok, playlists, } = await this.$store.dispatch("profile/getPlaylists", { userId: id, token, });
+        const { id, } = this.$route.params;
 
-        if (ok) {
-          playlists.map((playlist) => {
-            this.getValidPlaylistPoster(playlist.poster).then((url) => {
-              this.playlists.push({ ...playlist, poster: url, });
-            }).catch((err) => {
-              throw err;
+        if (id) {
+          const token = this.$store.getters["auth/getToken"];
+          const { ok, playlists, } = await this.$store.dispatch("profile/getPlaylists", { userId: parseInt(id), token, });
+
+          if (ok) {
+            playlists.map((playlist) => {
+              this.getValidPlaylistPoster(playlist.poster).then((url) => {
+                this.playlists.push({ ...playlist, poster: url, });
+              }).catch((err) => {
+                throw err;
+              });
             });
-          });
+          }
         }
       } catch (err) {
         throw err;

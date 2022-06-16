@@ -90,7 +90,6 @@
 <script>
   import getValidPlaylistPosterMixin from "@/mixins/getValidPlaylistPosterMixin";
   import {
-    required,
     minLength,
     maxLength,
   } from "vuelidate/lib/validators";
@@ -114,7 +113,6 @@
     },
     validations: {
       name: {
-        required,
         minLength: minLength(4),
         maxLength: maxLength(25),
       },

@@ -202,8 +202,7 @@
       async setFavorite({ id: audioId, }) {
         try {
           const token = this.$store.getters["auth/getToken"];
-          const { user: { id: userId, }, } = await this.$store.dispatch("auth/getUser");
-          const { ok, isFavorite, } = await this.$store.dispatch("audio/setFavorite", { audioId, token, userId, });
+          const { ok, isFavorite, } = await this.$store.dispatch("audio/setFavorite", { audioId, token, });
 
           if (ok) {
             this.isFavoriteSong = isFavorite;
