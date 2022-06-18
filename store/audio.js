@@ -30,6 +30,12 @@ export default {
     setVolume(state, val) {
       state.volume = val;
     },
+    clearAudio(state) {
+      state.play = false;
+      state.audio = null;
+      state.audioData = null;
+      state.playlist = null;
+    },
   },
   getters: {
     getAudioData: (state) => state.audioData,

@@ -50,7 +50,7 @@
           type="text"
           placeholder="Написать имя"
           name="name"
-          :class="{ 'input--invalid': $v.name.$invalid }"
+          :class="{ 'input--invalid': $v.name.$error }"
         >
       </label>
     </div>
@@ -67,7 +67,7 @@
           type="text"
           placeholder="Написать email"
           name="email"
-          :class="{ 'input--invalid': $v.email.$invalid }"
+          :class="{ 'input--invalid': $v.email.$error }"
         >
       </label>
     </div>
@@ -84,7 +84,7 @@
           type="password"
           placeholder="Написать пароль"
           name="password"
-          :class="{ 'input--invalid': $v.password.$invalid }"
+          :class="{ 'input--invalid': $v.password.$error }"
         >
       </label>
     </div>
@@ -101,7 +101,7 @@
           type="password"
           placeholder="Написать пароль еще раз"
           name="repeatPassword"
-          :class="{ 'input--invalid': $v.repeatPassword.$invalid }"
+          :class="{ 'input--invalid': $v.repeatPassword.$error }"
         >
       </label>
     </div>

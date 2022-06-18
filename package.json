@@ -1,5 +1,5 @@
 {
-  "name": "spotifyClone",
+  "name": "MusicApplicationPEVN",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -45,6 +45,7 @@
     "normalize.css": "^8.0.1",
     "pg": "^8.7.3",
     "sass": "^1.52.1",
+    "vue-awesome-swiper": "^4.1.1",
     "vuelidate": "^0.7.7"
   }
 }

@@ -17,7 +17,7 @@
           class="playlist__form-input form__input input"
           type="text"
           placeholder="Написать название"
-          :class="{ 'input--invalid': $v.name.$invalid }"
+          :class="{ 'input--invalid': $v.name.$error }"
         >
       </label>
     </div>

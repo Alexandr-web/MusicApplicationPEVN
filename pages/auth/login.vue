@@ -18,7 +18,6 @@
     head: { title: "Вход", },
     methods: {
       login(data) {
-        if (Object.values(data).every(Boolean)) {
           const res = this.$store.dispatch("auth/login", data);
 
           this.pendingLogin = true;
@@ -34,9 +33,6 @@
           }).catch((err) => {
             throw err;
           });
-        } else {
-          alert("Все поля должны быть заполнены!");
-        }
       },
     },
   };

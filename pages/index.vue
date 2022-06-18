@@ -6,32 +6,41 @@
           <h1 class="title home__column-title">
             Плейлисты
           </h1>
-          <ul
-            v-if="playlists.length"
-            class="home__playlists"
-          >
-            <vPlaylist
-              v-for="(playlist, index) in playlists"
-              :key="index"
-              :playlist="playlist"
-              @setPlaylist="setPlaylist"
-            />
-          </ul>
+        </div>
+        <div class="home__column">
+          <clientOnly v-if="playlists.length">
+            <Swiper
+              class="swiper__wrapper"
+              :options="sliderOptions"
+            >
+              <SwiperSlide
+                v-for="(playlist, index) in playlists"
+                :key="index"
+                class="slider__slide"
+              >
+                <vPlaylist
+                  :playlist="playlist"
+                  @setPlaylist="setPlaylist"
+                />
+              </SwiperSlide>
+            </Swiper>
+          </clientOnly>
           <vNothing v-else />
         </div>
-        <vPlaylistModal 
-          v-if="Object.keys(objectPlaylist).length"
-          :playlist="objectPlaylist"
-          :show="showPlaylistModal"
-          @hide="showPlaylistModal = false"
-          @removePlaylist="removePlaylist"
-        />
       </div>
+      <vPlaylistModal 
+        v-if="Object.keys(objectPlaylist).length"
+        :playlist="objectPlaylist"
+        :show="showPlaylistModal"
+        @hide="showPlaylistModal = false"
+        @removePlaylist="removePlaylist"
+      />
     </div>
   </div>
 </template>
 
 <script>
+  import { Swiper, SwiperSlide, } from "vue-awesome-swiper";
   import vPlaylist from "@/components/general/vPlaylist";
   import vPlaylistModal from "@/components/playlist/vPlaylistModal";
   import vNothing from "@/components/general/vNothing";
@@ -43,11 +52,19 @@
       vPlaylist,
       vPlaylistModal,
       vNothing,
+      Swiper,
+      SwiperSlide,
     },
     mixins: [getValidPlaylistPosterMixin],
     layout: "default",
     data() {
       return {
+        sliderOptions: {
+          slidesPerView: 3,
+          speed: 500,
+          grabCursor: true,
+          spaceBetween: 10,
+        },
         playlists: [],
         objectPlaylist: {},
         showPlaylistModal: false,

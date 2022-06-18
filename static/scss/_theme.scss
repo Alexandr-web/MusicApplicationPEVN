@@ -167,6 +167,8 @@ body {
 
     .playlists {
       &__item {
+        background: $darkTheme_backgroundPlaylist;
+
         &:hover &-name {
           color: $darkTheme_colorActivePlaylistName;
         }

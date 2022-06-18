@@ -41,6 +41,17 @@
             </h4>
           </nuxt-link>
         </li>
+        <li class="sidebar__list-item">
+          <nuxt-link
+            class="sidebar__list-link"
+            :to="`/profile/signout`"
+            exact-active-class="sidebar__list-link--active"
+          >
+            <h4 class="sidebar__list-title">
+              Выйти
+            </h4>
+          </nuxt-link>
+        </li>
       </ul>
     </nav>
   </aside>

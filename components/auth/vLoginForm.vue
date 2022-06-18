@@ -1,10 +1,7 @@
 <template>
   <form
     class="form auth__form" 
-    @submit.prevent="$emit('login', {
-      email: $v.email.$model,
-      password: $v.password.$model,
-    })"
+    @submit.prevent="login"
   >
     <div class="form__field auth__form-field">
       <label
@@ -19,7 +16,7 @@
           type="text"
           placeholder="Написать email"
           name="email"
-          :class="{ 'input--invalid': $v.email.$invalid }"
+          :class="{ 'input--invalid': $v.email.$error }"
         >
       </label>
     </div>
@@ -36,7 +33,7 @@
           type="password"
           placeholder="Написать пароль"
           name="password"
-          :class="{ 'input--invalid': $v.password.$invalid }"
+          :class="{ 'input--invalid': $v.password.$error }"
         >
       </label>
     </div>
@@ -64,13 +61,23 @@
       return { submitText: "Войти", };
     },
     validations: {
+      password: {
+        required,
+        minLength: minLength(6),
+      },
       email: {
         required,
         email,
       },
-      password: {
-        required,
-        minLength: minLength(6),
+    },
+    methods: {
+      login() {
+        this.$v.$touch();
+
+        this.$emit("login", {
+          email: this.$v.email.$model,
+          password: this.$v.password.$model,
+        });
       },
     },
   };

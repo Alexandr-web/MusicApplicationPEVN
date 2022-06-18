@@ -17,7 +17,10 @@
           <h3 class="playlist-modal__title">
             {{ playlist.name }}
           </h3>
-          <ul class="playlist-modal__controls">
+          <ul
+            v-if="Object.keys(user).length && user.id === playlist.userId"
+            class="playlist-modal__controls"
+          >
             <li class="playlist-modal__controls-item">
               <nuxt-link
                 class="playlist-modal__controls-link playlist-modal__controls-link--edit"
@@ -72,6 +75,20 @@
         type: Boolean,
         required: true,
       },
+    },
+    data() {
+      return { user: {}, };
+    },
+    async fetch() {
+      try {
+        const { ok, user, } = await this.$store.dispatch("auth/getUser");
+
+        if (ok) {
+          this.user = user;
+        }
+      } catch (err) {
+        throw err;
+      }
     },
     computed: {
       getPlay() {

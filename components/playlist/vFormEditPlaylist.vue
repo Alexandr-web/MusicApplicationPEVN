@@ -38,7 +38,7 @@
                 type="text"
                 name="name"
                 placeholder="Название"
-                :class="{ 'input--invalid': $v.name.$invalid }"
+                :class="{ 'input--invalid': $v.name.$error }"
               >
             </label>
           </div>

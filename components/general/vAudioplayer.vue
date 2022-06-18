@@ -257,8 +257,10 @@
         const percent = Math.ceil((e.layerX / width) * 100);
         const audio = this.$refs.audio;
 
-        audio.currentTime = (percent * this.getAudioData.duration) / 100;
-        this.$store.commit("audio/setCurrentTime", (percent * this.getAudioData.duration) / 100);
+        if (audio) {
+          audio.currentTime = (percent * this.getAudioData.duration) / 100;
+          this.$store.commit("audio/setCurrentTime", (percent * this.getAudioData.duration) / 100);
+        }
       },
       setVolume(e) {
         if (e.target.classList.contains("audioplayer__volume-slider") || e.target.classList.contains("audioplayer__volume-slider-line")) {
@@ -279,7 +281,9 @@
       ontimeupdate() {
         const audio = this.$refs.audio;
 
-        this.$store.commit("audio/setCurrentTime", audio.currentTime);
+        if (audio) {
+          this.$store.commit("audio/setCurrentTime", audio.currentTime);
+        }
       },
     },
   };

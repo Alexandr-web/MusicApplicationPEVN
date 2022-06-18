@@ -17,6 +17,7 @@
   }
 
   &__center {
+    padding: 15px 0;
     display: flex;
     flex-direction: column;
   }
@@ -61,7 +62,7 @@
   position: sticky;
   top: 0;
   left: 0;
-  flex-basis: 15%;
+  width: 15%;
   height: 100vh;
   z-index: 999999;
 
@@ -141,7 +142,7 @@
 }
 
 .main-content {
-  flex-basis: 85%;
+  width: 85%;
 }
 
 .header {
@@ -231,6 +232,12 @@
 .profile {
   &__form {
     width: 700px;
+  }
+
+  &__singout-title {
+    text-align: center;
+    padding: 15px 0;
+    @extend %roboto-400;
   }
 
   &__inner {
@@ -716,11 +723,6 @@
     display: flex;
     flex-direction: column;
   }
-
-  &__playlists {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-  }
 }
 
 .audio {
@@ -1105,6 +1107,8 @@
     cursor: pointer;
     margin: 15px;
     align-self: start;
+    padding: 10px;
+    border-radius: 6px;
 
     &:hover &-poster-image {
       transform: scale(1.1);
@@ -1127,7 +1131,6 @@
     }
 
     &-poster {
-      margin-bottom: 15px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -1161,9 +1164,8 @@
       text-transform: uppercase;
       @extend %roboto-300;
       text-align: center;
-      max-width: 80%;
-      margin: 0 auto;
       transition: color .4s;
+      padding-top: 15px;
     }
   }
 }
