@@ -41,12 +41,12 @@
           <h4 class="form__field-title profile__form-field-title">Имя пользователя</h4>
           <input
             id="username"
-            v-model.trim="$v.name.$model"
+            v-model.trim="validations.name.model"
             class="form__input profile__form-input input"
             type="text"
             placeholder="Написать имя"
             name="name"
-            :class="{ 'input--invalid': $v.name.$error }"
+            :class="{ 'input--invalid': validations.name.$invalid }"
           >
         </label>
       </div>
@@ -58,12 +58,12 @@
           <h4 class="form__field-title profile__form-field-title">Email пользователя</h4>
           <input
             id="email"
-            v-model.trim="$v.email.$model"
+            v-model.trim="validations.email.model"
             class="form__input profile__form-input input"
             type="text"
             placeholder="Написать email"
             name="email"
-            :class="{ 'input--invalid': $v.email.$error }"
+            :class="{ 'input--invalid': validations.email.$invalid }"
           >
         </label>
       </div>
@@ -75,12 +75,12 @@
           <h4 class="form__field-title profile__form-field-title">Пароль пользователя</h4>
           <input
             id="password"
-            v-model.trim="$v.password.$model"
+            v-model.trim="validations.password.model"
             class="form__input profile__form-input input"
             type="password"
             placeholder="Написать пароль"
             name="password"
-            :class="{ 'input--invalid': $v.password.$error }"
+            :class="{ 'input--invalid': validations.password.$invalid }"
           >
         </label>
       </div>
@@ -92,12 +92,12 @@
           <h4 class="form__field-title profile__form-field-title">Повторить пароль</h4>
           <input
             id="repeatPassword"
-            v-model.trim="$v.password.$model"
+            v-model.trim="validations.password.model"
             class="form__input profile__form-input input"
             type="password"
             placeholder="Написать пароль еще раз"
             name="repeatPassword"
-            :class="{ 'input--invalid': $v.repeatPassword.$error }"
+            :class="{ 'input--invalid': validations.repeatPassword.$invalid }"
           >
         </label>
       </div>
@@ -113,13 +113,6 @@
 </template>
 
 <script>
-  import {
-    minLength,
-    maxLength,
-    email,
-    sameAs,
-  } from "vuelidate/lib/validators";
-
   export default {
     name: "ProfileSettingsFormComponent",
     props: {
@@ -128,20 +121,32 @@
         required: true,
       },
     },
-    validations: {
-      name: {
-        maxLength: maxLength(16),
-        minLength: minLength(6),
-      },
-      email: { email, },
-      password: { minLength: minLength(6), },
-      repeatPassword: { sameAs: sameAs("password"), },
-    },
     data() {
       return {
         avatar: {
           file: {},
           src: "",
+        },
+        validations: {
+          name: {
+            rules: {
+              maxLength: 16,
+              minLength: 6,
+            },
+            model: "",
+          },
+          email: {
+            rules: { email: true, },
+            model: "",
+          },
+          password: {
+            rules: { minLength: 6, },
+            model: "",
+          },
+          repeatPassword: {
+            rules: { sameAs: "password", },
+            model: "",
+          },
         },
       };
     },
@@ -170,13 +175,11 @@
       },
 
       edit() {
-        this.$v.$touch();
-        
-        if (!this.$v.$invalid) {
+        if (!this.validations.$invalid) {
           this.$emit("edit", {
-            name: this.$v.name.$model,
-            email: this.$v.email.$model,
-            password: this.$v.password.$model,
+            name: this.validations.name.model,
+            email: this.validations.email.model,
+            password: this.validations.password.model,
             avatar: this.avatar.file instanceof File ? this.avatar.file : null,
           });
         } else {

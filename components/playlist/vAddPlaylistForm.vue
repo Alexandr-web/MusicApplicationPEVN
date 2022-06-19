@@ -12,12 +12,12 @@
         <h4 class="playlist__form-title form__field-title">Название</h4>
         <input
           id="name"
-          v-model.trim="$v.name.$model"
+          v-model.trim="validations.name.model"
           name="name"
           class="playlist__form-input form__input input"
           type="text"
           placeholder="Написать название"
-          :class="{ 'input--invalid': $v.name.$error }"
+          :class="{ 'input--invalid': validations.name.$invalid }"
         >
       </label>
     </div>
@@ -98,22 +98,10 @@
 
 <script>
   import setNewAudioMixin from "@/mixins/setNewAudioMixin";
-  import {
-    required,
-    minLength,
-    maxLength,
-  } from "vuelidate/lib/validators";
   import getValidAudioAndPosterUrlMixin from "@/mixins/getValidAudioAndPosterUrlMixin";
 
   export default {
     name: "AddPlaylistFormComponent",
-    validations: {
-      name: {
-        required,
-        minLength: minLength(4),
-        maxLength: maxLength(25),
-      },
-    },
     mixins: [getValidAudioAndPosterUrlMixin, setNewAudioMixin],
     props: {
       pending: {
@@ -126,6 +114,16 @@
         poster: {
           src: "",
           file: {},
+        },
+        validations: {
+          name: {
+            rules: {
+              required: true,
+              minLength: 4,
+              maxLength: 25,
+            },
+            model: "",
+          },
         },
         audio: [],
         audioForPlaylist: [],
@@ -167,12 +165,10 @@
         }
       },
       addPlaylist() {
-        this.$v.$touch();
-
-        if ([...Object.values(this.poster), this.$v.name, this.audioForPlaylist.length].every(Boolean)) {
+        if ([...Object.values(this.poster), this.validations.name.model, this.audioForPlaylist.length].every(Boolean)) {
           this.$emit("add", {
             poster: this.poster.file,
-            name: this.$v.name.$model,
+            name: this.validations.name.model,
             audio: JSON.stringify(this.audioForPlaylist),
           });
         } else {

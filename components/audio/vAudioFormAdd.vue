@@ -12,12 +12,12 @@
         <h4 class="audio__form-title form__field-title">Название</h4>
         <input
           id="name"
-          v-model.trim="$v.name.$model"
+          v-model.trim="validations.name.model"
           name="name"
           class="audio__form-input form__input input"
           type="text"
           placeholder="Написать название"
-          :class="{ 'input--invalid': $v.name.$error }"
+          :class="{ 'input--invalid': validations.name.$invalid }"
         >
       </label>
     </div>
@@ -76,11 +76,6 @@
 </template>
 
 <script>
-  import {
-    required,
-    minLength,
-    maxLength,
-  } from "vuelidate/lib/validators";
   import getAudioTimeMixin from "@/mixins/getAudioTimeMixin";
 
   export default {
@@ -92,15 +87,18 @@
         required: true,
       },
     },
-    validations: {
-      name: {
-        required,
-        minLength: minLength(3),
-        maxLength: maxLength(30),
-      },
-    },
     data() {
       return {
+        validations: {
+          name: {
+            rules: {
+              required: true,
+              minLength: 3,
+              maxLength: 16,
+            },
+            model: "",
+          },
+        },
         audio: {
           src: "",
           file: {},
@@ -135,18 +133,22 @@
         }
       },
       add() {
-        const audio = document.createElement("audio");
+        if (!this.validations.$invalid && [this.audio.file && this.poster.file].every((file) => file instanceof File)) {
+          const audio = document.createElement("audio");
 
-        audio.src = this.audio.src;
-        audio.addEventListener("loadedmetadata", () => {
-          this.$emit("add", {
-            name: this.$v.name.$model,
-            poster: this.poster.file,
-            audio: this.audio.file,
-            time: this.getValidTime(audio.duration),
-            duration: audio.duration,
+          audio.src = this.audio.src;
+          audio.addEventListener("loadedmetadata", () => {
+            this.$emit("add", {
+              name: this.validations.name.model,
+              poster: this.poster.file,
+              audio: this.audio.file,
+              time: this.getValidTime(audio.duration),
+              duration: audio.duration,
+            });
           });
-        });
+        } else {
+          alert("Все данные должны быть заполнены");
+        }
       },
     },
   };

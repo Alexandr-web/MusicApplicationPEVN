@@ -11,12 +11,12 @@
         <h4 class="form__field-title auth__form-field-title">Email пользователя</h4>
         <input
           id="email"
-          v-model.trim="$v.email.$model"
+          v-model.trim="validations.email.model"
           class="form__input auth__form-input input"
           type="text"
           placeholder="Написать email"
           name="email"
-          :class="{ 'input--invalid': $v.email.$error }"
+          :class="{ 'input--invalid': validations.email.$invalid }"
         >
       </label>
     </div>
@@ -28,12 +28,12 @@
         <h4 class="form__field-title auth__form-field-title">Пароль пользователя</h4>
         <input
           id="password"
-          v-model.trim="$v.password.$model"
+          v-model.trim="validations.password.model"
           class="form__input auth__form-input input"
           type="password"
           placeholder="Написать пароль"
           name="password"
-          :class="{ 'input--invalid': $v.password.$error }"
+          :class="{ 'input--invalid': validations.password.$invalid }"
         >
       </label>
     </div>
@@ -48,36 +48,45 @@
 </template>
 
 <script>
-  import {
-    required,
-    minLength,
-    email,
-  } from "vuelidate/lib/validators";
-
   export default {
     name: "LoginFormComponent",
-    props: { pending: { type: Boolean, required: true, }, },
-    data() {
-      return { submitText: "Войти", };
+    props: {
+      pending: {
+        type: Boolean,
+        required: true,
+      },
     },
-    validations: {
-      password: {
-        required,
-        minLength: minLength(6),
-      },
-      email: {
-        required,
-        email,
-      },
+    data() {
+      return {
+        submitText: "Войти",
+        validations: {
+          email: {
+            rules: {
+              required: true,
+              email: true,
+            },
+            model: "",
+          },
+          password: {
+            rules: {
+              minLength: 6,
+              required: true,
+            },
+            model: "",
+          },
+        },
+      };
     },
     methods: {
       login() {
-        this.$v.$touch();
-
-        this.$emit("login", {
-          email: this.$v.email.$model,
-          password: this.$v.password.$model,
-        });
+        if (!this.validations.$invalid) {
+          this.$emit("login", {
+            email: this.validations.email.model,
+            password: this.validations.password.model,
+          });
+        } else {
+          alert("Все поля должны быть заполнены");
+        }
       },
     },
   };

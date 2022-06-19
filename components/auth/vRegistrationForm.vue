@@ -3,12 +3,7 @@
     class="form auth__form" 
     enctype="multipart/form-data"
     method="POST"
-    @submit.prevent="$emit('registration', {
-      name: $v.name.$model,
-      email: $v.email.$model,
-      password: $v.password.$model,
-      avatar: avatar.file
-    })"
+    @submit.prevent="registration"
   >
     <div class="form__field auth__form-field">
       <label
@@ -45,12 +40,12 @@
         <h4 class="form__field-title auth__form-field-title">Имя пользователя</h4>
         <input
           id="username"
-          v-model.trim="$v.name.$model"
+          v-model.trim="validations.name.model"
           class="form__input auth__form-input input"
           type="text"
           placeholder="Написать имя"
           name="name"
-          :class="{ 'input--invalid': $v.name.$error }"
+          :class="{ 'input--invalid': validations.name.$invalid }"
         >
       </label>
     </div>
@@ -62,12 +57,12 @@
         <h4 class="form__field-title auth__form-field-title">Email пользователя</h4>
         <input
           id="email"
-          v-model.trim="$v.email.$model"
+          v-model.trim="validations.email.model"
           class="form__input auth__form-input input"
           type="text"
           placeholder="Написать email"
           name="email"
-          :class="{ 'input--invalid': $v.email.$error }"
+          :class="{ 'input--invalid': validations.email.$invalid }"
         >
       </label>
     </div>
@@ -79,12 +74,12 @@
         <h4 class="form__field-title auth__form-field-title">Пароль пользователя</h4>
         <input
           id="password"
-          v-model.trim="$v.password.$model"
+          v-model.trim="validations.password.model"
           class="form__input auth__form-input input"
           type="password"
           placeholder="Написать пароль"
           name="password"
-          :class="{ 'input--invalid': $v.password.$error }"
+          :class="{ 'input--invalid': validations.password.$invalid }"
         >
       </label>
     </div>
@@ -96,12 +91,12 @@
         <h4 class="form__field-title auth__form-field-title">Повторить пароль</h4>
         <input
           id="repeatPassword"
-          v-model.trim="$v.repeatPassword.$model"
+          v-model.trim="validations.repeatPassword.model"
           class="form__input auth__form-input input"
           type="password"
           placeholder="Написать пароль еще раз"
           name="repeatPassword"
-          :class="{ 'input--invalid': $v.repeatPassword.$error }"
+          :class="{ 'input--invalid': validations.repeatPassword.$invalid }"
         >
       </label>
     </div>
@@ -116,14 +111,6 @@
 </template>
 
 <script>
-  import {
-    required,
-    minLength,
-    maxLength,
-    email,
-    sameAs,
-  } from "vuelidate/lib/validators";
-
   export default {
     name: "RegistrationFormComponent",
     props: { pending: { type: Boolean, required: true, }, },
@@ -134,28 +121,52 @@
           file: {},
           src: "",
         },
+        validations: {
+          name: {
+            rules: {
+              required: true,
+              minLength: 6,
+              maxLength: 16,
+            },
+            model: "",
+          },
+          email: {
+            rules: {
+              required: true,
+              email: true,
+            },
+            model: "",
+          },
+          password: {
+            rules: {
+              required: true,
+              minLength: 6,
+            },
+            model: "",
+          },
+          repeatPassword: {
+            rules: {
+              required: true,
+              sameAs: "password",
+            },
+            model: "",
+          },
+        },
       };
     },
-    validations: {
-      name: {
-        required,
-        maxLength: maxLength(16),
-        minLength: minLength(6),
-      },
-      email: {
-        required,
-        email,
-      },
-      password: {
-        required,
-        minLength: minLength(6),
-      },
-      repeatPassword: {
-        required,
-        sameAs: sameAs("password"),
-      },
-    },
     methods: {
+      registration() {
+        if (!this.validations.$invalid && this.avatar.file instanceof File) {
+          this.$emit("registration", {
+            name: this.validations.name.model,
+            email: this.validations.email.model,
+            password: this.validations.password.model,
+            avatar: this.avatar.file,
+          });
+        } else {
+          alert("Все поля должны быть заполнены");
+        }
+      },
       loadAvatar(e) {
         if (window.FileReader) {
           const file = e.currentTarget.files[0];

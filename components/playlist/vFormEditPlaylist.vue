@@ -33,12 +33,12 @@
             >
               <input
                 id="name"
-                v-model.trim="$v.name.$model"
+                v-model.trim="validations.name.model"
                 class="playlist__edit-input input"
                 type="text"
                 name="name"
                 placeholder="Название"
-                :class="{ 'input--invalid': $v.name.$error }"
+                :class="{ 'input--invalid': validations.name.$invalid }"
               >
             </label>
           </div>
@@ -89,10 +89,6 @@
 
 <script>
   import getValidPlaylistPosterMixin from "@/mixins/getValidPlaylistPosterMixin";
-  import {
-    minLength,
-    maxLength,
-  } from "vuelidate/lib/validators";
 
   export default {
     name: "FormEditPlaylistComponent",
@@ -111,17 +107,21 @@
         required: true,
       },
     },
-    validations: {
-      name: {
-        minLength: minLength(4),
-        maxLength: maxLength(25),
-      },
-    },
     data() {
       return {
         posterPlaylist: {
           file: {},
           res: "",
+        },
+        validations: {
+          name: {
+            rules: {
+              minLength: 4,
+              maxLength: 25,
+              required: true,
+            },
+            model: "",
+          },
         },
       };
     },
@@ -156,11 +156,9 @@
         }
       },
       edit() {
-        this.$v.$touch();
-
-        if ([this.posterPlaylist.src, this.$v.name.$model, this.audio.filter((audio) => audio.have).length].every(Boolean)) {
+        if ([this.posterPlaylist.src, this.validations.name.model, this.audio.filter((audio) => audio.have).length].every(Boolean)) {
           this.$emit("edit", {
-            name: this.$v.name.$model,
+            name: this.validations.name.model,
             poster: this.posterPlaylist.file instanceof File ? this.posterPlaylist.file : this.posterPlaylist.src,
             audio: JSON.stringify(this.audio.filter(({ have, }) => have).map(({ id, }) => id)),
           });
