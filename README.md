@@ -6,29 +6,34 @@ This project was created in order to listen not only to your own music, but also
 
 ## Options
 
-### Authorization
+### Registration and Login Pages
 
-<img src="./readmeImages/vueWLGNHgm0.jpg" alt="authorization" />
+<img src="./readmeImages/RegistrationPage.jpg" alt="Registration" />
+<img src="./readmeImages/SignInPage.jpg" alt="login" />
 
 ### Home page
 
-<img src="./readmeImages/Sn2h28knoxk.jpg" alt="home page" />
+<img src="./readmeImages/home.jpg" alt="home page" />
 
 ### Listening to playlists
 
-<img src="./readmeImages/gCS_l03nOx0.jpg" alt="listening to playlists" />
+<img src="./readmeImages/listeningPlaylist.jpg" alt="listening to playlists" />
+
+### User favorite audio page
+
+<img src="./readmeImages/s4Dc2r8j6RA.jpg" alt="user favorite audio page" />
 
 ### User audio page
 
-<img src="./readmeImages/3vwXoOmj_e0.jpg" alt="user audio page" />
+<img src="./readmeImages/ProfileAudioPage.jpg" alt="user audio page" />
 
 ### User playlist page
 
-<img src="./readmeImages/q_0EiuH7e8c.jpg" alt="user playlist page" />
+<img src="./readmeImages/ProfilePlaylistPage.jpg" alt="user playlist page" />
 
 ### User settings page
 
-<img src="./readmeImages/nfThETLoPwk.jpg" alt="user settings page" />
+<img src="./readmeImages/ProfileSettingsPage.jpg" alt="user settings page" />
 
 ## Build Setup
 

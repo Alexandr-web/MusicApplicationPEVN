@@ -21,6 +21,9 @@ class Profile {
         return res.status(403).json({ ok: false, message: "У вас нет доступа для изменения этого аккаунта", });
       }
 
+      const allAudio = await Song.findAll();
+      const userAudio = allAudio.filter(({ userId, }) => userId === +id);
+
       Object.keys(req.body).map(async (key) => {
         updates[key] = key !== "password" ? req.body[key] : await bcrypt.hash(req.body[key], 7);
       });
@@ -31,6 +34,13 @@ class Profile {
         if (matchUser && matchUser.dataValues.id !== +id) {
           return res.status(400).json({ ok: false, message: "Пользователь с данным email уже существует", });
         }
+      }
+
+      if (updates.name) {
+        userAudio.map(async (audio) => {
+          await audio.update({ author: updates.name, });
+          await audio.save();
+        });
       }
 
       if (req.file) {

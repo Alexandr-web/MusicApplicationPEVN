@@ -101,7 +101,7 @@ class Playlist {
 
       await playlist.destroy();
 
-      return res.status(200).json({ ok: true, message: "Плейлист был удален", });
+      return res.status(200).json({ ok: true, message: "Плейлист удален", });
     } catch (err) {
       console.log(err);
 
