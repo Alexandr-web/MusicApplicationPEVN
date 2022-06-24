@@ -6,8 +6,6 @@
           <h1 class="title home__column-title">
             Плейлисты
           </h1>
-        </div>
-        <div class="home__column">
           <clientOnly v-if="playlists.length">
             <Swiper
               class="swiper__wrapper"
@@ -26,15 +24,33 @@
             </Swiper>
           </clientOnly>
           <vNothing v-else />
+          <vPlaylistModal 
+            v-if="Object.keys(objectPlaylist).length"
+            :playlist="objectPlaylist"
+            :show="showPlaylistModal"
+            @hide="showPlaylistModal = false"
+            @removePlaylist="removePlaylist"
+          />
+        </div>
+        <div class="home__column">
+          <h1 class="title home__column-title">
+            Аудио
+          </h1>
+          <ul
+            v-if="songs.length"
+            class="audio__list"
+          >
+            <vAudio
+              v-for="(audio, indexAudio) in songs"
+              :key="indexAudio"
+              :audio="audio"
+              :no-controls="true"
+              @setActiveAudio="setAudio"
+            />
+          </ul>
+          <vNothing v-else />
         </div>
       </div>
-      <vPlaylistModal 
-        v-if="Object.keys(objectPlaylist).length"
-        :playlist="objectPlaylist"
-        :show="showPlaylistModal"
-        @hide="showPlaylistModal = false"
-        @removePlaylist="removePlaylist"
-      />
     </div>
   </div>
 </template>
@@ -45,6 +61,8 @@
   import vPlaylistModal from "@/components/playlist/vPlaylistModal";
   import vNothing from "@/components/general/vNothing";
   import getValidPlaylistPosterMixin from "@/mixins/getValidPlaylistPosterMixin";
+  import vAudio from "@/components/general/vAudio";
+  import setNewAudioMixin from "@/mixins/setNewAudioMixin";
 
   export default { 
     name: "MainPage",
@@ -54,8 +72,9 @@
       vNothing,
       Swiper,
       SwiperSlide,
+      vAudio,
     },
-    mixins: [getValidPlaylistPosterMixin],
+    mixins: [getValidPlaylistPosterMixin, setNewAudioMixin],
     layout: "default",
     data() {
       return {
@@ -66,6 +85,7 @@
           spaceBetween: 10,
         },
         playlists: [],
+        songs: [],
         objectPlaylist: {},
         showPlaylistModal: false,
       };
@@ -73,9 +93,10 @@
     async fetch() {
       try {
         const token = this.$store.getters["auth/getToken"];
-        const { ok, playlists, } = await this.$store.dispatch("playlist/getAll", { token, });
+        const { ok: completePlaylists, playlists, } = await this.$store.dispatch("playlist/getAll", { token, });
+        const { ok: completeAudio, audio, } = await this.$store.dispatch("audio/getAll", { token, });
 
-        if (ok) {
+        if (completePlaylists) {
           playlists.map((playlist) => {
             this.getValidPlaylistPoster(playlist.poster).then((url) => {
               this.playlists.push({ ...playlist, poster: url, });
@@ -84,17 +105,40 @@
             });
           });
         }
+        
+        if (completeAudio) {
+          this.songs = audio;
+          this.$store.commit("audio/setPlaylist", audio);
+        }
       } catch (err) {
         throw err;
       }
     },
     head: { title: "Главная", },
+    computed: {
+      getAudioData() {
+        return this.$store.getters["audio/getAudioData"];
+      },
+      getPlay() {
+        return this.$store.getters["audio/getPlay"];
+      },
+      getPlaylist() {
+        return this.$store.getters["audio/getPlaylist"];
+      },
+    },
     watch: {
       showPlaylistModal(val) {
         document.documentElement.style.overflow = val ? "hidden" : "visible";
       },
     },
     methods: {
+      setAudio(audioData) {
+        if (this.getAudioData && this.getAudioData.id === audioData.id) {
+          this.$store.commit("audio/setPlay", !this.getPlay);
+        } else {
+          this.setActiveAudio(audioData);
+        }
+      },
       setPlaylist(playlist) {
         const playlistAudioFetch = this.$store.dispatch("playlist/getAudio", { playlistId: playlist.id, });
 

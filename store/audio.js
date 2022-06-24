@@ -29,6 +29,7 @@ export default {
     },
     setVolume(state, val) {
       state.volume = val;
+      localStorage.setItem("volume", val);
     },
     clearAudio(state) {
       state.play = false;
@@ -62,6 +63,7 @@ export default {
         throw err;
       }
     },
+
     async addToPlaylist({ }, { token, audioId, playlistId, }) {
       try {
         const res = await fetch(`${host}/audio/add/playlist/${playlistId}`, {
@@ -79,6 +81,7 @@ export default {
         throw err;
       }
     },
+
     async remove({ }, { token, audioId, }) {
       try {
         const res = await fetch(`${host}/audio/${audioId}/remove`, {
@@ -95,6 +98,7 @@ export default {
         throw err;
       }
     },
+
     async setFavorite({ }, { token, audioId, }) {
       try {
         const res = await fetch(`${host}/audio/${audioId}/favorite`, {
@@ -102,6 +106,38 @@ export default {
           headers: {
             "Accept-Type": "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token || ""}`,
+          },
+        });
+
+        return res.json();
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    async getFavorite({ }, { token, }) {
+      try {
+        const res = await fetch(`${host}/audio/favorite`, {
+          method: "GET",
+          headers: {
+            "Accept-Type": "application/json",
+            Authorization: `Bearer ${token || ""}`,
+          },
+        });
+
+        return res.json();
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    async getAll({ }, { token, }) {
+      try {
+        const res = await fetch(`${host}/audio/api`, {
+          method: "GET",
+          headers: {
+            "Accept-Type": "application/json",
             Authorization: `Bearer ${token || ""}`,
           },
         });

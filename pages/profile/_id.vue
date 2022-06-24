@@ -33,7 +33,7 @@
 
         this.user = user;
 
-        return Boolean(user) && ["settings", "audio", "playlists", "artists"].includes(tab);
+        return Boolean(user) && ["settings", "audio", "playlists", "favorite"].includes(tab);
       }).catch((err) => {
         throw err;
       });

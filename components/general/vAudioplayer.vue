@@ -167,6 +167,13 @@
         this.$refs.audio.volume = val;
       },
     },
+    created() {
+      const localVolume = localStorage.getItem("volume");
+
+      if (localVolume) {
+        this.$store.commit("audio/setVolume", JSON.parse(localVolume));
+      }
+    },
     mounted() {
       this.checkFavorite();
       this.setAudioState(this.getPlay);

@@ -48,6 +48,7 @@
             v-for="(song, index) in getPlaylist"
             :key="index"
             :audio="song"
+            :no-controls="true"
             @setActiveAudio="setAudio"
             @remove="removeAudio"
           />

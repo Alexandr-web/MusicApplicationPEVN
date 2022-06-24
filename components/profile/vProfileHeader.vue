@@ -51,16 +51,16 @@
             link: "?tab=settings",
           },
           {
-            name: "Прослушиваемые артисты",
-            link: "?tab=artists",
-          },
-          {
             name: "Плейлисты",
             link: "?tab=playlists",
           },
           {
             name: "Песни",
             link: "?tab=audio",
+          },
+          {
+            name: "Избранное",
+            link: "?tab=favorite",
           }
         ],
       };

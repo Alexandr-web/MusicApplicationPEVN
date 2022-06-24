@@ -29,7 +29,10 @@
         <span class="audio__list-favorite-count">{{ audio.likes.length }}</span>
       </div>
     </div>
-    <div class="audio__list-block audio__list-options">
+    <div
+      v-if="!noControls"
+      class="audio__list-block audio__list-options"
+    >
       <button
         class="audio__list-options-btn add-btn add-btn--remove"
         @click.stop="$emit('remove', audio)"
@@ -52,6 +55,10 @@
         required: true,
       },
       noPoster: {
+        type: Boolean,
+        default: false,
+      },
+      noControls: {
         type: Boolean,
         default: false,
       },

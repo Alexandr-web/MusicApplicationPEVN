@@ -123,6 +123,7 @@
     },
     data() {
       return {
+        user: {},
         avatar: {
           file: {},
           src: "",
@@ -131,7 +132,7 @@
           name: {
             rules: {
               maxLength: 16,
-              minLength: 6,
+              minLength: 4,
             },
             model: "",
           },
@@ -150,6 +151,23 @@
         },
       };
     },
+
+    async fetch() {
+      try {
+        const { ok, user, } = await this.$store.dispatch("auth/getUser");
+
+        if (ok) {
+          Object.keys(this.validations).map((key) => {
+            if (key in user && !["password"].includes(key)) {
+              this.validations[key].model = user[key];
+            }
+          });
+        }
+      } catch (err) {
+        throw err;
+      }
+    },
+
     methods: {
       loadAvatar(e) {
         if (window.FileReader) {

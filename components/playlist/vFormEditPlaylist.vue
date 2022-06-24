@@ -126,6 +126,8 @@
       };
     },
     mounted() {
+      this.validations.name.model = this.playlist.name;
+
       this.getValidPlaylistPoster(this.playlist.poster).then((url) => {
         this.posterPlaylist = { file: {}, src: url, };
       }).catch((err) => {

@@ -27,7 +27,7 @@ class Audio {
 
       const songs = await Song.findAll();
 
-      return res.status(200).json({ ok: true, songs, });
+      return res.status(200).json({ ok: true, audio: songs, });
     } catch (err) {
       console.log(err);
 
@@ -176,6 +176,23 @@ class Audio {
       await audio.update({ likes: copyAudioLikes, });
 
       return res.status(200).json({ ok: true, isFavorite: true, });
+    } catch (err) {
+      console.log(err);
+
+      return res.status(500).json({ ok: false, message: "Произошла ошибка сервера", });
+    }
+  }
+
+  async getFavorite(req, res) {
+    try {
+      if (!req.isAuth) {
+        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+      }
+
+      const allAudio = await Song.findAll();
+      const favoriteAudio = allAudio.filter(({ dataValues: { likes, }, }) => likes.includes(req.userId));
+
+      return res.status(200).json({ ok: true, audio: favoriteAudio, });
     } catch (err) {
       console.log(err);
 
