@@ -17,12 +17,12 @@ class Profile {
         return res.status(404).json({ ok: false, message: "Данного пользователя не существует", });
       }
 
-      if (req.userId !== +id) {
+      if (req.userId !== parseInt(id)) {
         return res.status(403).json({ ok: false, message: "У вас нет доступа для изменения этого аккаунта", });
       }
 
       const allAudio = await Song.findAll();
-      const userAudio = allAudio.filter(({ userId, }) => userId === +id);
+      const userAudio = allAudio.filter(({ userId, }) => userId === parseInt(id));
 
       Object.keys(req.body).map(async (key) => {
         updates[key] = key !== "password" ? req.body[key] : await bcrypt.hash(req.body[key], 7);
@@ -31,7 +31,7 @@ class Profile {
       if (updates.email) {
         const matchUser = await User.findOne({ where: { email: updates.email, }, });
 
-        if (matchUser && matchUser.dataValues.id !== +id) {
+        if (matchUser && matchUser.dataValues.id !== parseInt(id)) {
           return res.status(400).json({ ok: false, message: "Пользователь с данным email уже существует", });
         }
       }
@@ -63,17 +63,18 @@ class Profile {
   async getAudio(req, res) {
     try {
       const { id, } = req.params;
+      const { favorite, } = req.query;
 
       if (!req.isAuth) {
         return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
-      if (req.userId !== +id) {
+      if (req.userId !== parseInt(id)) {
         return res.status(403).json({ ok: false, message: "У вас нет доступа для получения списка аудио другого пользователя", });
       }
 
       const songs = await Song.findAll();
-      const userSongs = songs.filter(({ dataValues, }) => dataValues.userId === +id);
+      const userSongs = songs.filter(({ dataValues, }) => dataValues.userId === parseInt(id) || (favorite && dataValues.likes.includes(parseInt(id))));
 
       return res.status(200).json({ ok: true, songs: userSongs, });
     } catch (err) {
@@ -91,12 +92,12 @@ class Profile {
         return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
-      if (req.userId !== +id) {
+      if (req.userId !== parseInt(id)) {
         return res.status(403).json({ ok: false, message: "У вас нет доступа для получения списка плейлистов другого пользователя", });
       }
 
       const playlists = await Playlist.findAll();
-      const userPlaylists = playlists.filter(({ dataValues, }) => dataValues.userId === +id);
+      const userPlaylists = playlists.filter(({ dataValues, }) => dataValues.userId === parseInt(id));
 
       return res.status(200).json({ ok: true, playlists: userPlaylists, });
     } catch (err) {
@@ -125,7 +126,7 @@ class Profile {
 
       const allAudio = await Song.findAll();
       const filterAudio = allAudio.filter((audio) => {
-        if (audio.dataValues.userId === req.userId) {
+        if (audio.dataValues.userId === req.userId || audio.dataValues.likes.includes(req.userId)) {
           audio.dataValues.have = playlist.dataValues.audio.includes(audio.dataValues.id);
 
           return audio;

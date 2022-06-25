@@ -39,6 +39,18 @@ This project was created in order to listen not only to your own music, but also
 
 <img src="./readmeImages/ProfileSettingsPage2.jpg" alt="user settings page with light theme" />
 
+### Edit playlist page
+
+<img src="./readmeImages/editPlaylistPage.jpg" alt="edit playlist page" />
+
+### Add audio page
+
+<img src="./readmeImages/addAudioPage.jpg" alt="add audio page" />
+
+### Add playlist page
+
+<img src="./readmeImages/addPlaylistPage.jpg" alt="add playlist page" />
+
 ## Build Setup
 
 ```bash

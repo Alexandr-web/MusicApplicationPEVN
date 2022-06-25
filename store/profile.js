@@ -66,5 +66,21 @@ export default {
         throw err;
       }
     },
+
+    async getAudioAndFavorite({ }, { userId, token, }) {
+      try {
+        const res = await fetch(`${host}/profile/api/${userId}/audio?favorite=true`, {
+          method: "GET",
+          headers: {
+            "Accept-Type": "application/json",
+            Authorization: `Bearer ${token || ""}`,
+          },
+        });
+
+        return res.json();
+      } catch (err) {
+        throw err;
+      }
+    },
   },
 };

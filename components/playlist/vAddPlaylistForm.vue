@@ -133,7 +133,7 @@
       try {
         const token = this.$store.getters["auth/getToken"];
         const { user: { id, }, } = await this.$store.dispatch("auth/getUser");
-        const { ok, songs, } = await this.$store.dispatch("profile/getAudio", { token, userId: id, });
+        const { ok, songs, } = await this.$store.dispatch("profile/getAudioAndFavorite", { token, userId: id, });
         
         if (ok) {
           songs.map((song) => {
