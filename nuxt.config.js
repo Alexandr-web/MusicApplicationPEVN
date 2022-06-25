@@ -1,5 +1,4 @@
 export default {
-  // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: "Music Application",
     htmlAttrs: { lang: "ru", },
@@ -14,25 +13,20 @@ export default {
     ],
   },
 
-  // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     "@/static/css/main.css"
   ],
 
-  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: "~/plugins/vue-awesome-swiper.js", ssr: false, },
     { src: "~/plugins/validation.js", }
   ],
 
-  // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
-  // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
   ],
 
-  // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
   ],
 
@@ -40,14 +34,15 @@ export default {
     "@/server/app.js"
   ],
 
-  // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extend(config) {
-      config.module.rules.push({
+      const audioFileRule = {
         test: /\.(ogg|mp3|wav|mpe?g)$/i,
         loader: "file-loader",
         options: { name: "[path][name].[ext]", },
-      });
+      };
+
+      config.module.rules.push(audioFileRule);
     },
   },
 };

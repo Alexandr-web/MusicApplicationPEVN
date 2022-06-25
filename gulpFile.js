@@ -13,15 +13,13 @@ const paths = {
 };
 
 const styles = () => {
-  const res = src(paths.scss.from)
+  return src(paths.scss.from)
     .pipe(plumber())
     .pipe(scss({ outputStyle: "expanded", }))
     .pipe(autoprefixer({ cascade: true, overrideBrowserslist: ["last 5 versions"], }))
     .pipe(cleanCss({ level: { 1: { specialComments: 0, }, }, }))
     .pipe(concat("main.css"))
     .pipe(dest(paths.scss.to));
-
-  return res;
 };
 
 const watching = () => {

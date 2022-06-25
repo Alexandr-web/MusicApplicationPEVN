@@ -1,0 +1,343 @@
+body {
+  &[data-theme=light] {
+    background: $lightTheme_backgroundPage;
+    color: $lightTheme_colorItems;
+
+    a {
+      color: $lightTheme_colorItems;
+    }
+
+    .playlist-modal {
+      background: $lightTheme_backgroundPlaylistModal;
+
+      &__main {
+        background: $lightTheme_backgroundPlaylistModalMain;
+      }
+
+      &__controls {
+        &-link {
+          &--edit {
+            color: $lightTheme_colorPlaylistModalEditControls;
+          }
+        }
+
+        &-item {
+          background: $lightTheme_backgroundPlaylistModalControlsItems;
+
+          &--remove {
+            color: $invalid;
+          }
+        }
+      }
+    }
+
+    .nothing {
+      &__link {
+        color: $lightTheme_colorNothingLink;
+      }
+    }
+
+    .audioplayer {
+      background: $lightTheme_backgroundAudioplayer;
+
+      &__progressbar {
+        background: $lightTheme_backgroundAudioplayerProgressbar;
+
+        &-line {
+          background: $lightTheme_backgroundAudioplayerProgressbarLine;
+        }
+      }
+
+      &__volume {
+        &-slider {
+          background: $lightTheme_backgroundAudioplayerVolumeSlider;
+
+          &-line {
+            background: $lightTheme_backgroundAudioplayerVolumeLine;
+          }
+
+          &-end {
+            background: $lightTheme_backgroundAudioplayerVolumeSliderEnd;
+          }
+        }
+
+        &-icon {
+          fill: $lightTheme_colorAudioplayerVolumeIcon;
+        }
+      }
+
+      &__songname {
+        color: $lightTheme_colorAudioplayerSong;
+      }
+
+      &__authorname {
+        color: $lightTheme_colorAudioplayerAuthor;
+      }
+
+      &__favorite {
+        &-icon {
+          fill: $lightTheme_colorDisabledStar;
+
+          &--active {
+            fill: $lightTheme_colorActiveStar;
+          }
+        }
+      }
+
+      &__controls {
+        &-play {
+          fill: $lightTheme_colorAudioplayerPlay;
+        }
+
+        &-pause {
+          fill: $lightTheme_colorAudioplayerPause;
+        }
+
+        &-prev {
+          fill: $lightTheme_colorAudioplayerPrev;
+        }
+
+        &-next {
+          fill: $lightTheme_colorAudioplayerNext;
+        }
+      }
+    }
+
+    .playlist {
+      &__edit {
+        &-audio {
+          background: $lightTheme_backgroundAudio;
+
+          &-songname {
+            color: $lightTheme_colorAudioName;
+          }
+        }
+      }
+    }
+
+    .audio {
+      &__list {
+        &-item {
+          background: $lightTheme_backgroundAudio;
+
+          &--active {
+            &::before {
+              background: $lightTheme_backgroundActiveAudio;
+            }
+          }
+        }
+
+        &-favorite {
+          &-icon {
+            fill: $lightTheme_colorActiveStar;
+          }
+
+          &-count {
+            color: $lightTheme_colorAudioFavoriteCount;
+          }
+        }
+
+        &-author {
+          &-songname {
+            color: $lightTheme_colorAudioName;
+          }
+
+          &-name {
+            color: $lightTheme_colorAudioAuthor;
+          }
+        }
+
+        &-songtime {
+          color: $lightTheme_colorAudioTime;
+        }
+      }
+    }
+
+    .playlists {
+      &__item {
+        background: $lightTheme_backgroundPlaylist;
+
+        &:hover &-name {
+          color: $lightTheme_colorActivePlaylistName;
+        }
+
+        &-poster {
+          background: $lightTheme_backgroundPlaylistPoster;
+
+          &::before {
+            background: $lightTheme_backgroundPlaylistAreaPoster;
+          }
+        }
+      }
+    }
+
+    .add-btn {
+      background: $lightTheme_backgroundAddBtn;
+
+      &::before,
+      &::after {
+        background: $lightTheme_colorLineAddBtn;
+      }
+    }
+
+    .form {
+      &__block-avatar {
+        box-shadow: inset $lightTheme_boxShadowBlockAvatar 0 0 30px 4px;
+      }
+
+      &__data {
+        &-list {
+          &-item {
+            background-color: $lightTheme_backgroundFormDataListItem;
+          }
+
+          &-text {
+            background: $lightTheme_backgroundFormDataListText;
+          }
+        }
+      }
+
+      &__block-poster,
+      &__block-audio {
+        border-color: $lightTheme_colorBorderFile;
+      }
+
+      &__field {
+        &-title {
+          color: $lightTheme_colorFieldTitle;
+        }
+      }
+
+      &__submit {
+        background: $lightTheme_backgroundSubmitAuth;
+        color: $lightTheme_colorSubmitAuth;
+      }
+    }
+
+    .auth {
+      &__header {
+        &-list {
+          &-item {
+            &::after {
+              background: $lightTheme_backgroundSpaceAuth;
+            }
+          }
+
+          &-link {
+            color: $lightTheme_colorDisabledLinkAuth;
+
+            &--active {
+              color: $lightTheme_colorActiveLinkAuth;
+            }
+          }
+        }
+      }
+    }
+
+    .sidebar {
+      background: $lightTheme_backgroundSidebar;
+
+      &__list {
+        &-icon {
+          fill: $lightTheme_backgroundDisabledSidebarIcon;
+        }
+
+        &-link {
+          color: $lightTheme_colorDisabledSidebarLink;
+
+          &:hover {
+            color: $lightTheme_colorActiveSidebarLink;
+          }
+
+          &:hover>svg {
+            fill: $lightTheme_backgroundActiveSidebarIcon;
+          }
+
+          &--active {
+            color: $lightTheme_colorActiveSidebarLink;
+
+            &>svg {
+              fill: $lightTheme_backgroundActiveSidebarIcon;
+            }
+          }
+        }
+      }
+    }
+
+    .header {
+      background: $lightTheme_backgroundHeader;
+
+      &__list {
+        &-username {
+          color: $lightTheme_colorUsernameLink;
+        }
+
+        &-search-input {
+          background: $lightTheme_backgroundSearchInput;
+          color: $lightTheme_colorSearchInput;
+        }
+      }
+    }
+
+    .profile {
+      &__header {
+        background: $lightTheme_backgroundProfileHeader;
+
+        &-list {
+          &-link {
+            color: $lightTheme_colorProfileHeaderDisabledLink;
+
+            &:hover {
+              color: $lightTheme_colorProfileHeaderActiveLink;
+            }
+
+            &--active {
+              color: $lightTheme_colorProfileHeaderActiveLink;
+            }
+
+            &::after {
+              background: $lightTheme_backgroundProfileHeaderLineLink;
+            }
+          }
+        }
+      }
+    }
+
+    .input {
+      border-bottom: 1px solid $lightTheme_colorDisabledBorderInput;
+      color: $lightTheme_colorDisabledInput;
+
+      &--invalid {
+        border-color: $invalid;
+      }
+
+      &:focus {
+        color: $lightTheme_colorActiveInput;
+        border-color: $lightTheme_colorActiveBorderInput;
+      }
+
+      &__file {
+        &-style {
+          color: $lightTheme_colorFileText;
+        }
+      }
+
+      &__radio {
+        &:checked+span {
+          &::after {
+            background: $lightTheme_backgroundActiveRadioThemeCheckbox;
+          }
+        }
+
+        &-style {
+          background: $lightTheme_backgroundRadioTheme;
+          color: $lightTheme_colorRadioTheme;
+
+          &::after {
+            background: $lightTheme_backgroundRadioThemeCheckbox;
+          }
+        }
+      }
+    }
+  }
+}

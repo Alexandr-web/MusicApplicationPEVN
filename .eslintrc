@@ -30,10 +30,7 @@
     "semi": "error",
     "no-plusplus": "off",
     "eol-last": "off",
-    "arrow-body-style": [
-      "error",
-      "as-needed"
-    ],
+    "arrow-body-style": "off",
     "no-unused-vars": "warn",
     "no-alert": "off",
     "prefer-destructuring": "off",

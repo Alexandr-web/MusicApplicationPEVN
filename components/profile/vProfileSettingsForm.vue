@@ -101,6 +101,38 @@
           >
         </label>
       </div>
+      <div class="form__field profile__form-field">
+        <div class="profile__form-row-center">
+          <label
+            class="form__label profile__form-label"
+            for="dark"
+          >
+            <input
+              id="dark"
+              class="input__radio"
+              type="radio"
+              name="theme"
+              :checked="theme === 'dark'"
+              @input="theme = 'dark'"
+            >
+            <span class="input__radio-style">Темная</span>
+          </label>
+          <label
+            class="form__label profile__form-label"
+            for="light"
+          >
+            <input
+              id="light"
+              class="input__radio"
+              type="radio"
+              name="theme"
+              :checked="theme === 'light'"
+              @input="theme = 'light'"
+            >
+            <span class="input__radio-style">Светлая</span>
+          </label>
+        </div>
+      </div> 
       <button
         class="form__submit profile__form-submit"
         type="submit"
@@ -124,6 +156,7 @@
     data() {
       return {
         user: {},
+        theme: "",
         avatar: {
           file: {},
           src: "",
@@ -158,7 +191,7 @@
 
         if (ok) {
           Object.keys(this.validations).map((key) => {
-            if (key in user && !["password"].includes(key)) {
+            if (key in user && !["password", "repeatPassword"].includes(key)) {
               this.validations[key].model = user[key];
             }
           });
@@ -166,6 +199,16 @@
       } catch (err) {
         throw err;
       }
+    },
+
+    watch: {
+      theme(newVal) {
+        document.body.dataset.theme = newVal;
+      },
+    },
+
+    mounted() {
+      this.theme = localStorage.getItem("theme") || "dark";
     },
 
     methods: {
@@ -200,6 +243,8 @@
             password: this.validations.password.model,
             avatar: this.avatar.file instanceof File ? this.avatar.file : null,
           });
+
+          localStorage.setItem("theme", this.theme);
         } else {
           alert("Все поля должны быть заполнены верно");
         }
