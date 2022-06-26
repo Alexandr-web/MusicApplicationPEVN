@@ -48,10 +48,11 @@
     },
     async fetch() {
       try {
-        const res = await this.$store.dispatch("auth/getUser");
-        const user = { ...res.user, avatar: await this.getValidAvatarUrl(res.user.avatar), };
-        
-        this.user = user;
+        const { ok, user, } = await this.$store.dispatch("auth/getUser");
+
+        if (ok) {
+          this.user = { ...user, avatar: await this.getValidAvatarUrl(user.avatar), };
+        }
       } catch (err) {
         throw err;
       }
