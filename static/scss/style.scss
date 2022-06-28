@@ -137,20 +137,13 @@
     height: 100%;
   }
 
-  &__list {
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-
-    &-user {
+  &__user {
+    &-link {
       display: flex;
       align-items: center;
     }
 
     &-avatar {
-      width: 35px;
       border-radius: 50%;
       overflow: hidden;
       display: flex;
@@ -158,13 +151,13 @@
       align-items: center;
 
       &-image {
-        width: 35px;
-        height: 35px;
+        width: 32px;
+        height: 32px;
         object-fit: cover;
       }
     }
 
-    &-username {
+    &-name {
       padding-left: 10px;
       font-size: 16px;
       @extend %roboto-400;
@@ -173,19 +166,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
       word-break: break-word;
-    }
-
-    &-search {
-      width: 220px;
-
-      &-input {
-        width: 100%;
-        border: none;
-        border-radius: 8px;
-        padding: 5px;
-        font-size: 15px;
-        @extend %roboto-400;
-      }
     }
   }
 }

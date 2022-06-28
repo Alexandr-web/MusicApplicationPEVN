@@ -267,14 +267,9 @@ body {
     .header {
       background: $lightTheme_backgroundHeader;
 
-      &__list {
-        &-username {
+      &__user {
+        &-name {
           color: $lightTheme_colorUsernameLink;
-        }
-
-        &-search-input {
-          background: $lightTheme_backgroundSearchInput;
-          color: $lightTheme_colorSearchInput;
         }
       }
     }

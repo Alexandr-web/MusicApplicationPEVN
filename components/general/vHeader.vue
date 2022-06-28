@@ -1,35 +1,23 @@
 <template>
   <header class="header">
     <nav class="header__nav">
-      <ul class="header__list">
-        <li class="header__list-item">
-          <div class="header__list-search">
-            <input
-              v-model.trim="search"
-              class="header__list-search-input"
-              type="text"
-              placeholder="Искать"
+      <div class="header__user">
+        <nuxt-link
+          class="header__user-link"
+          :to="`/profile/${user.id}?tab=settings`"
+          :title="user.name"
+        >
+          <div class="header__user-avatar">
+            <img
+              class="header__user-avatar-image"
+              :src="user.avatar"
             >
           </div>
-        </li>
-        <li class="header__list-item">
-          <nuxt-link
-            class="header__list-user"
-            :to="`/profile/${user.id}?tab=settings`"
-            :title="user.name"
-          >
-            <div class="header__list-avatar">
-              <img
-                class="header__list-avatar-image"
-                :src="user.avatar"
-              >
-            </div>
-            <h4 class="header__list-username">
-              {{ user.name }}
-            </h4>
-          </nuxt-link>
-        </li>
-      </ul>
+          <h4 class="header__user-name">
+            {{ user.name }}
+          </h4>
+        </nuxt-link>
+      </div>
     </nav>
   </header>
 </template>
@@ -41,10 +29,7 @@
     name: "HeaderComponent",
     mixins: [getValidURLForAvatarMixin],
     data() {
-      return {
-        search: "",
-        user: {},
-      };
+      return { user: {}, };
     },
     async fetch() {
       try {
