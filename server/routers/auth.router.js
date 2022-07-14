@@ -13,8 +13,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage, });
 
-router.get("/api/users", AuthController.getAll);
-router.get("/api/users/:id", AuthController.getOne);
 router.post("/registration", upload.single("avatar"), AuthController.registration);
 router.post("/login", AuthController.login);
 

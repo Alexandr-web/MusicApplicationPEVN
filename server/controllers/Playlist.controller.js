@@ -1,4 +1,5 @@
-const { Playlist: ModelPlaylist, Song, } = require("../models/index");
+const ModelPlaylist = require("../models/Playlist");
+const Song = require("../models/Song");
 const removeFile = require("../removeFile");
 
 class Playlist {

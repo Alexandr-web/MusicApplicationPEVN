@@ -1,6 +1,6 @@
 import jwtDecode from "jwt-decode";
 
-const { User, } = require("../models/index");
+const User = require("../models/User");
 
 module.exports = async (req, res, next) => {
   try {

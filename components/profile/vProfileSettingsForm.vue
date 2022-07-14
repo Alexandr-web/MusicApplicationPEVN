@@ -187,7 +187,7 @@
 
     async fetch() {
       try {
-        const { ok, user, } = await this.$store.dispatch("auth/getUser");
+        const { ok, user, } = await this.$store.dispatch("profile/getOne");
 
         if (ok) {
           Object.keys(this.validations).map((key) => {

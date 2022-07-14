@@ -1,4 +1,4 @@
-import host from "../server/host";
+const host = require("../server/host");
 
 export default {
   state() {

@@ -197,7 +197,7 @@
     methods: {
       async checkFavorite() {
         try {
-          const { ok, user: { id: userId, }, } = await this.$store.dispatch("auth/getUser");
+          const { ok, user: { id: userId, }, } = await this.$store.dispatch("profile/getOne");
           
           if (ok) {
             this.isFavoriteSong = this.getAudioData.likes.includes(userId);

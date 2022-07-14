@@ -1,4 +1,6 @@
-const { User, Song, Playlist, } = require("../models/index");
+const Song = require("../models/Song");
+const User = require("../models/User");
+const Playlist = require("../models/Playlist");
 const removeFile = require("../removeFile");
 const bcrypt = require("bcrypt");
 
@@ -134,6 +136,31 @@ class Profile {
       });
 
       return res.status(200).json({ ok: true, audio: filterAudio, playlist, });
+    } catch (err) {
+      console.log(err);
+
+      return res.status(500).json({ ok: false, message: "Произошла ошибка сервера", });
+    }
+  }
+
+  async getOne(req, res) {
+    try {
+      const { id, } = req.params;
+      const user = await User.findOne({ where: { id, }, });
+
+      return res.status(200).json({ ok: true, user, });
+    } catch (err) {
+      console.log(err);
+
+      return res.status(500).json({ ok: false, message: "Произошла ошибка сервера", });
+    }
+  }
+
+  async getAll(req, res) {
+    try {
+      const users = await User.findAll();
+
+      return res.status(200).json({ ok: true, users, });
     } catch (err) {
       console.log(err);
 

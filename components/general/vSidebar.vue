@@ -74,7 +74,7 @@
     },
     async fetch() {
       try {
-        const { ok, user, } = await this.$store.dispatch("auth/getUser");
+        const { ok, user, } = await this.$store.dispatch("profile/getOne");
         
         if (ok) {
           this.userId = user.id;

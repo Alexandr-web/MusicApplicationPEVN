@@ -132,7 +132,7 @@
     async fetch() {
       try {
         const token = this.$store.getters["auth/getToken"];
-        const { user: { id, }, } = await this.$store.dispatch("auth/getUser");
+        const { user: { id, }, } = await this.$store.dispatch("profile/getOne");
         const { ok, songs, } = await this.$store.dispatch("profile/getAudioAndFavorite", { token, userId: id, });
         
         if (ok) {

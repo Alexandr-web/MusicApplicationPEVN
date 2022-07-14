@@ -1,10 +1,9 @@
-import host from "./host";
-
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const sequelize = require("./db");
+const host = require("./host");
 
 const authRoute = require("./routers/auth.router");
 const profileRoute = require("./routers/profile.router");

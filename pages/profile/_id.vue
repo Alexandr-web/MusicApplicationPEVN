@@ -24,7 +24,7 @@
     mixins: [getValidURLForAvatarMixin],
     layout: "default",
     validate({ params: { id, }, store, query: { tab, }, }) {
-      const res = store.dispatch("auth/getUser", id);
+      const res = store.dispatch("profile/getOne", id);
 
       return res.then(({ ok, user, }) => {
         if (!ok) {
@@ -44,7 +44,7 @@
     async fetch() {
       try {
         const { id, } = this.$route.params;
-        const res = await this.$store.dispatch("auth/getUser", id);
+        const res = await this.$store.dispatch("profile/getOne", id);
         const user = { ...res.user, avatar: await this.getValidAvatarUrl(res.user.avatar), };
 
         this.user = user;

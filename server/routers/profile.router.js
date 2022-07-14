@@ -18,5 +18,7 @@ router.put("/edit/:id", isAuth, upload.single("avatar"), ProfileController.edit)
 router.get("/api/:id/audio", isAuth, ProfileController.getAudio);
 router.get("/api/:id/playlists", isAuth, ProfileController.getPlaylists);
 router.get("/api/edit/playlist/:playlistId", isAuth, ProfileController.getDataForEditPlaylist);
+router.get("/api/", ProfileController.getAll);
+router.get("/api/:id", ProfileController.getOne);
 
 module.exports = router;

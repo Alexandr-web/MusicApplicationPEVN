@@ -1,4 +1,4 @@
-const { User, } = require("../models/index");
+const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -34,18 +34,6 @@ class Auth {
     }
   }
 
-  async getAll(req, res) {
-    try {
-      const users = await User.findAll();
-
-      return res.status(200).json({ ok: true, users, });
-    } catch (err) {
-      console.log(err);
-
-      return res.status(500).json({ ok: false, message: "Произошла ошибка сервера", });
-    }
-  }
-
   async login(req, res) {
     try {
       const { email, password, } = req.body;
@@ -64,19 +52,6 @@ class Auth {
       const token = jwt.sign({ ...candidate, }, process.env.SECRET_KEY, { expiresIn: Math.floor(Date.now() / 1000) + (60 * 60), });
 
       return res.status(200).json({ ok: true, message: "Вход выполнен успешно", token: `Bearer ${token}`, });
-    } catch (err) {
-      console.log(err);
-
-      return res.status(500).json({ ok: false, message: "Произошла ошибка сервера", });
-    }
-  }
-
-  async getOne(req, res) {
-    try {
-      const { id, } = req.params;
-      const user = await User.findOne({ where: { id, }, });
-
-      return res.status(200).json({ ok: true, user, });
     } catch (err) {
       console.log(err);
 

@@ -1,7 +1,7 @@
-import host from "../server/host";
 import jsCookie from "js-cookie";
 import jwtDecode from "jwt-decode";
 
+const host = require("../server/host");
 const Cookie = require("cookie");
 
 export default {
@@ -81,35 +81,6 @@ export default {
         }
 
         return commit("clearToken");
-      } catch (err) {
-        throw err;
-      }
-    },
-
-    async getUser({ }, id) {
-      try {
-        const sendReq = async (userId) => {
-          const res = await fetch(`${host}/auth/api/users/${userId}`, {
-            method: "GET",
-            headers: { "Accept-Type": "application/json", },
-          });
-
-          return res.json();
-        };
-
-        if (id) {
-          return sendReq(id);
-        }
-
-        const cookieStr = process.browser ? document.cookie : this.app.context.req.headers.cookie || "";
-        const findToken = Cookie.parse(cookieStr);
-        const res = findToken ? jwtDecode(findToken.token) || {} : {};
-
-        if (Object.keys(res).length) {
-          return sendReq(res.dataValues.id);
-        }
-
-        return {};
       } catch (err) {
         throw err;
       }
