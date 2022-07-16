@@ -237,12 +237,15 @@
 
       edit() {
         if (!this.validations.$invalid) {
-          this.$emit("edit", {
-            name: this.validations.name.model,
-            email: this.validations.email.model,
-            password: this.validations.password.model,
-            avatar: this.avatar.file instanceof File ? this.avatar.file : null,
+          const fd = { avatar: this.avatar.file instanceof File ? this.avatar.file : null, };
+
+          Object.keys(this.validations).map((key) => {
+            if (this.validations[key].model && !this.validations[key].$invalid) {
+              fd[key] = this.validations[key].model;
+            }
           });
+
+          this.$emit("edit", fd);
 
           localStorage.setItem("theme", this.theme);
         } else {

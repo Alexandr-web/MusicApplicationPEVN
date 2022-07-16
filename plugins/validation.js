@@ -1,22 +1,34 @@
 import Vue from "vue";
 
+function checkModelsOnValid() {
+  const keysRules = Object.keys(this.rules);
+
+  if (!keysRules.includes("required")) {
+    if (!this.model.length) {
+      this.$invalid = false;
+    } else {
+      this.$invalid = !Object.values(this.$watchRules).every(Boolean);
+    }
+  } else {
+    this.$invalid = !Object.values(this.$watchRules).every(Boolean);
+  }
+}
+
+function checkOnValid(models) {
+  this.$invalid = models.some(Boolean);
+}
+
 const validationPlugin = {
   install(globalVue) {
     globalVue.mixin({
       created() {
         if (this.validations !== undefined) {
-          Object.assign(this.validations, {
-            $invalid: false,
-            $checkOnValid(models) {
-              this.$invalid = models.some(Boolean);
-            },
-          });
+          Object.assign(this.validations, { $invalid: false, });
 
           Object.keys(this.validations).map((key) => {
             if (!/^\$/.test(key)) {
               const rules = this.validations[key].rules;
               const updates = {
-                ...this.validations[key],
                 $invalid: false,
                 $watchRules: Object.keys(rules).reduce((acc, rule) => {
                   if (rules[rule]) {
@@ -25,33 +37,20 @@ const validationPlugin = {
 
                   return acc;
                 }, {}),
-                $checkModelsOnValid() {
-                  const keysRules = Object.keys(this.rules);
-
-                  if (!keysRules.includes("required")) {
-                    if (!this.model.length) {
-                      this.$invalid = false;
-                    } else {
-                      this.$invalid = !Object.values(this.$watchRules).every(Boolean);
-                    }
-                  } else {
-                    this.$invalid = !Object.values(this.$watchRules).every(Boolean);
-                  }
-                },
               };
 
-              Object.assign(this.validations[key], updates);
+              Object.keys(updates).map((k) => this.validations[key][k] = updates[k]);
 
               this.$watch(`validations.${key}.model`, () => {
                 this.watchingRules(key);
-                this.validations[key].$checkModelsOnValid();
+                checkModelsOnValid.call(this.validations[key]);
 
                 const models = Object
                   .keys(this.validations)
                   .filter((k) => !/^\$/.test(k))
                   .map((k) => this.validations[k].$invalid);
 
-                this.validations.$checkOnValid(models);
+                checkOnValid.call(this.validations, models);
               }, { immediate: true, deep: true, });
             }
           });

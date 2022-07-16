@@ -158,7 +158,7 @@
         }
       },
       edit() {
-        if ([this.posterPlaylist.src, this.validations.name.model, this.audio.filter((audio) => audio.have).length].every(Boolean)) {
+        if ([this.posterPlaylist.src, !this.validations.$invalid, this.audio.filter((audio) => audio.have).length].every(Boolean)) {
           this.$emit("edit", {
             name: this.validations.name.model,
             poster: this.posterPlaylist.file instanceof File ? this.posterPlaylist.file : this.posterPlaylist.src,
