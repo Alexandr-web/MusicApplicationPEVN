@@ -7,7 +7,7 @@ module.exports = async (req, res, next) => {
     const auth = req.headers.authorization;
 
     if (auth) {
-      const token = auth.replace(/^Bearer /, "");
+      const token = /^Bearer\s/.test(auth) ? auth.replace(/^Bearer\s/, "") : "";
 
       if (token) {
         const { dataValues, } = await jwtDecode(token);
