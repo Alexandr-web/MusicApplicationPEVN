@@ -137,6 +137,7 @@
           this.$store.commit("audio/setPlay", !this.getPlay);
         } else {
           this.setActiveAudio(audioData);
+          this.$store.commit("audio/setPlaylist", this.songs);
         }
       },
       setPlaylist(playlist) {
