@@ -1171,6 +1171,10 @@
   justify-content: center;
   align-items: center;
 
+  &--gaps {
+    padding: 10px;
+  }
+
   &__text {
     opacity: .8;
     text-align: center;

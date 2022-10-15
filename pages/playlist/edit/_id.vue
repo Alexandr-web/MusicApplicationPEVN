@@ -3,13 +3,22 @@
     <div class="container">
       <div class="playlist__inner">
         <vFormEditPlaylist
-          v-if="Object.keys(playlist).length"
+          v-if="Object.keys(playlist).length && userAudio.length"
           :playlist="playlist"
           :pending="pendingEdit"
           :audio="userAudio"
           @setStateAudioAtPlaylist="setStateAudioAtPlaylist"
           @setAudio="setAudio"
           @edit="edit"
+        />
+        <vNothing
+          v-if="!userAudio.length"
+          text="Нет аудио для создания плейлиста"
+          :gaps="true"
+          :link="{
+            to: '/',
+            text: 'Найти аудио',
+          }"
         />
       </div>
     </div>
@@ -20,10 +29,14 @@
   import getValidAudioAndPosterUrlMixin from "@/mixins/getValidAudioAndPosterUrlMixin";
   import setNewAudioMixin from "@/mixins/setNewAudioMixin";
   import vFormEditPlaylist from "@/components/playlist/vFormEditPlaylist";
+  import vNothing from "@/components/general/vNothing";
 
   export default {
     name: "EditPlaylistPage",
-    components: { vFormEditPlaylist, },
+    components: {
+      vFormEditPlaylist,
+      vNothing,
+    },
     mixins: [getValidAudioAndPosterUrlMixin, setNewAudioMixin],
     layout: "default",
     validate({ params: { id: playlistId, }, store, }) {
@@ -31,9 +44,12 @@
       const p1 = store.dispatch("playlist/getOne", { token, playlistId, });
       const p2 = store.dispatch("profile/getDataForEditPlaylist", { token, playlistId, });
 
-      return Promise.all([p1, p2]).then(([res1, res2]) => res1.ok && Boolean(res1.playlist) && res2.ok).catch((err) => {
-        throw err;
-      });
+      return Promise
+        .all([p1, p2])
+        .then(([res1, res2]) => res1.ok && Boolean(res1.playlist) && res2.ok)
+        .catch((err) => {
+          throw err;
+        });
     },
     data() {
       return {
@@ -51,7 +67,6 @@
         if (ok) {
           this.$store.commit("audio/setPlaylist", audio);
           this.playlist = playlist;
-
           audio.map((song) => this.userAudio.push({ ...song, }));
         }
       } catch (err) {

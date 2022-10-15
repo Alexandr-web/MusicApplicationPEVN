@@ -45,7 +45,7 @@ class Playlist {
       const playlistData = { ...req.body, userId: req.userId, };
       const songs = await Song.findAll();
 
-      playlistData.audio = songs.filter(({ dataValues: { id, }, }) => req.body.audio.includes(id)).map(({ dataValues, }) => dataValues.id);
+      playlistData.audio = songs.filter(({ id, }) => req.body.audio.includes(id)).map(({ id, }) => id);
 
       if (req.file) {
         playlistData.poster = req.file.filename;
@@ -71,7 +71,7 @@ class Playlist {
         return res.status(404).json({ ok: false, message: "Такого плейлиста не существует", });
       }
 
-      const playlistAudio = songs.filter((audio) => playlist.dataValues.audio.includes(audio.dataValues.id));
+      const playlistAudio = songs.filter((audio) => playlist.audio.includes(audio.id));
 
       return res.status(200).json({ ok: true, audio: playlistAudio, });
     } catch (err) {
@@ -94,7 +94,7 @@ class Playlist {
         return res.status(404).json({ ok: false, message: "Данного плейлиста не существует", });
       }
 
-      if (playlist.dataValues.userId !== req.userId) {
+      if (playlist.userId !== req.userId) {
         return res.status(403).json({ ok: false, message: "У вас нет доступа для удаления этого плейлиста", });
       }
 
@@ -123,7 +123,7 @@ class Playlist {
         return res.status(404).json({ ok: false, message: "Данного плейлиста не существует", });
       }
 
-      if (req.userId !== playlist.dataValues.userId) {
+      if (req.userId !== playlist.userId) {
         return res.status(403).json({ ok: false, message: "У вас нет доступа для изменения этого плейлиста", });
       }
 

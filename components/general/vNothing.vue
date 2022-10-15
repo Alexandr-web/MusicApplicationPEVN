@@ -1,5 +1,10 @@
 <template>
-  <div class="nothing">
+  <div
+    class="nothing"
+    :class="{
+      'nothing--gaps': gaps,
+    }"
+  >
     <span class="nothing__text">{{ text }}</span>
     <nuxt-link
       v-if="link"
@@ -19,6 +24,7 @@
         type: String,
         default: "Ничего нет",
       },
+      gaps: Boolean,
       link: {
         type: Object, 
         default: () => {}, 

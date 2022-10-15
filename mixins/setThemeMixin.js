@@ -7,7 +7,7 @@ export default {
     } else {
       localStorage.setItem("theme", "dark");
 
-      document.body.dataset.theme = "light";
+      document.body.dataset.theme = "dark";
     }
   },
 };

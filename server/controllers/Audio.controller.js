@@ -44,7 +44,7 @@ class Audio {
       }
 
       const user = await User.findOne({ where: { id: req.userId, }, });
-      const audioData = { ...req.body, author: user.dataValues.name, userId: req.userId, };
+      const audioData = { ...req.body, author: user.name, userId: req.userId, };
 
       if (req.files) {
         Object.keys(req.files).map((key) => audioData[key] = req.files[key][0].filename);
@@ -79,7 +79,7 @@ class Audio {
         return res.status(404).json({ ok: false, message: "Такой песни не существует", });
       }
 
-      const copyAudioPlaylist = [...playlist.dataValues.audio];
+      const copyAudioPlaylist = [...playlist.audio];
 
       if (copyAudioPlaylist.includes(audioId)) {
         await playlist.update({ audio: copyAudioPlaylist.filter((id) => id !== audioId), });
@@ -113,7 +113,7 @@ class Audio {
         return res.status(404).json({ ok: false, message: "Данной аудиозаписи не существует", });
       }
 
-      if (req.userId !== song.dataValues.userId) {
+      if (req.userId !== song.userId) {
         return res.status(403).json({ ok: false, message: "У вас нет прав для удаления этой аудиозаписи", });
       }
 
@@ -192,7 +192,7 @@ class Audio {
       }
 
       const allAudio = await Song.findAll();
-      const favoriteAudio = allAudio.filter(({ dataValues: { likes, }, }) => likes.includes(req.userId));
+      const favoriteAudio = allAudio.filter(({ likes, }) => likes.includes(req.userId));
 
       return res.status(200).json({ ok: true, audio: favoriteAudio, });
     } catch (err) {

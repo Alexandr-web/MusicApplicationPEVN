@@ -33,7 +33,7 @@ class Profile {
       if (updates.email) {
         const matchUser = await User.findOne({ where: { email: updates.email, }, });
 
-        if (matchUser && matchUser.dataValues.id !== parseInt(id)) {
+        if (matchUser && matchUser.id !== parseInt(id)) {
           return res.status(400).json({ ok: false, message: "Пользователь с данным email уже существует", });
         }
       }
@@ -76,7 +76,7 @@ class Profile {
       }
 
       const songs = await Song.findAll();
-      const userSongs = songs.filter(({ dataValues, }) => dataValues.userId === parseInt(id) || (favorite && dataValues.likes.includes(parseInt(id))));
+      const userSongs = songs.filter(({ userId, likes, }) => userId === parseInt(id) || (favorite && likes.includes(parseInt(id))));
 
       return res.status(200).json({ ok: true, songs: userSongs, });
     } catch (err) {
@@ -99,7 +99,7 @@ class Profile {
       }
 
       const playlists = await Playlist.findAll();
-      const userPlaylists = playlists.filter(({ dataValues, }) => dataValues.userId === parseInt(id));
+      const userPlaylists = playlists.filter(({ userId, }) => userId === parseInt(id));
 
       return res.status(200).json({ ok: true, playlists: userPlaylists, });
     } catch (err) {
@@ -122,18 +122,14 @@ class Profile {
         return res.status(404).json({ ok: false, message: "Данного плейлиста не существует", });
       }
 
-      if (req.userId !== playlist.dataValues.userId) {
+      if (req.userId !== playlist.userId) {
         return res.status(403).json({ ok: false, message: "У вас нет доступа для получения данных другого пользователя", });
       }
 
       const allAudio = await Song.findAll();
-      const filterAudio = allAudio.filter((audio) => {
-        if (audio.dataValues.userId === req.userId || audio.dataValues.likes.includes(req.userId)) {
-          audio.dataValues.have = playlist.dataValues.audio.includes(audio.dataValues.id);
-
-          return audio;
-        }
-      });
+      const filterAudio = allAudio
+        .filter((audio) => audio.userId === req.userId || audio.likes.includes(req.userId) || playlist.audio.includes(audio.id))
+        .map((audio) => ({ ...audio.dataValues, have: playlist.audio.includes(audio.id), }));
 
       return res.status(200).json({ ok: true, audio: filterAudio, playlist, });
     } catch (err) {
