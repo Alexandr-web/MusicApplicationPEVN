@@ -18,7 +18,7 @@
             {{ playlist.name }}
           </h3>
           <ul
-            v-if="Object.keys(user).length && user.id === playlist.userId"
+            v-if="Object.keys(getUser).length && getUser.id === playlist.userId"
             class="playlist-modal__controls"
           >
             <li class="playlist-modal__controls-item">
@@ -77,20 +77,6 @@
         required: true,
       },
     },
-    data() {
-      return { user: {}, };
-    },
-    async fetch() {
-      try {
-        const { ok, user, } = await this.$store.dispatch("profile/getOne");
-
-        if (ok) {
-          this.user = user;
-        }
-      } catch (err) {
-        throw err;
-      }
-    },
     computed: {
       getPlay() {
         return this.$store.getters["audio/getPlay"];
@@ -100,6 +86,9 @@
       },
       getPlaylist() {
         return this.$store.getters["audio/getPlaylist"];
+      },
+      getUser() {
+        return this.$store.getters["profile/getUser"];
       },
     },
     methods: {

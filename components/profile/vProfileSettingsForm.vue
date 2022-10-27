@@ -155,7 +155,6 @@
     },
     data() {
       return {
-        user: {},
         theme: "",
         avatar: {
           file: {},
@@ -184,33 +183,25 @@
         },
       };
     },
-
-    async fetch() {
-      try {
-        const { ok, user, } = await this.$store.dispatch("profile/getOne");
-
-        if (ok) {
-          Object.keys(this.validations).map((key) => {
-            if (key in user && !["password", "repeatPassword"].includes(key)) {
-              this.validations[key].model = user[key];
-            }
-          });
-        }
-      } catch (err) {
-        throw err;
-      }
+    computed: {
+      getUser() {
+        return this.$store.getters["profile/getUser"];
+      },
     },
-
     watch: {
       theme(newVal) {
         document.body.dataset.theme = newVal;
       },
     },
-
     mounted() {
       this.theme = localStorage.getItem("theme") || "dark";
-    },
 
+      Object.keys(this.getUser).map((key) => {
+        if (key in this.validations && !["password", "repeatPassword"].includes(key)) {
+          this.validations[key].model = this.getUser[key];
+        }
+      });
+    },
     methods: {
       loadAvatar(e) {
         if (window.FileReader) {
@@ -234,7 +225,6 @@
           alert("В вашем браузере не поддерживается FileReader. Обновите его до последней версии или установите более современный");
         }
       },
-
       edit() {
         if (!this.validations.$invalid) {
           const fd = { avatar: this.avatar.file instanceof File ? this.avatar.file : null, };

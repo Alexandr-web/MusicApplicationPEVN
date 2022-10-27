@@ -28,10 +28,6 @@
         type: String,
         required: true,
       },
-      user: {
-        type: Object,
-        required: true,
-      },
     },
   };
 </script>

@@ -2,7 +2,7 @@
   <aside class="sidebar">
     <nav class="sidebar__nav">
       <ul
-        v-if="userId"
+        v-if="getUserId"
         class="sidebar__list"
       >
         <li class="sidebar__list-item">
@@ -20,7 +20,7 @@
         <li class="sidebar__list-item">
           <nuxt-link
             class="sidebar__list-link"
-            :to="`/profile/${userId}?tab=audio`"
+            :to="`/profile/${getUserId}?tab=audio`"
             exact-active-class="sidebar__list-link--active"
           >
             <vAudioIcon :class-names="['sidebar__list-icon']" />
@@ -32,7 +32,7 @@
         <li class="sidebar__list-item">
           <nuxt-link
             class="sidebar__list-link"
-            :to="`/profile/${userId}?tab=playlists`"
+            :to="`/profile/${getUserId}?tab=playlists`"
             exact-active-class="sidebar__list-link--active"
           >
             <vPlaylistIcon :class-names="['sidebar__list-icon']" />
@@ -69,19 +69,10 @@
       vHomeIcon,
       vPlaylistIcon,
     },
-    data() {
-      return { userId: null, };
-    },
-    async fetch() {
-      try {
-        const { ok, user, } = await this.$store.dispatch("profile/getOne");
-        
-        if (ok) {
-          this.userId = user.id;
-        }
-      } catch (err) {
-        throw err;
-      }
+    computed: {
+      getUserId() {
+        return this.$store.getters["profile/getUser"].id;
+      },
     },
   };
 </script>

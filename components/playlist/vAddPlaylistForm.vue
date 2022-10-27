@@ -132,8 +132,8 @@
     async fetch() {
       try {
         const token = this.$store.getters["auth/getToken"];
-        const { user: { id, }, } = await this.$store.dispatch("profile/getOne");
-        const { ok, songs, } = await this.$store.dispatch("profile/getAudioAndFavorite", { token, userId: id, });
+        const { id: userId, } = this.getUser;
+        const { ok, songs, } = await this.$store.dispatch("profile/getAudioAndFavorite", { token, userId, });
         
         if (ok) {
           songs.map((song) => {
@@ -154,6 +154,9 @@
       },
       getPlay() {
         return this.$store.getters["audio/getPlay"];
+      },
+      getUser() {
+        return this.$store.getters["profile/getUser"];
       },
     },
     methods: {

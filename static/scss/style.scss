@@ -514,6 +514,7 @@
 
     &-image {
       height: 100%;
+      object-fit: cover;
     }
   }
 
@@ -657,6 +658,8 @@
   &__poster {
     border-radius: 25px;
     margin-top: 15px;
+    width: 100%;
+    object-fit: cover;
   }
 
   &__audio {
@@ -1150,6 +1153,8 @@
       }
 
       &-image {
+        object-fit: cover;
+        width: 100%;
         transition: transform .4s;
       }
     }

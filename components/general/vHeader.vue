@@ -4,17 +4,17 @@
       <div class="header__user">
         <nuxt-link
           class="header__user-link"
-          :to="`/profile/${user.id}?tab=settings`"
-          :title="user.name"
+          :to="`/profile/${getUser.id}?tab=settings`"
+          :title="getUser.name"
         >
           <div class="header__user-avatar">
             <img
               class="header__user-avatar-image"
-              :src="user.avatar"
+              :src="getUser.avatar"
             >
           </div>
           <h4 class="header__user-name">
-            {{ user.name }}
+            {{ getUser.name }}
           </h4>
         </nuxt-link>
       </div>
@@ -23,24 +23,12 @@
 </template>
 
 <script>
-  import getValidURLForAvatarMixin from "@/mixins/getValidURLForAvatarMixin";
-
   export default {
     name: "HeaderComponent",
-    mixins: [getValidURLForAvatarMixin],
-    data() {
-      return { user: {}, };
-    },
-    async fetch() {
-      try {
-        const { ok, user, } = await this.$store.dispatch("profile/getOne");
-
-        if (ok) {
-          this.user = { ...user, avatar: await this.getValidAvatarUrl(user.avatar), };
-        }
-      } catch (err) {
-        throw err;
-      }
+    computed: {
+      getUser() {
+        return this.$store.getters["profile/getUser"];
+      },
     },
   };
 </script>

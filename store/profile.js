@@ -4,6 +4,16 @@ const host = require("../server/host");
 const Cookie = require("cookie");
 
 export default {
+  state: () => ({ user: null, }),
+  getters: { getUser: (state) => state.user, },
+  mutations: {
+    setUser(state, val) {
+      state.user = val;
+    },
+    clearUser(state) {
+      state.user = null;
+    },
+  },
   actions: {
     async edit({ }, { fd, userId, token, }) {
       try {
@@ -103,7 +113,7 @@ export default {
 
         const cookieStr = process.browser ? document.cookie : this.app.context.req.headers.cookie || "";
         const findToken = Cookie.parse(cookieStr || "");
-        const res = "token" in findToken ? jwtDecode(findToken.token) || {} : {};
+        const res = jwtDecode(findToken.token);
 
         if (Object.keys(res).length) {
           return sendReq(res.dataValues.id);

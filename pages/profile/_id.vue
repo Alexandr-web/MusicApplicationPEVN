@@ -2,18 +2,15 @@
   <div class="profile gaps-t-b">
     <div class="profile__inner">
       <vProfileHeader :user="user" />
-      <vProfileMain
-        :tab="$route.query.tab"
-        :user="user"
-      />
+      <vProfileMain :tab="$route.query.tab" />
     </div>
   </div>
 </template>
 
 <script>
-  import getValidURLForAvatarMixin from "@/mixins/getValidURLForAvatarMixin";
   import vProfileHeader from "@/components/profile/vProfileHeader";
   import vProfileMain from "@/components/profile/vProfileMain";
+  import getValidUrlForAvatarMixin from "@/mixins/getValidUrlForAvatarMixin";
 
   export default {
     name: "ProfilePage",
@@ -21,17 +18,15 @@
       vProfileHeader,
       vProfileMain,
     },
-    mixins: [getValidURLForAvatarMixin],
+    mixins: [getValidUrlForAvatarMixin],
     layout: "default",
     validate({ params: { id, }, store, query: { tab, }, }) {
       const res = store.dispatch("profile/getOne", id);
 
       return res.then(({ ok, user, }) => {
-        if (!ok) {
+        if (!(ok || user)) {
           return false;
         }
-
-        this.user = user;
 
         return Boolean(user) && ["settings", "audio", "playlists", "favorite"].includes(tab);
       }).catch((err) => {
@@ -44,10 +39,16 @@
     async fetch() {
       try {
         const { id, } = this.$route.params;
-        const res = await this.$store.dispatch("profile/getOne", id);
-        const user = { ...res.user, avatar: await this.getValidAvatarUrl(res.user.avatar), };
+        const { ok, user, } = await this.$store.dispatch("profile/getOne", id);
 
-        this.user = user;
+        if (ok) {
+          const avatar = await this.getValidAvatarUrl(user.avatar);
+
+          this.user = {
+            ...user,
+            avatar,
+          };
+        }
       } catch (err) {
         throw err;
       }
