@@ -5,6 +5,7 @@ const removeFile = require("../removeFile");
 const bcrypt = require("bcrypt");
 
 class Profile {
+  // Edits user data
   async edit(req, res) {
     try {
       if (!req.isAuth) {
@@ -13,6 +14,8 @@ class Profile {
 
       const { id, } = req.params;
       const candidate = await User.findOne({ where: { id, }, });
+
+      // This is where the data that needs to be changed will be stored.
       const updates = {};
 
       if (!candidate) {
@@ -30,6 +33,7 @@ class Profile {
         updates[key] = key !== "password" ? req.body[key] : await bcrypt.hash(req.body[key], 7);
       });
 
+      // Check for originality
       if (updates.email) {
         const matchUser = await User.findOne({ where: { email: updates.email, }, });
 
@@ -62,6 +66,7 @@ class Profile {
     }
   }
 
+  // Getting User Audio
   async getAudio(req, res) {
     try {
       const { id, } = req.params;
@@ -86,6 +91,7 @@ class Profile {
     }
   }
 
+  // Get user playlists
   async getPlaylists(req, res) {
     try {
       const { id, } = req.params;
@@ -109,6 +115,7 @@ class Profile {
     }
   }
 
+  // Getting data to edit a playlist
   async getDataForEditPlaylist(req, res) {
     try {
       if (!req.isAuth) {
@@ -139,6 +146,7 @@ class Profile {
     }
   }
 
+  // Getting a user by his id
   async getOne(req, res) {
     try {
       const { id, } = req.params;
@@ -152,11 +160,37 @@ class Profile {
     }
   }
 
+  // Getting all users
   async getAll(req, res) {
     try {
       const users = await User.findAll();
 
       return res.status(200).json({ ok: true, users, });
+    } catch (err) {
+      console.log(err);
+
+      return res.status(500).json({ ok: false, message: "Произошла ошибка сервера", });
+    }
+  }
+
+  // Gets the favorite audio
+  async getFavorites(req, res) {
+    try {
+      if (!req.isAuth) {
+        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+      }
+
+      const { id, } = req.params;
+      const user = await User.findOne({ where: { id, }, });
+
+      if (!user) {
+        return res.status(404).json({ ok: false, message: "Такого пользователя не существует", });
+      }
+
+      const songs = await Song.findAll();
+      const favoritesSongs = songs.filter(({ likes, }) => likes.includes(+id));
+
+      return res.status(200).json({ ok: true, audio: favoritesSongs, });
     } catch (err) {
       console.log(err);
 

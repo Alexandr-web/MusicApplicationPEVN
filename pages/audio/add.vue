@@ -12,7 +12,7 @@
 </template>
 
 <script>
-  import vAudioFormAdd from "@/components/audio/vAudioFormAdd";
+  import vAudioFormAdd from "@/components/vAudioFormAdd";
 
   export default {
     name: "AudioAddPage",
@@ -22,30 +22,31 @@
     },
     head: { title: "Добавление аудио", },
     methods: {
+      /**
+       * Receives data from the form and sends a request to add a audio
+       * @param {object} data Required data for audio (poster, name, audio file, ...)
+       */
       add(data) {
-        if (Object.values(data).every(Boolean) && [data.poster, data.audio].every((file) => file instanceof File)) {
-          const fd = new FormData();
-          const token = this.$store.getters["auth/getToken"];
+        const fd = new FormData();
+        const token = this.$store.getters["auth/getToken"];
 
-          Object.keys(data).map((key) => fd.append(key, data[key]));
+        Object.keys(data).map((key) => fd.append(key, data[key]));
 
-          const res = this.$store.dispatch("audio/add", { token, fd, });
+        const res = this.$store.dispatch("audio/add", { token, fd, });
 
-          this.pendingAdd = true;
+        this.pendingAdd = true;
 
-          res.then(({ ok, message, }) => {
-            this.pendingAdd = false;
-            alert(message);
+        res.then(({ ok, message, }) => {
+          this.pendingAdd = false;
 
-            if (ok) {
-              this.$router.push("/");
-            }
-          }).catch((err) => {
-            throw err;
-          });
-        } else {
-          alert("Все поля должны быть заполнены");
-        }
+          alert(message);
+          
+          if (ok) {
+            this.$router.push("/");
+          }
+        }).catch((err) => {
+          throw err;
+        });
       },
     },
   };

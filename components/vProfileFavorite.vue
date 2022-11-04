@@ -17,9 +17,9 @@
 </template>
 
 <script>
-  import vNothing from "@/components/general/vNothing";
+  import vNothing from "@/components/vNothing";
   import setNewAudioMixin from "@/mixins/setNewAudioMixin";
-  import vAudio from "@/components/general/vAudio";
+  import vAudio from "@/components/vAudio";
 
   export default {
     name: "ProfileFavoriteAudioComponent",
@@ -31,37 +31,27 @@
     data() {
       return { songs: [], };
     },
+    // Getting favorite songs
     async fetch() {
       try {
         const token = this.$store.getters["auth/getToken"];
-        const { ok, audio, } = await this.$store.dispatch("audio/getFavorite", { token, });
+        const { id, } = this.getUser;
+        const { ok, audio, } = await this.$store.dispatch("profile/getFavorites", { token, id, });
 
         if (ok) {
           this.songs = audio;
-          this.$store.commit("audio/setPlaylist", audio);
+          this.$store.commit("playlist/setPlaylist", audio);
         }
       } catch (err) {
         throw err;
       }
     },
     computed: {
-      getAudioData() {
-        return this.$store.getters["audio/getAudioData"];
-      },
-      getPlay() {
-        return this.$store.getters["audio/getPlay"];
-      },
       getPlaylist() {
-        return this.$store.getters["audio/getPlaylist"];
+        return this.$store.getters["playlist/getPlaylist"];
       },
-    },
-    methods: {
-      setAudio(audioData) {
-        if (this.getAudioData && this.getAudioData.id === audioData.id) {
-          this.$store.commit("audio/setPlay", !this.getPlay);
-        } else {
-          this.setActiveAudio(audioData);
-        }
+      getUser() {
+        return this.$store.getters["profile/getUser"];
       },
     },
   };

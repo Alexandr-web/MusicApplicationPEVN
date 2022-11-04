@@ -14,9 +14,9 @@
 
 <script>
   import setThemeMixin from "@/mixins/setThemeMixin";
-  import vHeader from "@/components/general/vHeader";
-  import vSidebar from "@/components/general/vSidebar";
-  import vAudioplayer from "@/components/general/vAudioplayer";
+  import vHeader from "@/components/vHeader";
+  import vSidebar from "@/components/vSidebar";
+  import vAudioplayer from "@/components/vAudioplayer";
 
   export default {
     name: "DefaultLayout",

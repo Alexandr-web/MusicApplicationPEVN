@@ -31,8 +31,8 @@
 </template>
 
 <script>
-  import vNothing from "@/components/general/vNothing";
-  import vAudio from "@/components/general/vAudio";
+  import vNothing from "@/components/vNothing";
+  import vAudio from "@/components/vAudio";
   import getValidAudioAndPosterUrlMixin from "@/mixins/getValidAudioAndPosterUrlMixin";
   import setNewAudioMixin from "@/mixins/setNewAudioMixin";
 
@@ -46,6 +46,10 @@
     data() {
       return { songs: [], };
     },
+    /**
+     * Getting user's songs
+     * Note: getting songs not from current user, but from user with param id
+     */
     async fetch() {
       try {
         const { id, } = this.$route.params;
@@ -55,7 +59,7 @@
           const { ok, songs, } = await this.$store.dispatch("profile/getAudio", { userId: parseInt(id), token, });
           
           if (ok) {
-            this.$store.commit("audio/setPlaylist", songs);
+            this.$store.commit("playlist/setPlaylist", songs);
             this.songs = songs;
           }
         }
@@ -64,37 +68,8 @@
       }
     },
     computed: {
-      getAudioData() {
-        return this.$store.getters["audio/getAudioData"];
-      },
-      getPlay() {
-        return this.$store.getters["audio/getPlay"];
-      },
       getPlaylist() {
-        return this.$store.getters["audio/getPlaylist"];
-      },
-    },
-    methods: {
-      setAudio(audioData) {
-        if (this.getAudioData && this.getAudioData.id === audioData.id) {
-          this.$store.commit("audio/setPlay", !this.getPlay);
-        } else {
-          this.setActiveAudio(audioData);
-        }
-      },
-      async removeAudio({ id, }) {
-        try {
-          const token = this.$store.getters["auth/getToken"];
-          const { ok, message, } = await this.$store.dispatch("audio/remove", { audioId: id, token, });
-
-          alert(message);
-
-          if (ok) {
-            this.$router.go(0);
-          }
-        } catch (err) {
-          throw err;
-        }
+        return this.$store.getters["playlist/getPlaylist"];
       },
     },
   };

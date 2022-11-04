@@ -62,6 +62,7 @@
           class="audio__form-audio form__audio"
           :src="audio.src"
           controls
+          @loadedmetadata="audioIsLoaded($event)"
         ></audio>
       </label>
     </div>
@@ -99,9 +100,13 @@
             model: "",
           },
         },
+        time: null,
+        duration: null,
         audio: {
           src: "",
           file: {},
+          duration: null,
+          time: null,
         },
         poster: {
           src: "",
@@ -110,6 +115,11 @@
       };
     },
     methods: {
+      /**
+       * Loads a file, the result of which will be written to an object with the key fileName
+       * @param {object} e Event object
+       * @param {string} fileName The name of the key to which the data of the uploaded file will be written
+       */
       loadFile(e, fileName) {
         if (window.FileReader) {
           const file = e.currentTarget.files[0];
@@ -132,19 +142,26 @@
           alert("В вашем браузере не поддерживается FileReader. Обновите его до последней версии или установите более современный");
         }
       },
+      /**
+       * Records the time and duration of a song when it is fully loaded
+       * @param {object} e Event object
+       */
+      audioIsLoaded(e) {
+        this.audio = {
+          ...this.audio,
+          time: this.getValidTime(e.currentTarget.duration),
+          duration: e.currentTarget.duration,
+        };
+      },
+      // Sends an emit to add a song if all the required data is present
       add() {
-        if (!this.validations.$invalid && [this.audio.file && this.poster.file].every((file) => file instanceof File)) {
-          const audio = document.createElement("audio");
-
-          audio.src = this.audio.src;
-          audio.addEventListener("loadedmetadata", () => {
-            this.$emit("add", {
-              name: this.validations.name.model,
-              poster: this.poster.file,
-              audio: this.audio.file,
-              time: this.getValidTime(audio.duration),
-              duration: audio.duration,
-            });
+        if (!this.validations.$invalid && [this.audio.file, this.poster.file].every((file) => file instanceof File)) {
+          this.$emit("add", {
+            name: this.validations.name.model,
+            poster: this.poster.file,
+            audio: this.audio.file,
+            time: this.audio.time,
+            duration: this.audio.duration,
           });
         } else {
           alert("Все данные должны быть заполнены");

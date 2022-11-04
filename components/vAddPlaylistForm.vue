@@ -32,7 +32,7 @@
           class="playlist__form-file form__input input__file"
           type="file"
           accept="image/jpeg,image/png,image/jpg,image/webp"
-          @change="loadFile($event, 'poster')"
+          @change="loadFile($event)"
         >
         <span class="playlist__form-file-style form__file-style input__file-style">Загрузить постер</span>
         <img
@@ -129,6 +129,7 @@
         audioForPlaylist: [],
       };
     },
+    // Gets all of the user's audio, including favorites
     async fetch() {
       try {
         const token = this.$store.getters["auth/getToken"];
@@ -136,6 +137,7 @@
         const { ok, songs, } = await this.$store.dispatch("profile/getAudioAndFavorite", { token, userId, });
         
         if (ok) {
+          // Populate the audio array with only a valid poster
           songs.map((song) => {
             this.getValidAudioAndPosterUrl(song.poster).then((url) => {
               this.audio.push({ ...song, poster: url, });
@@ -149,24 +151,12 @@
       }
     },
     computed: {
-      getAudioData() {
-        return this.$store.getters["audio/getAudioData"];
-      },
-      getPlay() {
-        return this.$store.getters["audio/getPlay"];
-      },
       getUser() {
         return this.$store.getters["profile/getUser"];
       },
     },
     methods: {
-      setAudio(audioData) {
-        if (this.getAudioData && this.getAudioData.id === audioData.id) {
-          this.$store.commit("audio/setPlay", !this.getPlay);
-        } else {
-          this.setActiveAudio(audioData);
-        }
-      },
+      // Sends an emit with playlist data for its further addition
       addPlaylist() {
         if ([...Object.values(this.poster), this.validations.name.model, this.audioForPlaylist.length].every(Boolean)) {
           this.$emit("add", {
@@ -178,6 +168,10 @@
           alert("Все поля должны быть заполнены");
         }
       },
+      /**
+       * Adds audio to the array, which will later be in the playlist
+       * @param {object} audio Audio object
+       */
       addAudio(audio) {
         if (this.audioForPlaylist.includes(audio.id)) {
           this.audioForPlaylist = this.audioForPlaylist.filter((id) => id !== audio.id);
@@ -185,7 +179,11 @@
           this.audioForPlaylist.push(audio.id);
         }
       },
-      loadFile(e, fileName) {
+      /**
+       * Uploading a poster file
+       * @param {object} e Event object
+       */
+      loadFile(e) {
         if (window.FileReader) {
           const file = e.currentTarget.files[0];
 
@@ -194,7 +192,7 @@
 
             reader.readAsDataURL(file);
             reader.addEventListener("load", () => {
-              this[fileName] = {
+              this.poster = {
                 file,
                 src: reader.result,
               };

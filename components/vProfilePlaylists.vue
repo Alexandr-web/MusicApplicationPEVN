@@ -37,11 +37,12 @@
 </template>
 
 <script>
-  import vNothing from "@/components/general/vNothing";
-  import vPlaylistModal from "@/components/playlist/vPlaylistModal";
-  import vPlaylist from "@/components/general/vPlaylist";
+  import vNothing from "@/components/vNothing";
+  import vPlaylistModal from "@/components/vPlaylistModal";
+  import vPlaylist from "@/components/vPlaylist";
   import getValidPlaylistPosterMixin from "@/mixins/getValidPlaylistPosterMixin";
   import setNewAudioMixin from "@/mixins/setNewAudioMixin";
+  import playlistModalControlsMixin from "@/mixins/playlistModalControlsMixin";
 
   export default {
     name: "ProfilePlaylistsComponent",
@@ -50,14 +51,11 @@
       vPlaylistModal,
       vPlaylist,
     },
-    mixins: [getValidPlaylistPosterMixin, setNewAudioMixin],
+    mixins: [getValidPlaylistPosterMixin, setNewAudioMixin, playlistModalControlsMixin],
     data() {
-      return {
-        playlists: [],
-        objectPlaylist: {},
-        showPlaylistModal: false,
-      };
+      return { playlists: [], };
     },
+    // Get playlists
     async fetch() {
       try {
         const { id, } = this.$route.params;
@@ -83,39 +81,6 @@
     watch: {
       showPlaylistModal(val) {
         document.documentElement.style.overflow = val ? "hidden" : "visible";
-      },
-    },
-    methods: {
-      setPlaylist(playlist) {
-        const playlistAudioFetch = this.$store.dispatch("playlist/getAudio", { playlistId: playlist.id, });
-
-        this.$store.commit("audio/setPlaylist", []);
-        this.objectPlaylist = {};
-
-        playlistAudioFetch.then(({ ok, audio, }) => {
-          if (ok) {
-            this.$store.commit("audio/setPlaylist", audio);
-            this.objectPlaylist = playlist;
-            this.showPlaylistModal = true;
-          }
-        }).catch((err) => {
-          throw err;
-        });
-      },
-      async removePlaylist(playlist) {
-        try {
-          const token = this.$store.getters["auth/getToken"];
-          const { id: playlistId, } = playlist;
-          const { ok, message, } = await this.$store.dispatch("playlist/remove", { token, playlistId, });
-
-          alert(message);
-
-          if (ok) {
-            this.$router.go(0);
-          }
-        } catch (err) {
-          throw err;
-        }
       },
     },
   };

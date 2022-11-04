@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import vRegistrationForm from "@/components/auth/vRegistrationForm";
+import vRegistrationForm from "@/components/vRegistrationForm";
 
 export default {
   name: "RegistrationPage",
@@ -17,6 +17,10 @@ export default {
   },
   head: { title: "Регистрация", },
   methods: {
+    /**
+     * Handles an emit for user registration
+     * @param {object} data User data
+     */
     registration(data) {
       if (Object.values(data).every(Boolean) && data.avatar instanceof File) {
         const fd = new FormData();

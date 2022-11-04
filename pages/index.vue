@@ -57,12 +57,13 @@
 
 <script>
   import { Swiper, SwiperSlide, } from "vue-awesome-swiper";
-  import vPlaylist from "@/components/general/vPlaylist";
-  import vPlaylistModal from "@/components/playlist/vPlaylistModal";
-  import vNothing from "@/components/general/vNothing";
+  import vPlaylist from "@/components/vPlaylist";
+  import vPlaylistModal from "@/components/vPlaylistModal";
+  import vNothing from "@/components/vNothing";
   import getValidPlaylistPosterMixin from "@/mixins/getValidPlaylistPosterMixin";
-  import vAudio from "@/components/general/vAudio";
+  import vAudio from "@/components/vAudio";
   import setNewAudioMixin from "@/mixins/setNewAudioMixin";
+  import playlistModalControlsMixin from "@/mixins/playlistModalControlsMixin";
 
   export default { 
     name: "MainPage",
@@ -74,7 +75,7 @@
       SwiperSlide,
       vAudio,
     },
-    mixins: [getValidPlaylistPosterMixin, setNewAudioMixin],
+    mixins: [getValidPlaylistPosterMixin, setNewAudioMixin, playlistModalControlsMixin],
     layout: "default",
     data() {
       return {
@@ -86,10 +87,9 @@
         },
         playlists: [],
         songs: [],
-        objectPlaylist: {},
-        showPlaylistModal: false,
       };
     },
+    // Get all songs and playlists
     async fetch() {
       try {
         const token = this.$store.getters["auth/getToken"];
@@ -108,7 +108,7 @@
         
         if (completeAudio) {
           this.songs = audio;
-          this.$store.commit("audio/setPlaylist", audio);
+          this.$store.commit("playlist/setPlaylist", audio);
         }
       } catch (err) {
         throw err;
@@ -116,59 +116,13 @@
     },
     head: { title: "Главная", },
     computed: {
-      getAudioData() {
-        return this.$store.getters["audio/getAudioData"];
-      },
-      getPlay() {
-        return this.$store.getters["audio/getPlay"];
-      },
       getPlaylist() {
-        return this.$store.getters["audio/getPlaylist"];
+        return this.$store.getters["playlist/getPlaylist"];
       },
     },
     watch: {
       showPlaylistModal(val) {
         document.documentElement.style.overflow = val ? "hidden" : "visible";
-      },
-    },
-    methods: {
-      setAudio(audioData) {
-        if (this.getAudioData && this.getAudioData.id === audioData.id) {
-          this.$store.commit("audio/setPlay", !this.getPlay);
-        } else {
-          this.setActiveAudio(audioData);
-          this.$store.commit("audio/setPlaylist", this.songs);
-        }
-      },
-      setPlaylist(playlist) {
-        const playlistAudioFetch = this.$store.dispatch("playlist/getAudio", { playlistId: playlist.id, });
-
-        this.$store.commit("audio/setPlaylist", []);
-        this.objectPlaylist = {};
-
-        playlistAudioFetch.then(({ ok, audio, }) => {
-          if (ok) {
-            this.$store.commit("audio/setPlaylist", audio);
-            this.objectPlaylist = playlist;
-            this.showPlaylistModal = true;
-          }
-        }).catch((err) => {
-          throw err;
-        });
-      },
-      async removePlaylist({ id: playlistId, }) {
-        try {
-          const token = this.$store.getters["auth/getToken"];
-          const { ok, message, } = await this.$store.dispatch("playlist/remove", { token, playlistId, });
-
-          alert(message);
-
-          if (ok) {
-            this.$router.go(0);
-          }
-        } catch (err) {
-          throw err;
-        }
       },
     },
   };

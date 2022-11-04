@@ -155,6 +155,7 @@
       };
     },
     methods: {
+      // Sends an emit with data for user registration
       registration() {
         if (!this.validations.$invalid && this.avatar.file instanceof File) {
           this.$emit("registration", {
@@ -167,6 +168,10 @@
           alert("Все поля должны быть заполнены");
         }
       },
+      /**
+       * Uploading an avatar file
+       * @param {object} e Event object
+       */
       loadAvatar(e) {
         if (window.FileReader) {
           const file = e.currentTarget.files[0];

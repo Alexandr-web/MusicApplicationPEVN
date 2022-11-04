@@ -2,7 +2,19 @@ import getValidAudioAndPosterUrlMixin from "@/mixins/getValidAudioAndPosterUrlMi
 
 export default {
   mixins: [getValidAudioAndPosterUrlMixin],
+  computed: {
+    getAudioData() {
+      return this.$store.getters["audio/getAudioData"];
+    },
+    getPlay() {
+      return this.$store.getters["audio/getPlay"];
+    },
+  },
   methods: {
+    /**
+     * Setting the active song and initial settings
+     * @param {object} audioData Active song data
+     */
     async setActiveAudio(audioData) {
       try {
         const poster = await this.getValidAudioAndPosterUrl(audioData.poster);
@@ -16,6 +28,10 @@ export default {
       }
     },
 
+    /**
+     * Delete song by id
+     * @param {number} id id of the song to be deleted
+     */
     async removeAudio({ id, }) {
       try {
         const token = this.$store.getters["auth/getToken"];
@@ -28,6 +44,19 @@ export default {
         }
       } catch (err) {
         throw err;
+      }
+    },
+
+    /**
+     * Set active audio if it is not in the store
+     * Otherwise change the state of the audio
+     * @param {object} audioData An object that stores audio data (id, title, poster, ...)
+     */
+    setAudio(audioData) {
+      if (this.getAudioData && this.getAudioData.id === audioData.id) {
+        this.$store.commit("audio/setPlay", !this.getPlay);
+      } else {
+        this.setActiveAudio(audioData);
       }
     },
   },

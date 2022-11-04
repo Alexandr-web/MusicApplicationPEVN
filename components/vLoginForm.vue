@@ -78,6 +78,7 @@
       };
     },
     methods: {
+      // Sends an emit with data for the user login
       login() {
         if (!this.validations.$invalid) {
           this.$emit("login", {

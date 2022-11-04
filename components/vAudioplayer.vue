@@ -152,7 +152,10 @@
         return this.$store.getters["audio/getAudioData"];
       },
       getPlaylist() {
-        return this.$store.getters["audio/getPlaylist"];
+        return this.$store.getters["playlist/getPlaylist"];
+      },
+      getUser() {
+        return this.$store.getters["profile/getUser"];
       },
     },
     watch: {
@@ -167,18 +170,12 @@
         this.$refs.audio.volume = val;
       },
     },
-    created() {
-      const localVolume = localStorage.getItem("volume");
-
-      if (localVolume) {
-        this.$store.commit("audio/setVolume", JSON.parse(localVolume));
-      }
-    },
     mounted() {
-      this.checkFavorite();
-      this.setAudioState(this.getPlay);
-      this.$refs.audio.volume = this.getVolume;
+      this.checkFavorite(); // Checking the status of the active song (favorite or not)
+      this.setLocalVolume();
+      this.setAudioState(true);
 
+      // Sound control logic
       document.documentElement.addEventListener("mousemove", (e) => {
         if ([...Object.values(this.range), this.touch].every(Boolean)) {
           const pageX = e.pageX;
@@ -195,17 +192,25 @@
       document.documentElement.addEventListener("mouseup", () => (this.touch = false));
     },
     methods: {
-      async checkFavorite() {
-        try {
-          const { ok, user: { id: userId, }, } = await this.$store.dispatch("profile/getOne");
-          
-          if (ok) {
-            this.isFavoriteSong = this.getAudioData.likes.includes(userId);
-          }
-        } catch (err) {
-          throw err;
+      setLocalVolume() {
+        const localVolume = localStorage.getItem("volume");
+
+        if (localVolume) {
+          this.$store.commit("audio/setVolume", localVolume);
+          this.$refs.audio.volume = parseInt(localVolume);
+        } else {
+          localVolume.setItem("volume", 1);
         }
       },
+      checkFavorite() {
+        const { id: userId, } = this.getUser;
+        
+        this.isFavoriteSong = this.getAudioData.likes.includes(userId);
+      },
+      /**
+       * Sets a song to favorite
+       * @param {number} id Song id
+       */
       async setFavorite({ id: audioId, }) {
         try {
           const token = this.$store.getters["auth/getToken"];
@@ -218,6 +223,10 @@
           throw err;
         }
       },
+      /**
+       * Change video status
+       * @param {boolean} play Song status value
+       */
       setAudioState(play) {
         const audio = this.$refs.audio;
 
@@ -240,6 +249,10 @@
         this.$store.commit("audio/setPlay", false);
         this.setNewAudio();
       },
+      /**
+       * Switching songs
+       * @param {boolean|undefined} setPrev Switch to previous
+       */
       setNewAudio(setPrev) {
         const { id: activeAudioId, } = this.getAudioData;
         const findIndexActiveAudio = this.getPlaylist ? this.getPlaylist.findIndex(({ id, }) => id === activeAudioId) : -1;
@@ -248,6 +261,10 @@
           this.setActiveAudio(this.getPlaylist[this.checkNumActiveAudio(setPrev ? findIndexActiveAudio - 1 : findIndexActiveAudio + 1)]);
         }
       },
+      /**
+       * Checks the index of the active song
+       * @param {number} num Active song index
+       */
       checkNumActiveAudio(num) {
         if (num > this.getPlaylist.length - 1) {
           return 0;
@@ -259,6 +276,10 @@
 
         return num;
       },
+      /**
+       * Switch video time by clicking on a line
+       * @param {object} e Event object
+       */
       setTime(e) {
         const width = e.currentTarget.offsetWidth;
         const percent = Math.ceil((e.layerX / width) * 100);
@@ -269,6 +290,10 @@
           this.$store.commit("audio/setCurrentTime", (percent * this.getAudioData.duration) / 100);
         }
       },
+      /**
+       * Setting the volume on a click on a line
+       * @param {object} e Event object
+       */
       setVolume(e) {
         if (e.target.classList.contains("audioplayer__volume-slider") || e.target.classList.contains("audioplayer__volume-slider-line")) {
           const width = e.currentTarget.offsetWidth;
@@ -277,6 +302,10 @@
           this.$store.commit("audio/setVolume", (percent * 1) / 100);
         }
       },
+      /**
+       * Records the initial abscissa of the touch
+       * @param {object} e Event object
+       */
       touchSlider(e) {
         this.touch = true;
         this.range.x = e.currentTarget.getBoundingClientRect().x;
@@ -285,6 +314,7 @@
           width: e.currentTarget.offsetWidth,
         };
       },
+      // Records the current time of the song
       ontimeupdate() {
         const audio = this.$refs.audio;
 

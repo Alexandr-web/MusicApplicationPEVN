@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 class Auth {
+  // Registers a user in the system
   async registration(req, res) {
     try {
       const { password, email, name, } = req.body;
@@ -21,6 +22,7 @@ class Auth {
         return res.status(400).json({ ok: false, message: "Такой пользователь уже существует", });
       }
 
+      // Hashing the password
       const hashPassword = await bcrypt.hash(password, 7);
       const avatar = req.file.filename;
 
@@ -34,6 +36,7 @@ class Auth {
     }
   }
 
+  // Authorizes the user
   async login(req, res) {
     try {
       const { email, password, } = req.body;

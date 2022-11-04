@@ -125,6 +125,7 @@
         },
       };
     },
+    // Sets the initial value of the parameters in the form
     mounted() {
       this.validations.name.model = this.playlist.name;
 
@@ -135,6 +136,10 @@
       });
     },
     methods: {
+      /**
+       * Uploading a poster file
+       * @param {object} e Event object
+       */
       loadPoster(e) {
         if (window.FileReader) {
           const file = e.currentTarget.files[0];
@@ -157,6 +162,7 @@
           alert("В вашем браузере не поддерживается FileReader. Обновите его до последней версии или установите более современный");
         }
       },
+      // Sends an emit with modified playlist data if all required data is present
       edit() {
         if ([this.posterPlaylist.src, !this.validations.$invalid, this.audio.filter((audio) => audio.have).length].every(Boolean)) {
           this.$emit("edit", {

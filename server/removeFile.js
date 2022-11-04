@@ -1,6 +1,11 @@
 const fs = require("fs");
 const path = require("path");
 
+/**
+ * Removes a file from a directory
+ * @param {array} slicePath An array consisting of parts of the entire path that leads to the directory ([__dirname, "../../", "avatars", "avatar.jpg")
+ * @param {object} res Response express object
+ */
 module.exports = async (slicePath, res) => {
   try {
     const filePath = path.resolve(...slicePath);

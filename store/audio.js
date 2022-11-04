@@ -8,15 +8,11 @@ export default {
       currentTime: 0,
       volume: 1,
       audio: null,
-      playlist: null,
     };
   },
   mutations: {
     setAudioData(state, val) {
       state.audioData = val;
-    },
-    setPlaylist(state, val) {
-      state.playlist = val;
     },
     setAudio(state, val) {
       state.audio = val;
@@ -44,9 +40,14 @@ export default {
     getPlay: (state) => state.play,
     getCurrentTime: (state) => state.currentTime,
     getVolume: (state) => state.volume,
-    getPlaylist: (state) => state.playlist,
   },
   actions: {
+    /**
+     * Submits a request to add audio
+     * @param {string} token User token
+     * @param {object} fd Form data containing the required parameters for adding audio
+     * @returns {promise} Request result
+     */
     async add({ }, { token, fd, }) {
       try {
         const res = await fetch(`${host}/audio/add`, {
@@ -64,6 +65,13 @@ export default {
       }
     },
 
+    /**
+     * Sends a request to add audio to a playlist
+     * @param {string} token User token
+     * @param {string|number} audioId Audio id
+     * @param {string|number} playlistId Playlist id
+     * @returns {promise} Request result
+     */
     async addToPlaylist({ }, { token, audioId, playlistId, }) {
       try {
         const res = await fetch(`${host}/audio/add/playlist/${playlistId}`, {
@@ -82,6 +90,12 @@ export default {
       }
     },
 
+    /**
+     * Submits a request to remove an audio
+     * @param {string} token User token
+     * @param {string|number} audioId Audio id
+     * @returns {promise} Request result
+     */
     async remove({ }, { token, audioId, }) {
       try {
         const res = await fetch(`${host}/audio/${audioId}/remove`, {
@@ -99,6 +113,12 @@ export default {
       }
     },
 
+    /**
+     * Sends a request to add audio to favorites
+     * @param {string} token User token
+     * @param {string|number} audioId Audio id
+     * @returns {promise} Request result
+     */
     async setFavorite({ }, { token, audioId, }) {
       try {
         const res = await fetch(`${host}/audio/${audioId}/favorite`, {
@@ -116,22 +136,11 @@ export default {
       }
     },
 
-    async getFavorite({ }, { token, }) {
-      try {
-        const res = await fetch(`${host}/audio/favorite`, {
-          method: "GET",
-          headers: {
-            "Accept-Type": "application/json",
-            Authorization: `Bearer ${token || ""}`,
-          },
-        });
-
-        return res.json();
-      } catch (err) {
-        throw err;
-      }
-    },
-
+    /**
+     * Gets all audio
+     * @param {string} token User token
+     * @returns {promise} Request result
+     */
     async getAll({ }, { token, }) {
       try {
         const res = await fetch(`${host}/audio/api`, {

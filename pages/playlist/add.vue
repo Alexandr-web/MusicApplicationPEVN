@@ -12,7 +12,7 @@
 </template>
 
 <script>
-  import vAddPlaylistForm from "@/components/playlist/vAddPlaylistForm";
+  import vAddPlaylistForm from "@/components/vAddPlaylistForm";
 
   export default {
     name: "AddPlaylistPage",
@@ -23,6 +23,10 @@
     },
     head: { title: "Добавление плейлиста", },
     methods: {
+      /**
+       * Handles an emit to add a playlist
+       * @param {object} data playlist we want to add
+       */
       add(data) {
         const fd = new FormData();
         const token = this.$store.getters["auth/getToken"];

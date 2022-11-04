@@ -8,7 +8,7 @@
 </template>
 
 <script>
-  import vProfileSettingsForm from "@/components/profile/vProfileSettingsForm";
+  import vProfileSettingsForm from "@/components/vProfileSettingsForm";
 
   export default { 
     name: "ProfileSettingsComponent",
@@ -17,6 +17,10 @@
       return { pendingEdit: false, };
     },
     methods: {
+      /**
+       * Handles an emit to edit user data
+       * @param {object} data User data to be changed
+       */
       edit(data) {
         const fd = new FormData();
         const { id, } = this.$route.params;

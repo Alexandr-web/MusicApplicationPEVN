@@ -12,6 +12,7 @@
   export default {
     name: "SignoutUserPage",
     layout: "default",
+    // We erase all data and go to the authorization page
     async mounted() {
       try {
         this.$store.commit("audio/clearAudio");

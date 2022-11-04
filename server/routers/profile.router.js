@@ -20,5 +20,6 @@ router.get("/api/:id/playlists", isAuth, ProfileController.getPlaylists);
 router.get("/api/edit/playlist/:playlistId", isAuth, ProfileController.getDataForEditPlaylist);
 router.get("/api/", ProfileController.getAll);
 router.get("/api/:id", ProfileController.getOne);
+router.get("/api/:id/favorites", isAuth, ProfileController.getFavorites);
 
 module.exports = router;

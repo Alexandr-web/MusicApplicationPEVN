@@ -2,6 +2,10 @@ import jwtDecode from "jwt-decode";
 
 const User = require("../models/User");
 
+/**
+ * This middleware checks if the user is logged in
+ * Checks if there is an Authorization and a valid token
+ */
 module.exports = async (req, res, next) => {
   try {
     const auth = req.headers.authorization;

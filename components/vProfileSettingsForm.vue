@@ -193,8 +193,9 @@
         document.body.dataset.theme = newVal;
       },
     },
+    // Setting the initial data in the form
     mounted() {
-      this.theme = localStorage.getItem("theme") || "dark";
+      this.theme = localStorage.getItem("theme");
 
       Object.keys(this.getUser).map((key) => {
         if (key in this.validations && !["password", "repeatPassword"].includes(key)) {
@@ -203,6 +204,10 @@
       });
     },
     methods: {
+      /**
+       * Uploading the avatar
+       * @param {object} e Event object
+       */
       loadAvatar(e) {
         if (window.FileReader) {
           const file = e.currentTarget.files[0];
@@ -225,6 +230,7 @@
           alert("В вашем браузере не поддерживается FileReader. Обновите его до последней версии или установите более современный");
         }
       },
+      // Sends an emit with the data to be edit
       edit() {
         if (!this.validations.$invalid) {
           const fd = { avatar: this.avatar.file instanceof File ? this.avatar.file : null, };

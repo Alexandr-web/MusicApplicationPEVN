@@ -4,6 +4,7 @@ const Playlist = require("../models/Playlist");
 const removeFile = require("../removeFile");
 
 class Audio {
+  // Gets a audio by his id from the database
   async getOne(req, res) {
     try {
       if (!req.isAuth) {
@@ -21,6 +22,7 @@ class Audio {
     }
   }
 
+  // Gets all audios from the database
   async getAll(req, res) {
     try {
       if (!req.isAuth) {
@@ -37,6 +39,7 @@ class Audio {
     }
   }
 
+  // Adds audio to the user
   async add(req, res) {
     try {
       if (!req.isAuth) {
@@ -60,6 +63,7 @@ class Audio {
     }
   }
 
+  // Adds audio to a playlist
   async addToPlaylist(req, res) {
     try {
       if (!req.isAuth) {
@@ -100,6 +104,7 @@ class Audio {
     }
   }
 
+  // Removes audio from the user
   async remove(req, res) {
     try {
       if (!req.isAuth) {
@@ -145,6 +150,7 @@ class Audio {
     }
   }
 
+  // Makes an audio favorite
   async setFavorite(req, res) {
     try {
       if (!req.isAuth) {
@@ -178,23 +184,6 @@ class Audio {
       await audio.update({ likes: copyAudioLikes, });
 
       return res.status(200).json({ ok: true, isFavorite: true, });
-    } catch (err) {
-      console.log(err);
-
-      return res.status(500).json({ ok: false, message: "Произошла ошибка сервера", });
-    }
-  }
-
-  async getFavorite(req, res) {
-    try {
-      if (!req.isAuth) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
-      }
-
-      const allAudio = await Song.findAll();
-      const favoriteAudio = allAudio.filter(({ likes, }) => likes.includes(req.userId));
-
-      return res.status(200).json({ ok: true, audio: favoriteAudio, });
     } catch (err) {
       console.log(err);
 

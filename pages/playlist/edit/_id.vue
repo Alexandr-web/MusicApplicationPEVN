@@ -28,8 +28,8 @@
 <script>
   import getValidAudioAndPosterUrlMixin from "@/mixins/getValidAudioAndPosterUrlMixin";
   import setNewAudioMixin from "@/mixins/setNewAudioMixin";
-  import vFormEditPlaylist from "@/components/playlist/vFormEditPlaylist";
-  import vNothing from "@/components/general/vNothing";
+  import vFormEditPlaylist from "@/components/vFormEditPlaylist";
+  import vNothing from "@/components/vNothing";
 
   export default {
     name: "EditPlaylistPage",
@@ -39,14 +39,13 @@
     },
     mixins: [getValidAudioAndPosterUrlMixin, setNewAudioMixin],
     layout: "default",
+    // Checking if the playlist exists
     validate({ params: { id: playlistId, }, store, }) {
       const token = store.getters["auth/getToken"];
-      const p1 = store.dispatch("playlist/getOne", { token, playlistId, });
-      const p2 = store.dispatch("profile/getDataForEditPlaylist", { token, playlistId, });
+      const res = store.dispatch("playlist/getOne", { token, playlistId, });
 
-      return Promise
-        .all([p1, p2])
-        .then(([res1, res2]) => res1.ok && Boolean(res1.playlist) && res2.ok)
+      return res
+        .then(({ ok, playlist, }) => ok && Boolean(playlist))
         .catch((err) => {
           throw err;
         });
@@ -58,6 +57,7 @@
         userAudio: [],
       };
     },
+    // Getting data to change the playlist
     async fetch() {
       try {
         const { id: playlistId, } = this.$route.params;
@@ -65,31 +65,20 @@
         const { ok, audio, playlist, } = await this.$store.dispatch("profile/getDataForEditPlaylist", { token, playlistId, });
 
         if (ok) {
-          this.$store.commit("audio/setPlaylist", audio);
+          this.$store.commit("playlist/setPlaylist", audio);
           this.playlist = playlist;
-          audio.map((song) => this.userAudio.push({ ...song, }));
+          audio.map((song) => this.userAudio.push(song));
         }
       } catch (err) {
         throw err;
       }
     },
     head: { title: "Изменение плейлиста", },
-    computed: {
-      getAudioData() {
-        return this.$store.getters["audio/getAudioData"];
-      },
-      getPlay() {
-        return this.$store.getters["audio/getPlay"];
-      },
-    },
     methods: {
-      setAudio(audio) {
-        if (this.getAudioData && this.getAudioData.id === audio.id) {
-          this.$store.commit("audio/setPlay", !this.getPlay);
-        } else {
-          this.setActiveAudio(audio);
-        }
-      },
+      /**
+       * Deleting/Adding a Song to a Playlist
+       * @param {object} audio the audio we want to add/remove
+       */
       setStateAudioAtPlaylist(audio) {
         this.userAudio = this.userAudio.map((song) => {
           if (audio.id === song.id) {
@@ -99,6 +88,10 @@
           return song;
         });
       },
+      /**
+       * Handles an emit to change a playlist
+       * @param {object} data data to be changed in the playlist
+       */
       edit(data) {
         const fd = new FormData();
         const token = this.$store.getters["auth/getToken"];

@@ -61,7 +61,7 @@
 <script>
   import getValidPlaylistPosterMixin from "@/mixins/getValidPlaylistPosterMixin";
   import setNewAudioMixin from "@/mixins/setNewAudioMixin";
-  import vAudio from "@/components/general/vAudio";
+  import vAudio from "@/components/vAudio";
 
   export default {
     name: "PlaylistModalComponent",
@@ -78,44 +78,17 @@
       },
     },
     computed: {
-      getPlay() {
-        return this.$store.getters["audio/getPlay"];
-      },
-      getAudioData() {
-        return this.$store.getters["audio/getAudioData"];
-      },
       getPlaylist() {
-        return this.$store.getters["audio/getPlaylist"];
+        return this.$store.getters["playlist/getPlaylist"];
       },
       getUser() {
         return this.$store.getters["profile/getUser"];
       },
     },
     methods: {
-      setAudio(audioData) {
-        if (this.getAudioData && this.getAudioData.id === audioData.id) {
-          this.$store.commit("audio/setPlay", !this.getPlay);
-        } else {
-          this.setActiveAudio(audioData);
-        }
-      },
       hideModal(e) {
         if (e.target.classList.contains("playlist-modal")) {
           this.$emit("hide");
-        }
-      },
-      async removeAudio({ id, }) {
-        try {
-          const token = this.$store.getters["auth/getToken"];
-          const { ok, message, } = await this.$store.dispatch("audio/remove", { audioId: id, token, });
-
-          alert(message);
-
-          if (ok) {
-            this.$router.go(0);
-          }
-        } catch (err) {
-          throw err;
         }
       },
     },

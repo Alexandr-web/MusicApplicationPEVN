@@ -8,8 +8,8 @@
 </template>
 
 <script>
-  import vProfileHeader from "@/components/profile/vProfileHeader";
-  import vProfileMain from "@/components/profile/vProfileMain";
+  import vProfileHeader from "@/components/vProfileHeader";
+  import vProfileMain from "@/components/vProfileMain";
   import getValidUrlForAvatarMixin from "@/mixins/getValidUrlForAvatarMixin";
 
   export default {
@@ -20,15 +20,12 @@
     },
     mixins: [getValidUrlForAvatarMixin],
     layout: "default",
+    // Checking if the user exists
     validate({ params: { id, }, store, query: { tab, }, }) {
       const res = store.dispatch("profile/getOne", id);
 
       return res.then(({ ok, user, }) => {
-        if (!(ok || user)) {
-          return false;
-        }
-
-        return Boolean(user) && ["settings", "audio", "playlists", "favorite"].includes(tab);
+        return [ok, user, ["settings", "audio", "playlists", "favorite"].includes(tab)].every(Boolean);
       }).catch((err) => {
         throw err;
       });
@@ -36,6 +33,7 @@
     data() {
       return { user: {}, };
     },
+    // Get user by id
     async fetch() {
       try {
         const { id, } = this.$route.params;

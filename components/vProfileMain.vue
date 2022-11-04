@@ -10,10 +10,10 @@
 </template>
 
 <script>
-  import vProfileSettings from "@/components/profile/vProfileSettings";
-  import vProfilePlaylists from "@/components/profile/vProfilePlaylists";
-  import vProfileAudio from "@/components/profile/vProfileAudio";
-  import vProfileFavorite from "@/components/profile/vProfileFavorite";
+  import vProfileSettings from "@/components/vProfileSettings";
+  import vProfilePlaylists from "@/components/vProfilePlaylists";
+  import vProfileAudio from "@/components/vProfileAudio";
+  import vProfileFavorite from "@/components/vProfileFavorite";
 
   export default {
     name: "ProfileMainComponent",

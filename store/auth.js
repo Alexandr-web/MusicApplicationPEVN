@@ -23,6 +23,11 @@ export default {
     },
   },
   actions: {
+    /**
+     * Sends a user registration request
+     * @param {object} fd Form data containing the necessary parameters for user registration in the system
+     * @returns {promise} Request result
+     */
     async registration({ }, fd) {
       try {
         const res = await fetch(`${host}/auth/registration`, {
@@ -37,6 +42,11 @@ export default {
       }
     },
 
+    /**
+     * Sends a request for a user login
+     * @param {object} fd Form data containing the necessary parameters for user login in the system
+     * @returns {promise} Request result
+     */
     async login({ commit, }, fd) {
       try {
         const res = await fetch(`${host}/auth/login`, {
@@ -60,6 +70,7 @@ export default {
       }
     },
 
+    // Checks for the presence of a token in the cookie, and then sets its value to the store if its time has not passed
     async autoLogin({ commit, }) {
       try {
         const cookieStr = process.browser ? document.cookie : this.app.context.req.headers.cookie || "";

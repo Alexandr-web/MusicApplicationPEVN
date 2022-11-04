@@ -3,6 +3,7 @@ const Song = require("../models/Song");
 const removeFile = require("../removeFile");
 
 class Playlist {
+  // Getting a playlist by its id
   async getOne(req, res) {
     try {
       if (!req.isAuth) {
@@ -20,6 +21,7 @@ class Playlist {
     }
   }
 
+  // Getting all playlists
   async getAll(req, res) {
     try {
       if (!req.isAuth) {
@@ -36,6 +38,7 @@ class Playlist {
     }
   }
 
+  // Adding a playlist to a user
   async add(req, res) {
     try {
       if (!req.isAuth) {
@@ -61,6 +64,7 @@ class Playlist {
     }
   }
 
+  // Get this playlist's audio
   async getAudio(req, res) {
     try {
       const { id, } = req.params;
@@ -81,6 +85,7 @@ class Playlist {
     }
   }
 
+  // Deleting a user's playlist
   async remove(req, res) {
     try {
       if (!req.isAuth) {
@@ -110,6 +115,7 @@ class Playlist {
     }
   }
 
+  // Playlist editing
   async edit(req, res) {
     try {
       if (!req.isAuth) {
