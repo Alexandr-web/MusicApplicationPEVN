@@ -27,7 +27,7 @@
 
 <script>
   import getValidAudioAndPosterUrlMixin from "@/mixins/getValidAudioAndPosterUrlMixin";
-  import setNewAudioMixin from "@/mixins/setNewAudioMixin";
+  import audioControlsMixin from "@/mixins/audioControlsMixin";
   import vFormEditPlaylist from "@/components/vFormEditPlaylist";
   import vNothing from "@/components/vNothing";
 
@@ -37,7 +37,7 @@
       vFormEditPlaylist,
       vNothing,
     },
-    mixins: [getValidAudioAndPosterUrlMixin, setNewAudioMixin],
+    mixins: [getValidAudioAndPosterUrlMixin, audioControlsMixin],
     layout: "default",
     // Checking if the playlist exists
     validate({ params: { id: playlistId, }, store, }) {

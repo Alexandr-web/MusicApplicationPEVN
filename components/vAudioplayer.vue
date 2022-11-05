@@ -111,7 +111,7 @@
   import vPrevIcon from "@/components/icons/vPrevIcon";
   import vVolumeIcon from "@/components/icons/vVolumeIcon";
   import getAudioTimeMixin from "@/mixins/getAudioTimeMixin";
-  import setActiveAudioMixin from "@/mixins/setNewAudioMixin";
+  import audioControlsMixin from "@/mixins/audioControlsMixin";
 
   export default {
     name: "AudioplayerComponent",
@@ -123,7 +123,7 @@
       vPrevIcon,
       vVolumeIcon,
     },
-    mixins: [getAudioTimeMixin, setActiveAudioMixin],
+    mixins: [getAudioTimeMixin, audioControlsMixin],
     data() {
       return {
         user: {},

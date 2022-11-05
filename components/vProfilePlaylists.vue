@@ -41,7 +41,7 @@
   import vPlaylistModal from "@/components/vPlaylistModal";
   import vPlaylist from "@/components/vPlaylist";
   import getValidPlaylistPosterMixin from "@/mixins/getValidPlaylistPosterMixin";
-  import setNewAudioMixin from "@/mixins/setNewAudioMixin";
+  import audioControlsMixin from "@/mixins/audioControlsMixin";
   import playlistModalControlsMixin from "@/mixins/playlistModalControlsMixin";
 
   export default {
@@ -51,7 +51,7 @@
       vPlaylistModal,
       vPlaylist,
     },
-    mixins: [getValidPlaylistPosterMixin, setNewAudioMixin, playlistModalControlsMixin],
+    mixins: [getValidPlaylistPosterMixin, audioControlsMixin, playlistModalControlsMixin],
     data() {
       return { playlists: [], };
     },

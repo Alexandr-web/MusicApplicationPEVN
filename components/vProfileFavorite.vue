@@ -18,7 +18,7 @@
 
 <script>
   import vNothing from "@/components/vNothing";
-  import setNewAudioMixin from "@/mixins/setNewAudioMixin";
+  import audioControlsMixin from "@/mixins/audioControlsMixin";
   import vAudio from "@/components/vAudio";
 
   export default {
@@ -27,7 +27,7 @@
       vNothing,
       vAudio,
     },
-    mixins: [setNewAudioMixin],
+    mixins: [audioControlsMixin],
     data() {
       return { songs: [], };
     },

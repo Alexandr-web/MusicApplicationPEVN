@@ -34,7 +34,7 @@
   import vNothing from "@/components/vNothing";
   import vAudio from "@/components/vAudio";
   import getValidAudioAndPosterUrlMixin from "@/mixins/getValidAudioAndPosterUrlMixin";
-  import setNewAudioMixin from "@/mixins/setNewAudioMixin";
+  import audioControlsMixin from "@/mixins/audioControlsMixin";
 
   export default {
     name: "ProfileArtistsComponent",
@@ -42,7 +42,7 @@
       vNothing,
       vAudio,
     },
-    mixins: [getValidAudioAndPosterUrlMixin, setNewAudioMixin],
+    mixins: [getValidAudioAndPosterUrlMixin, audioControlsMixin],
     data() {
       return { songs: [], };
     },

@@ -16,6 +16,7 @@
     async mounted() {
       try {
         this.$store.commit("audio/clearAudio");
+        this.$store.commit("playlist/clearPlaylist");
         this.$store.commit("auth/clearToken");
 
         await this.$router.push("/auth/login");

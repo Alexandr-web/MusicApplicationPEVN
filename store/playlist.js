@@ -8,6 +8,9 @@ export default {
     setPlaylist(state, val) {
       state.playlist = val;
     },
+    clearPlaylist(state) {
+      state.playlist = null;
+    },
   },
   getters: { getPlaylist: (state) => state.playlist, },
   actions: {

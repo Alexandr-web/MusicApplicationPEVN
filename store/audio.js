@@ -31,7 +31,6 @@ export default {
       state.play = false;
       state.audio = null;
       state.audioData = null;
-      state.playlist = null;
     },
   },
   getters: {

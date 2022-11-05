@@ -62,7 +62,7 @@
   import vNothing from "@/components/vNothing";
   import getValidPlaylistPosterMixin from "@/mixins/getValidPlaylistPosterMixin";
   import vAudio from "@/components/vAudio";
-  import setNewAudioMixin from "@/mixins/setNewAudioMixin";
+  import audioControlsMixin from "@/mixins/audioControlsMixin";
   import playlistModalControlsMixin from "@/mixins/playlistModalControlsMixin";
 
   export default { 
@@ -75,7 +75,7 @@
       SwiperSlide,
       vAudio,
     },
-    mixins: [getValidPlaylistPosterMixin, setNewAudioMixin, playlistModalControlsMixin],
+    mixins: [getValidPlaylistPosterMixin, audioControlsMixin, playlistModalControlsMixin],
     layout: "default",
     data() {
       return {

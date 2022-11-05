@@ -53,8 +53,13 @@ export default {
      * @param {object} audioData An object that stores audio data (id, title, poster, ...)
      */
     setAudio(audioData) {
-      if (this.getAudioData && this.getAudioData.id === audioData.id) {
-        this.$store.commit("audio/setPlay", !this.getPlay);
+      if (this.getAudioData) {
+        if (this.getAudioData.id === audioData.id) {
+          this.$store.commit("audio/setPlay", !this.getPlay);
+        } else {
+          this.$store.commit("audio/clearAudio");
+          this.setActiveAudio(audioData);
+        }
       } else {
         this.setActiveAudio(audioData);
       }

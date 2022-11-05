@@ -60,13 +60,13 @@
 
 <script>
   import getValidPlaylistPosterMixin from "@/mixins/getValidPlaylistPosterMixin";
-  import setNewAudioMixin from "@/mixins/setNewAudioMixin";
+  import audioControlsMixin from "@/mixins/audioControlsMixin";
   import vAudio from "@/components/vAudio";
 
   export default {
     name: "PlaylistModalComponent",
     components: { vAudio, },
-    mixins: [getValidPlaylistPosterMixin, setNewAudioMixin],
+    mixins: [getValidPlaylistPosterMixin, audioControlsMixin],
     props: {
       playlist: {
         type: Object,

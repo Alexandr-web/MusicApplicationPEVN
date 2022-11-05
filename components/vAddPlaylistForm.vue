@@ -97,12 +97,12 @@
 </template>
 
 <script>
-  import setNewAudioMixin from "@/mixins/setNewAudioMixin";
+  import audioControlsMixin from "@/mixins/audioControlsMixin";
   import getValidAudioAndPosterUrlMixin from "@/mixins/getValidAudioAndPosterUrlMixin";
 
   export default {
     name: "AddPlaylistFormComponent",
-    mixins: [getValidAudioAndPosterUrlMixin, setNewAudioMixin],
+    mixins: [getValidAudioAndPosterUrlMixin, audioControlsMixin],
     props: {
       pending: {
         type: Boolean,
