@@ -42,6 +42,45 @@ export default {
   },
   actions: {
     /**
+     * Setting the active song and initial settings
+     * @param {object} audioData Active song data
+     */
+    setNewAudio({ commit, }, audioData) {
+      new Promise((resolve) => {
+        setTimeout(() => {
+          commit("setPlay", false);
+          commit("setAudioData", audioData);
+          commit("setAudio", audioData.audio);
+
+          resolve(true);
+        }, 0);
+      }).then((play) => {
+        commit("setPlay", play);
+      }).catch((err) => {
+        throw err;
+      });
+    },
+
+    /**
+     * Set active audio if it is not in the store
+     * Otherwise change the state of the audio
+     * @param {object} audioData An object that stores audio data (id, title, poster, ...)
+     */
+    setActionForAudio({ getters, commit, dispatch, }, audioData) {
+      const currentAudioData = getters["getAudioData"];
+      const play = getters["getPlay"];
+
+      if (currentAudioData) {
+        if (currentAudioData.id === audioData.id) {
+          commit("setPlay", !play);
+        } else {
+          dispatch("setNewAudio", audioData);
+        }
+      } else {
+        dispatch("setNewAudio", audioData);
+      }
+    },
+    /**
      * Submits a request to add audio
      * @param {string} token User token
      * @param {object} fd Form data containing the required parameters for adding audio
@@ -154,6 +193,21 @@ export default {
       } catch (err) {
         throw err;
       }
+    },
+
+    /**
+     * Converts a path to a valid file path
+     * @param {string} path path url
+     * @returns {string} valid url file
+     */
+    async getValidAudioAndPosterUrl({ }, path) {
+      if (/^\/\_nuxt\//.test(path)) {
+        return path;
+      }
+
+      const url = await require(`@/audio/${path}`);
+
+      return url.default ? url.default : url;
     },
   },
 };

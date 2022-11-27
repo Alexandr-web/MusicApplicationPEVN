@@ -60,9 +60,7 @@
   import vPlaylist from "@/components/vPlaylist";
   import vPlaylistModal from "@/components/vPlaylistModal";
   import vNothing from "@/components/vNothing";
-  import getValidPlaylistPosterMixin from "@/mixins/getValidPlaylistPosterMixin";
   import vAudio from "@/components/vAudio";
-  import audioControlsMixin from "@/mixins/audioControlsMixin";
   import playlistModalControlsMixin from "@/mixins/playlistModalControlsMixin";
 
   export default { 
@@ -75,8 +73,61 @@
       SwiperSlide,
       vAudio,
     },
-    mixins: [getValidPlaylistPosterMixin, audioControlsMixin, playlistModalControlsMixin],
+    mixins: [playlistModalControlsMixin],
     layout: "default",
+    // Get all songs and playlists
+    async asyncData({ store, }) {
+      try {
+        const token = store.getters["auth/getToken"];
+        const { ok: completePlaylists, playlists, } = await store.dispatch("playlist/getAll", { token, });
+        const { ok: completeAudio, audio, } = await store.dispatch("audio/getAll", { token, });
+
+        if (!completePlaylists || !completeAudio) {
+          return {
+            playlists: [],
+            songs: [],
+          };
+        }
+
+        // Contains all playlists (promises) with the correct poster
+        const playlistPromises = playlists.map((playlist) => {
+          return store.dispatch("playlist/getValidPlaylistPoster", playlist.poster)
+            .then((url) => ({ ...playlist, poster: url, }))
+            .catch((err) => {
+              throw err;
+            });
+        });
+
+        const songsPromises = audio.map((song) => {
+          const pPoster = store.dispatch("audio/getValidAudioAndPosterUrl", song.poster);
+          const pAudio = store.dispatch("audio/getValidAudioAndPosterUrl", song.audio);
+
+          return Promise.all([pPoster, pAudio])
+            .then(([posterUrl, audioUrl]) => ({ ...song, poster: posterUrl, audio: audioUrl, isAudio: true, }))
+            .catch((err) => {
+              throw err;
+            });
+        });
+        
+        // Returns all playlists and audio when all promises are fulfilled
+        return Promise.all([...playlistPromises, ...songsPromises])
+          .then((data) => {
+            const arrPlaylists = data.filter(({ isAudio, }) => !isAudio);
+            const songs = data.filter(({ isAudio, }) => isAudio);
+
+            store.commit("playlist/setPlaylist", songs);
+
+            return {
+              playlists: arrPlaylists,
+              songs,
+            };
+          }).catch((err) => {
+            throw err;
+          });
+      } catch (err) {
+        throw err;
+      }
+    },
     data() {
       return {
         sliderOptions: {
@@ -85,34 +136,7 @@
           grabCursor: true,
           spaceBetween: 10,
         },
-        playlists: [],
-        songs: [],
       };
-    },
-    // Get all songs and playlists
-    async fetch() {
-      try {
-        const token = this.$store.getters["auth/getToken"];
-        const { ok: completePlaylists, playlists, } = await this.$store.dispatch("playlist/getAll", { token, });
-        const { ok: completeAudio, audio, } = await this.$store.dispatch("audio/getAll", { token, });
-
-        if (completePlaylists) {
-          playlists.map((playlist) => {
-            this.getValidPlaylistPoster(playlist.poster).then((url) => {
-              this.playlists.push({ ...playlist, poster: url, });
-            }).catch((err) => {
-              throw err;
-            });
-          });
-        }
-        
-        if (completeAudio) {
-          this.songs = audio;
-          this.$store.commit("playlist/setPlaylist", audio);
-        }
-      } catch (err) {
-        throw err;
-      }
     },
     head: { title: "Главная", },
     computed: {
@@ -123,6 +147,11 @@
     watch: {
       showPlaylistModal(val) {
         document.documentElement.style.overflow = val ? "hidden" : "visible";
+      },
+    },
+    methods: {
+      setAudio(audioData) {
+        this.$store.dispatch("audio/setActionForAudio", audioData);
       },
     },
   };

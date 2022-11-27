@@ -21,6 +21,11 @@
       return { pendingAdd: false, };
     },
     head: { title: "Добавление аудио", },
+    computed: {
+      getToken() {
+        return this.$store.getters["auth/getToken"];
+      },
+    },
     methods: {
       /**
        * Receives data from the form and sends a request to add a audio
@@ -28,7 +33,7 @@
        */
       add(data) {
         const fd = new FormData();
-        const token = this.$store.getters["auth/getToken"];
+        const token = this.getToken;
 
         Object.keys(data).map((key) => fd.append(key, data[key]));
 

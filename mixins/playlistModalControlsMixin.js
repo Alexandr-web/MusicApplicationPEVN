@@ -5,6 +5,11 @@ export default {
       showPlaylistModal: false,
     };
   },
+  computed: {
+    getToken() {
+      return this.$store.getters["auth/getToken"];
+    },
+  },
   methods: {
     /**
      * Sets a new playlist
@@ -16,15 +21,32 @@ export default {
       this.$store.commit("playlist/setPlaylist", []);
       this.objectPlaylist = {};
 
-      playlistAudioFetch.then(({ ok, audio, }) => {
-        if (ok) {
-          this.$store.commit("playlist/setPlaylist", audio);
-          this.objectPlaylist = playlist;
-          this.showPlaylistModal = true;
-        }
-      }).catch((err) => {
-        throw err;
-      });
+      playlistAudioFetch
+        .then(({ ok, audio, }) => {
+          if (ok) {
+            const audioPromises = audio.map((song) => {
+              const pPoster = this.$store.dispatch("audio/getValidAudioAndPosterUrl", song.poster);
+              const pAudio = this.$store.dispatch("audio/getValidAudioAndPosterUrl", song.audio);
+
+              return Promise.all([pPoster, pAudio])
+                .then(([posterUrl, audioUrl]) => ({ ...song, poster: posterUrl, audio: audioUrl, }))
+                .catch((err) => {
+                  throw err;
+                });
+            });
+
+            Promise.all(audioPromises)
+              .then((songs) => {
+                this.$store.commit("playlist/setPlaylist", songs);
+                this.objectPlaylist = playlist;
+                this.showPlaylistModal = true;
+              }).catch((err) => {
+                throw err;
+              });
+          }
+        }).catch((err) => {
+          throw err;
+        });
     },
 
     /**
@@ -33,7 +55,7 @@ export default {
      */
     async removePlaylist({ id: playlistId, }) {
       try {
-        const token = this.$store.getters["auth/getToken"];
+        const token = this.getToken;
         const { ok, message, } = await this.$store.dispatch("playlist/remove", { token, playlistId, });
 
         alert(message);

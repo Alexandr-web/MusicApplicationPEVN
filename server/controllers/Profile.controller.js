@@ -3,6 +3,7 @@ const User = require("../models/User");
 const Playlist = require("../models/Playlist");
 const removeFile = require("../removeFile");
 const bcrypt = require("bcrypt");
+const { Op, } = require("sequelize");
 
 class Profile {
   // Edits user data
@@ -56,7 +57,6 @@ class Profile {
       }
 
       await candidate.update(updates);
-      await candidate.save();
 
       return res.status(200).json({ ok: true, message: "Данные были изменены", });
     } catch (err) {
@@ -80,10 +80,26 @@ class Profile {
         return res.status(403).json({ ok: false, message: "У вас нет доступа для получения списка аудио другого пользователя", });
       }
 
-      const songs = await Song.findAll();
-      const userSongs = songs.filter(({ userId, likes, }) => userId === parseInt(id) || (favorite && likes.includes(parseInt(id))));
+      const findParams = {
+        [Op.or]: favorite ? {
+          userId: +id,
+          likes: { [Op.contains]: [id], },
+        } : false,
+        userId: !favorite ? +id : false,
+      };
 
-      return res.status(200).json({ ok: true, songs: userSongs, });
+      // We are looking for only those parameters that are true
+      const validFindParams = Object
+        .keys(findParams)
+        .filter((key) => findParams[key])
+        .reduce((acc, key) => {
+          acc[key] = findParams[key];
+
+          return acc;
+        }, {});
+      const songs = await Song.findAll({ where: validFindParams, });
+
+      return res.status(200).json({ ok: true, songs, });
     } catch (err) {
       console.log(err);
 
@@ -100,14 +116,13 @@ class Profile {
         return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
-      if (req.userId !== parseInt(id)) {
+      if (req.userId !== +id) {
         return res.status(403).json({ ok: false, message: "У вас нет доступа для получения списка плейлистов другого пользователя", });
       }
 
-      const playlists = await Playlist.findAll();
-      const userPlaylists = playlists.filter(({ userId, }) => userId === parseInt(id));
+      const playlists = await Playlist.findAll({ where: { userId: +id, }, });
 
-      return res.status(200).json({ ok: true, playlists: userPlaylists, });
+      return res.status(200).json({ ok: true, playlists, });
     } catch (err) {
       console.log(err);
 

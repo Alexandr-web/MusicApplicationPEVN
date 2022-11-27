@@ -88,11 +88,9 @@
 </template>
 
 <script>
-  import getValidPlaylistPosterMixin from "@/mixins/getValidPlaylistPosterMixin";
 
   export default {
     name: "FormEditPlaylistComponent",
-    mixins: [getValidPlaylistPosterMixin],
     props: {
       playlist: {
         type: Object,
@@ -129,11 +127,12 @@
     mounted() {
       this.validations.name.model = this.playlist.name;
 
-      this.getValidPlaylistPoster(this.playlist.poster).then((url) => {
-        this.posterPlaylist = { file: {}, src: url, };
-      }).catch((err) => {
-        throw err;
-      });
+      this.$store.dispatch("playlist/getValidPlaylistPoster", this.playlist.poster)
+        .then((url) => {
+          this.posterPlaylist = { file: {}, src: url, };
+        }).catch((err) => {
+          throw err;
+        });
     },
     methods: {
       /**

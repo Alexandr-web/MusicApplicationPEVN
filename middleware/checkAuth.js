@@ -1,5 +1,4 @@
 import jwtDecode from "jwt-decode";
-import getValidAvatarUrl from "@/helpers/getValidAvatarUrl";
 
 /**
  * This middleware is used on all pages, except pages with authorization
@@ -29,15 +28,12 @@ export default async ({ store, redirect, }) => {
     const { ok, user, } = await store.dispatch("profile/getOne", id);
 
     if (ok) {
-      getValidAvatarUrl(user.avatar)
-        .then((avatar) => {
-          store.commit("profile/setUser", {
-            ...user,
-            avatar,
-          });
-        }).catch((err) => {
-          throw err;
-        });
+      const avatar = await store.dispatch("profile/getValidAvatarUrl", user.avatar);
+
+      store.commit("profile/setUser", {
+        ...user,
+        avatar,
+      });
     }
   } catch (err) {
     throw err;

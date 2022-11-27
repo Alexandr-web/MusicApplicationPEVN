@@ -16,6 +16,11 @@
     data() {
       return { pendingEdit: false, };
     },
+    computed: {
+      getToken() {
+        return this.$store.getters["auth/getToken"];
+      },
+    },
     methods: {
       /**
        * Handles an emit to edit user data
@@ -24,7 +29,7 @@
       edit(data) {
         const fd = new FormData();
         const { id, } = this.$route.params;
-        const token = this.$store.getters["auth/getToken"];
+        const token = this.getToken;
 
         Object.keys(data).map((key) => data[key] && fd.append(key, data[key]));
         

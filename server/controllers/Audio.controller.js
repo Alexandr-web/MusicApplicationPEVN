@@ -2,6 +2,7 @@ const Song = require("../models/Song");
 const User = require("../models/User");
 const Playlist = require("../models/Playlist");
 const removeFile = require("../removeFile");
+const { Op, } = require("sequelize");
 
 class Audio {
   // Gets a audio by his id from the database
@@ -94,7 +95,6 @@ class Audio {
       copyAudioPlaylist.unshift(audioId);
 
       await playlist.update({ audio: copyAudioPlaylist, });
-      await playlist.save();
 
       return res.status(200).json({ ok: true, message: "Аудиозапись добавлена в плейлист", have: true, });
     } catch (err) {
@@ -122,11 +122,10 @@ class Audio {
         return res.status(403).json({ ok: false, message: "У вас нет прав для удаления этой аудиозаписи", });
       }
 
-      const allPlaylists = await Playlist.findAll();
-      const playlistsByAudio = allPlaylists.filter(({ audio, }) => audio.includes(audioId));
+      const allPlaylists = await Playlist.findAll({ where: { audio: { [Op.contains]: [audioId], }, }, });
 
-      if (playlistsByAudio.length) {
-        playlistsByAudio.map(async ({ id, }) => {
+      if (allPlaylists.length) {
+        allPlaylists.map(async ({ id, }) => {
           const playlist = await Playlist.findOne({ where: { id, }, });
           const updateAudioId = playlist.audio.filter((identificator) => identificator !== audioId);
 

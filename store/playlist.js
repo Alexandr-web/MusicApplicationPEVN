@@ -144,5 +144,18 @@ export default {
         throw err;
       }
     },
+
+    /**
+     * Converts a path to a valid file path
+     * @param {string} path path url
+     * @returns {string} valid url file
+     */
+    async getValidPlaylistPoster({ }, path) {
+      if (/^\/\_nuxt\//.test(path)) {
+        return path;
+      }
+
+      return require(`@/playlistPosters/${path}`);
+    },
   },
 };

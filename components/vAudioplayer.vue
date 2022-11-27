@@ -1,15 +1,16 @@
 <template>
   <div
-    v-if="getAudioData && getAudio"
+    v-if="getAudioData"
     class="audioplayer"
   >
     <div class="audioplayer__inner">
       <audio
+        v-if="getAudio"
         ref="audio"
         :src="getAudio"
         class="audioplayer__audio"
         @timeupdate="ontimeupdate"
-        @ended="endAudio"
+        @ended="switchAudio(false)"
       ></audio>
       <div class="audioplayer__section audioplayer__info">
         <div class="audioplayer__poster">
@@ -39,7 +40,7 @@
           <div class="audioplayer__controls-buttons">
             <button
               class="audioplayer__controls-btn"
-              @click="setNewAudio(true)"
+              @click="switchAudio(true)"
             >
               <vPrevIcon :class-names="['audioplayer__controls-icon', 'audioplayer__controls-prev']" />
             </button>
@@ -58,7 +59,7 @@
             </button>
             <button
               class="audioplayer__controls-btn"
-              @click="setNewAudio()"
+              @click="switchAudio()"
             >
               <vNextIcon :class-names="['audioplayer__controls-icon', 'audioplayer__controls-next']" />
             </button>
@@ -111,7 +112,6 @@
   import vPrevIcon from "@/components/icons/vPrevIcon";
   import vVolumeIcon from "@/components/icons/vVolumeIcon";
   import getAudioTimeMixin from "@/mixins/getAudioTimeMixin";
-  import audioControlsMixin from "@/mixins/audioControlsMixin";
 
   export default {
     name: "AudioplayerComponent",
@@ -123,7 +123,7 @@
       vPrevIcon,
       vVolumeIcon,
     },
-    mixins: [getAudioTimeMixin, audioControlsMixin],
+    mixins: [getAudioTimeMixin],
     data() {
       return {
         user: {},
@@ -157,23 +157,47 @@
       getUser() {
         return this.$store.getters["profile/getUser"];
       },
+      getToken() {
+        return this.$store.getters["auth/getToken"];
+      },
+      getAudioElement() {
+        return this.$refs.audio;
+      },
     },
     watch: {
-      getPlay(play) {
-        this.setAudioState(play);
+      /**
+       * Change video state
+       * @param {boolean} play Song status value
+       */
+       getPlay(play) {
+        const audio = this.getAudioElement;
+      
+        if (audio) {
+          const promise = fetch(audio.src)
+            .then((res) => res.blob())
+            .then(() => audio.play());
+
+          if (promise !== undefined) {
+            promise
+              .then(() => audio[play ? "play" : "pause"]())
+              .catch((err) => {
+                throw err;
+              });
+          }
+        }
       },
       getAudio() {
-        this.setAudioState(this.getPlay);
         this.checkFavorite();
       },
       getVolume(val) {
-        this.$refs.audio.volume = val;
+        this.getAudioElement.volume = val;
       },
     },
     mounted() {
-      this.checkFavorite(); // Checking the status of the active song (favorite or not)
+      // Checking the status of the active song (favorite or not)
+      this.checkFavorite();
+      // Set volume from local storage
       this.setLocalVolume();
-      this.setAudioState(true);
 
       // Sound control logic
       document.documentElement.addEventListener("mousemove", (e) => {
@@ -197,7 +221,7 @@
 
         if (localVolume) {
           this.$store.commit("audio/setVolume", localVolume);
-          this.$refs.audio.volume = parseInt(localVolume);
+          this.getAudioElement.volume = parseInt(localVolume);
         } else {
           localVolume.setItem("volume", 1);
         }
@@ -213,7 +237,7 @@
        */
       async setFavorite({ id: audioId, }) {
         try {
-          const token = this.$store.getters["auth/getToken"];
+          const token = this.getToken;
           const { ok, isFavorite, } = await this.$store.dispatch("audio/setFavorite", { audioId, token, });
 
           if (ok) {
@@ -224,41 +248,19 @@
         }
       },
       /**
-       * Change video status
-       * @param {boolean} play Song status value
-       */
-      setAudioState(play) {
-        const audio = this.$refs.audio;
-
-        if (audio) {
-          const promise = fetch(audio.src)
-            .then((res) => res.blob())
-            .then(() => audio.play());
-
-          if (promise !== undefined) {
-            promise.then(() => {
-              audio[play ? "play" : "pause"]();
-            })
-            .catch((err) => {
-              throw err;
-            });
-          }
-        }
-      },
-      endAudio() {
-        this.$store.commit("audio/setPlay", false);
-        this.setNewAudio();
-      },
-      /**
        * Switching songs
        * @param {boolean|undefined} setPrev Switch to previous
        */
-      setNewAudio(setPrev) {
+      async switchAudio(setPrev) {
         const { id: activeAudioId, } = this.getAudioData;
         const findIndexActiveAudio = this.getPlaylist ? this.getPlaylist.findIndex(({ id, }) => id === activeAudioId) : -1;
 
+        await this.$store.commit("audio/setPlay", false);
+
         if (findIndexActiveAudio !== -1) {
-          this.setActiveAudio(this.getPlaylist[this.checkNumActiveAudio(setPrev ? findIndexActiveAudio - 1 : findIndexActiveAudio + 1)]);
+          const activeAudio = this.getPlaylist[this.checkNumActiveAudio(setPrev ? findIndexActiveAudio - 1 : findIndexActiveAudio + 1)];
+
+          this.$store.dispatch("audio/setNewAudio", activeAudio);
         }
       },
       /**
@@ -283,7 +285,7 @@
       setTime(e) {
         const width = e.currentTarget.offsetWidth;
         const percent = Math.ceil((e.layerX / width) * 100);
-        const audio = this.$refs.audio;
+        const audio = this.getAudioElement;
 
         if (audio) {
           audio.currentTime = (percent * this.getAudioData.duration) / 100;
@@ -316,7 +318,7 @@
       },
       // Records the current time of the song
       ontimeupdate() {
-        const audio = this.$refs.audio;
+        const audio = this.getAudioElement;
 
         if (audio) {
           this.$store.commit("audio/setCurrentTime", audio.currentTime);

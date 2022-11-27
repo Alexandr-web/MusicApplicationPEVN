@@ -26,8 +26,6 @@
 </template>
 
 <script>
-  import getValidAudioAndPosterUrlMixin from "@/mixins/getValidAudioAndPosterUrlMixin";
-  import audioControlsMixin from "@/mixins/audioControlsMixin";
   import vFormEditPlaylist from "@/components/vFormEditPlaylist";
   import vNothing from "@/components/vNothing";
 
@@ -37,7 +35,6 @@
       vFormEditPlaylist,
       vNothing,
     },
-    mixins: [getValidAudioAndPosterUrlMixin, audioControlsMixin],
     layout: "default",
     // Checking if the playlist exists
     validate({ params: { id: playlistId, }, store, }) {
@@ -50,31 +47,58 @@
           throw err;
         });
     },
-    data() {
-      return {
-        playlist: {},
-        pendingEdit: false,
-        userAudio: [],
-      };
-    },
     // Getting data to change the playlist
-    async fetch() {
+    async asyncData({ store, params: { id: playlistId, }, }) {
       try {
-        const { id: playlistId, } = this.$route.params;
-        const token = this.$store.getters["auth/getToken"];
-        const { ok, audio, playlist, } = await this.$store.dispatch("profile/getDataForEditPlaylist", { token, playlistId, });
+        const token = store.getters["auth/getToken"];
+        const { ok, audio, playlist, } = await store.dispatch("profile/getDataForEditPlaylist", { token, playlistId, });
 
-        if (ok) {
-          this.$store.commit("playlist/setPlaylist", audio);
-          this.playlist = playlist;
-          audio.map((song) => this.userAudio.push(song));
+        if (!ok) {
+          return {
+            playlist: {},
+            userAudio: [],
+          };
         }
+
+        const audioPromises = audio.map((song) => {
+          const pPoster = store.dispatch("audio/getValidAudioAndPosterUrl", song.poster);
+          const pAudio = store.dispatch("audio/getValidAudioAndPosterUrl", song.audio);
+
+          return Promise.all([pPoster, pAudio])
+            .then(([posterUrl, audioUrl]) => ({ ...song, poster: posterUrl, audio: audioUrl, }))
+            .catch((err) => {
+              throw err;
+            });
+        });
+
+        return Promise.all(audioPromises)
+          .then((songs) => {
+            store.commit("playlist/setPlaylist", songs);
+            
+            return {
+              playlist,
+              userAudio: songs,
+            };
+          }).catch((err) => {
+            throw err;
+          });
       } catch (err) {
         throw err;
       }
     },
+    data() {
+      return { pendingEdit: false, };
+    },
     head: { title: "Изменение плейлиста", },
+    computed: {
+      getToken() {
+        return this.$store.getters["auth/getToken"];
+      },
+    },
     methods: {
+      setAudio(audioData) {
+        this.$store.dispatch("audio/setActionForAudio", audioData);
+      },
       /**
        * Deleting/Adding a Song to a Playlist
        * @param {object} audio the audio we want to add/remove
@@ -94,7 +118,7 @@
        */
       edit(data) {
         const fd = new FormData();
-        const token = this.$store.getters["auth/getToken"];
+        const token = this.getToken;
         const { id: playlistId, } = this.playlist;
 
         Object.keys(data).map((key) => fd.append(key, data[key]));

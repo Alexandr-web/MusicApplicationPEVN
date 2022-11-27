@@ -18,7 +18,6 @@
 
 <script>
   import vNothing from "@/components/vNothing";
-  import audioControlsMixin from "@/mixins/audioControlsMixin";
   import vAudio from "@/components/vAudio";
 
   export default {
@@ -27,20 +26,35 @@
       vNothing,
       vAudio,
     },
-    mixins: [audioControlsMixin],
     data() {
       return { songs: [], };
     },
     // Getting favorite songs
     async fetch() {
       try {
-        const token = this.$store.getters["auth/getToken"];
+        const token = this.getToken;
         const { id, } = this.getUser;
         const { ok, audio, } = await this.$store.dispatch("profile/getFavorites", { token, id, });
 
         if (ok) {
-          this.songs = audio;
-          this.$store.commit("playlist/setPlaylist", audio);
+          const audioPromises = audio.map((song) => {
+            const pPoster = this.$store.dispatch("audio/getValidAudioAndPosterUrl", song.poster);
+            const pAudio = this.$store.dispatch("audio/getValidAudioAndPosterUrl", song.audio);
+
+            return Promise.all([pPoster, pAudio])
+              .then(([posterUrl, audioUrl]) => ({ ...song, poster: posterUrl, audio: audioUrl, }))
+              .catch((err) => {
+                throw err;
+              });
+          });
+
+          Promise.all(audioPromises)
+            .then((songs) => {
+              this.songs = songs;
+              this.$store.commit("playlist/setPlaylist", songs);
+            }).catch((err) => {
+              throw err;
+            });
         }
       } catch (err) {
         throw err;
@@ -52,6 +66,14 @@
       },
       getUser() {
         return this.$store.getters["profile/getUser"];
+      },
+      getToken() {
+        return this.$store.getters["auth/getToken"];
+      },
+    },
+    methods: {
+      setAudio(audioData) {
+        this.$store.dispatch("audio/setActionForAudio", audioData);
       },
     },
   };

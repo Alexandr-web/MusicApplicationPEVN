@@ -64,7 +64,7 @@
                 :key="index"
                 class="form__data-list-item"
                 :style="`background-image: url(${song.poster})`"
-                @click.stop="setAudio(song)"
+                @click.stop="$store.dispatch('audio/setActionForAudio', song)"
               >
                 <div class="form__data-list-block">
                   <span class="form__data-list-text">{{ song.name }}</span>
@@ -97,12 +97,8 @@
 </template>
 
 <script>
-  import audioControlsMixin from "@/mixins/audioControlsMixin";
-  import getValidAudioAndPosterUrlMixin from "@/mixins/getValidAudioAndPosterUrlMixin";
-
   export default {
     name: "AddPlaylistFormComponent",
-    mixins: [getValidAudioAndPosterUrlMixin, audioControlsMixin],
     props: {
       pending: {
         type: Boolean,
@@ -132,18 +128,22 @@
     // Gets all of the user's audio, including favorites
     async fetch() {
       try {
-        const token = this.$store.getters["auth/getToken"];
+        const token = this.getToken;
         const { id: userId, } = this.getUser;
         const { ok, songs, } = await this.$store.dispatch("profile/getAudioAndFavorite", { token, userId, });
         
         if (ok) {
           // Populate the audio array with only a valid poster
           songs.map((song) => {
-            this.getValidAudioAndPosterUrl(song.poster).then((url) => {
-              this.audio.push({ ...song, poster: url, });
-            }).catch((err) => {
-              throw err;
-            });
+            const pPoster = this.$store.dispatch("audio/getValidAudioAndPosterUrl", song.poster);
+            const pAudio = this.$store.dispatch("audio/getValidAudioAndPosterUrl", song.audio);
+
+            Promise.all([pPoster, pAudio])
+              .then(([poster, audio]) => {
+                this.audio.push({ ...song, poster, audio, });
+              }).catch((err) => {
+                throw err;
+              });
           });
         }
       } catch (err) {
@@ -153,6 +153,9 @@
     computed: {
       getUser() {
         return this.$store.getters["profile/getUser"];
+      },
+      getToken() {
+        return this.$store.getters["auth/getToken"];
       },
     },
     methods: {

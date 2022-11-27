@@ -59,14 +59,13 @@
 </template>
 
 <script>
-  import getValidPlaylistPosterMixin from "@/mixins/getValidPlaylistPosterMixin";
-  import audioControlsMixin from "@/mixins/audioControlsMixin";
   import vAudio from "@/components/vAudio";
+  import removeAudioMixin from "@/mixins/removeAudioMixin";
 
   export default {
     name: "PlaylistModalComponent",
     components: { vAudio, },
-    mixins: [getValidPlaylistPosterMixin, audioControlsMixin],
+    mixins: [removeAudioMixin],
     props: {
       playlist: {
         type: Object,
@@ -86,6 +85,9 @@
       },
     },
     methods: {
+      setAudio(audioData) {
+        this.$store.dispatch("audio/setActionForAudio", audioData);
+      },
       hideModal(e) {
         if (e.target.classList.contains("playlist-modal")) {
           this.$emit("hide");

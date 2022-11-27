@@ -33,8 +33,7 @@
 <script>
   import vNothing from "@/components/vNothing";
   import vAudio from "@/components/vAudio";
-  import getValidAudioAndPosterUrlMixin from "@/mixins/getValidAudioAndPosterUrlMixin";
-  import audioControlsMixin from "@/mixins/audioControlsMixin";
+  import removeAudioMixin from "@/mixins/removeAudioMixin";
 
   export default {
     name: "ProfileArtistsComponent",
@@ -42,7 +41,7 @@
       vNothing,
       vAudio,
     },
-    mixins: [getValidAudioAndPosterUrlMixin, audioControlsMixin],
+    mixins: [removeAudioMixin],
     data() {
       return { songs: [], };
     },
@@ -55,12 +54,28 @@
         const { id, } = this.$route.params;
 
         if (id) {
-          const token = this.$store.getters["auth/getToken"];
+          const token = this.getToken;
           const { ok, songs, } = await this.$store.dispatch("profile/getAudio", { userId: parseInt(id), token, });
           
           if (ok) {
-            this.$store.commit("playlist/setPlaylist", songs);
-            this.songs = songs;
+            const audioPromises = songs.map((song) => {
+              const pPoster = this.$store.dispatch("audio/getValidAudioAndPosterUrl", song.poster);
+              const pAudio = this.$store.dispatch("audio/getValidAudioAndPosterUrl", song.audio);
+
+              return Promise.all([pPoster, pAudio])
+                .then(([poster, audio]) => ({ ...song, poster, audio, }))
+                .catch((err) => {
+                  throw err;
+                });
+            });
+            
+            Promise.all(audioPromises)
+              .then((audio) => {
+                this.songs = audio;
+                this.$store.commit("playlist/setPlaylist", audio);
+              }).catch((err) => {
+                throw err;
+              });
           }
         }
       } catch (err) {
@@ -70,6 +85,14 @@
     computed: {
       getPlaylist() {
         return this.$store.getters["playlist/getPlaylist"];
+      },
+      getToken() {
+        return this.$store.getters["auth/getToken"];
+      },
+    },
+    methods: {
+      setAudio(audioData) {
+        this.$store.dispatch("audio/setActionForAudio", audioData);
       },
     },
   };

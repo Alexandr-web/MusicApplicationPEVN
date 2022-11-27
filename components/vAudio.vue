@@ -42,13 +42,11 @@
 </template>
 
 <script>
-  import getValidAudioAndPosterUrlMixin from "@/mixins/getValidAudioAndPosterUrlMixin";
   import vStarIcon from "@/components/icons/vStarIcon";
 
   export default {
     name: "AudioComponent",
     components: { vStarIcon, },
-    mixins: [getValidAudioAndPosterUrlMixin],
     props: {
       audio: {
         type: Object,
@@ -77,7 +75,7 @@
     async mounted() {
       const { poster, } = this.audio;
       
-      this.posterUrl = await this.getValidAudioAndPosterUrl(poster);
+      this.posterUrl = await this.$store.dispatch("audio/getValidAudioAndPosterUrl", poster);
     },
   };
 </script>

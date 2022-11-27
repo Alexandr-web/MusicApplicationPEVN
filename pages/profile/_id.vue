@@ -10,7 +10,6 @@
 <script>
   import vProfileHeader from "@/components/vProfileHeader";
   import vProfileMain from "@/components/vProfileMain";
-  import getValidUrlForAvatarMixin from "@/mixins/getValidUrlForAvatarMixin";
 
   export default {
     name: "ProfilePage",
@@ -18,7 +17,6 @@
       vProfileHeader,
       vProfileMain,
     },
-    mixins: [getValidUrlForAvatarMixin],
     layout: "default",
     // Checking if the user exists
     validate({ params: { id, }, store, query: { tab, }, }) {
@@ -30,23 +28,23 @@
         throw err;
       });
     },
-    data() {
-      return { user: {}, };
-    },
     // Get user by id
-    async fetch() {
+    async asyncData({ store, params: { id, }, }) {
       try {
-        const { id, } = this.$route.params;
-        const { ok, user, } = await this.$store.dispatch("profile/getOne", id);
+        const { ok, user, } = await store.dispatch("profile/getOne", id);
 
-        if (ok) {
-          const avatar = await this.getValidAvatarUrl(user.avatar);
+        if (!ok) {
+          return { user: {}, };
+        }
 
-          this.user = {
+        const avatar = await store.dispatch("profile/getValidAvatarUrl", user.avatar);
+
+        return {
+          user: {
             ...user,
             avatar,
-          };
-        }
+          },
+        };
       } catch (err) {
         throw err;
       }

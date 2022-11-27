@@ -40,8 +40,6 @@
   import vNothing from "@/components/vNothing";
   import vPlaylistModal from "@/components/vPlaylistModal";
   import vPlaylist from "@/components/vPlaylist";
-  import getValidPlaylistPosterMixin from "@/mixins/getValidPlaylistPosterMixin";
-  import audioControlsMixin from "@/mixins/audioControlsMixin";
   import playlistModalControlsMixin from "@/mixins/playlistModalControlsMixin";
 
   export default {
@@ -51,7 +49,7 @@
       vPlaylistModal,
       vPlaylist,
     },
-    mixins: [getValidPlaylistPosterMixin, audioControlsMixin, playlistModalControlsMixin],
+    mixins: [playlistModalControlsMixin],
     data() {
       return { playlists: [], };
     },
@@ -61,22 +59,28 @@
         const { id, } = this.$route.params;
 
         if (id) {
-          const token = this.$store.getters["auth/getToken"];
+          const token = this.getToken;
           const { ok, playlists, } = await this.$store.dispatch("profile/getPlaylists", { userId: parseInt(id), token, });
 
           if (ok) {
             playlists.map((playlist) => {
-              this.getValidPlaylistPoster(playlist.poster).then((url) => {
-                this.playlists.push({ ...playlist, poster: url, });
-              }).catch((err) => {
-                throw err;
-              });
+              this.$store.dispatch("playlist/getValidPlaylistPoster", playlist.poster)
+                .then((url) => {
+                  this.playlists.push({ ...playlist, poster: url, });
+                }).catch((err) => {
+                  throw err;
+                });
             });
           }
         }
       } catch (err) {
         throw err;
       }
+    },
+    computed: {
+      getToken() {
+        return this.$store.getters["auth/getToken"];
+      },
     },
     watch: {
       showPlaylistModal(val) {

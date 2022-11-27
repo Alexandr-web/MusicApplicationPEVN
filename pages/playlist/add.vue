@@ -22,6 +22,11 @@
       return { pendingAdd: false, };
     },
     head: { title: "Добавление плейлиста", },
+    computed: {
+      getToken() {
+        return this.$store.getters["auth/getToken"];
+      },
+    },
     methods: {
       /**
        * Handles an emit to add a playlist
@@ -29,7 +34,7 @@
        */
       add(data) {
         const fd = new FormData();
-        const token = this.$store.getters["auth/getToken"];
+        const token = this.getToken;
 
         Object.keys(data).map((key) => fd.append(key, data[key]));
         
