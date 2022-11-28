@@ -568,67 +568,16 @@
   }
 }
 
+.list-audio-column {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
 .form {
   display: flex;
   flex-direction: column;
   border-radius: 8px;
-
-  &__data {
-    display: flex;
-    flex-direction: column;
-
-    &-list {
-      display: flex;
-      flex-direction: column;
-      max-height: 300px;
-      overflow: auto;
-
-      &-item {
-        padding: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 50px;
-        background-blend-mode: multiply;
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-color: transparent;
-        background-position: center;
-        border-radius: 8px;
-        cursor: pointer;
-
-        &:not(:last-child) {
-          margin-bottom: 10px;
-        }
-      }
-
-      &-btn {
-        width: 30px;
-        height: 30px;
-      }
-
-      &-block {
-        display: flex;
-        align-items: center;
-        position: relative;
-
-        &:not(:last-child) {
-          margin-right: 5px;
-        }
-      }
-
-      &-text {
-        font-size: 13px;
-        max-width: 320px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        padding: 8px;
-        border-radius: 8px;
-        display: inline-block;
-      }
-    }
-  }
 
   &__block-avatar {
     width: 150px;
@@ -720,6 +669,12 @@
     display: flex;
     flex-direction: column;
   }
+
+  &__column {
+    &:not(:last-child) {
+      margin-bottom: 15px;
+    }
+  }
 }
 
 .audio {
@@ -780,9 +735,9 @@
   &__list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
 
     &-item {
-      margin: 15px;
       display: flex;
       align-items: center;
       cursor: pointer;
@@ -965,6 +920,7 @@
 
   &__main {
     border-radius: 8px;
+    padding: 10px;
   }
 
   &__title {
@@ -1040,53 +996,6 @@
     &-bottom {
       margin-top: 15px;
     }
-
-    &-audio-list {
-      display: flex;
-      flex-direction: column;
-    }
-
-    &-audio {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px;
-      border-radius: 8px;
-      cursor: pointer;
-
-      &:not(:last-child) {
-        margin-bottom: 8px;
-      }
-
-      &-block {
-        display: flex;
-        align-items: center;
-
-        &:not(:last-child) {
-          margin-right: 10px;
-        }
-      }
-
-      &-authorname {
-        margin-right: 5px;
-        font-size: 14px;
-        @extend %roboto-300;
-      }
-
-      &-songname {
-        @extend %roboto-300;
-      }
-
-      &-time {
-        margin-right: 10px;
-        font-size: 14px;
-      }
-
-      &-btn {
-        width: 20px;
-        height: 20px;
-      }
-    }
   }
 
   &__form {
@@ -1099,10 +1008,10 @@
 .playlists {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
 
   &__item {
     cursor: pointer;
-    margin: 15px;
     align-self: start;
     padding: 10px;
     border-radius: 6px;

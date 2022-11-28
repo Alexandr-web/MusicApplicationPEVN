@@ -42,7 +42,7 @@
       <main class="playlist-modal__main">
         <ul
           v-if="getPlaylist && getPlaylist.length"
-          class="playlist-modal__list"
+          class="list-audio-column"
         >
           <vAudio
             v-for="(song, index) in getPlaylist"

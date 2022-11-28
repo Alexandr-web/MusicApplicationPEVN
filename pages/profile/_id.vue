@@ -2,7 +2,7 @@
   <div class="profile gaps-t-b">
     <div class="profile__inner">
       <vProfileHeader :user="user" />
-      <vProfileMain :tab="$route.query.tab" />
+      <vProfileMain />
     </div>
   </div>
 </template>

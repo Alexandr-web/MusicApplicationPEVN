@@ -34,7 +34,12 @@
       class="audio__list-block audio__list-options"
     >
       <button
-        class="audio__list-options-btn add-btn add-btn--remove"
+        class="audio__list-options-btn add-btn"
+        :class="{
+          'add-btn--add': !isRemove,
+          'add-btn--remove': isRemove,
+        }"
+        type="button"
         @click.stop="$emit('remove', audio)"
       ></button>
     </div>
@@ -57,6 +62,10 @@
         default: false,
       },
       noControls: {
+        type: Boolean,
+        default: false,
+      },
+      isRemove: {
         type: Boolean,
         default: false,
       },

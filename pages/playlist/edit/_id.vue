@@ -3,16 +3,15 @@
     <div class="container">
       <div class="playlist__inner">
         <vFormEditPlaylist
-          v-if="Object.keys(playlist).length && userAudio.length"
+          v-if="Object.keys(playlist).length && audio.length"
           :playlist="playlist"
           :pending="pendingEdit"
-          :audio="userAudio"
+          :audio="audio"
           @setStateAudioAtPlaylist="setStateAudioAtPlaylist"
-          @setAudio="setAudio"
           @edit="edit"
         />
         <vNothing
-          v-if="!userAudio.length"
+          v-if="!audio.length"
           text="Нет аудио для создания плейлиста"
           :gaps="true"
           :link="{
@@ -56,7 +55,7 @@
         if (!ok) {
           return {
             playlist: {},
-            userAudio: [],
+            audio: [],
           };
         }
 
@@ -77,7 +76,11 @@
             
             return {
               playlist,
-              userAudio: songs,
+              audio: songs.map((song) => {
+                song.have = playlist.audio.includes(song.id);
+
+                return song;
+              }),
             };
           }).catch((err) => {
             throw err;
@@ -96,21 +99,14 @@
       },
     },
     methods: {
-      setAudio(audioData) {
-        this.$store.dispatch("audio/setActionForAudio", audioData);
-      },
       /**
        * Deleting/Adding a Song to a Playlist
        * @param {object} audio the audio we want to add/remove
        */
       setStateAudioAtPlaylist(audio) {
-        this.userAudio = this.userAudio.map((song) => {
-          if (audio.id === song.id) {
-            song.have = !audio.have;
-          }
-
-          return song;
-        });
+        const indexAudio = this.audio.findIndex(({ id, }) => id === audio.id);
+        
+        this.$set(this.audio, indexAudio, { ...audio, have: !audio.have, });
       },
       /**
        * Handles an emit to change a playlist

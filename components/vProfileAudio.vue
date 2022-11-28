@@ -8,6 +8,7 @@
         v-for="(audio, index) in songs"
         :key="index"
         :audio="audio"
+        :is-remove="true"
         @setActiveAudio="setAudio"
         @remove="removeAudio"
       />
@@ -52,31 +53,28 @@
     async fetch() {
       try {
         const { id, } = this.$route.params;
-
-        if (id) {
-          const token = this.getToken;
-          const { ok, songs, } = await this.$store.dispatch("profile/getAudio", { userId: parseInt(id), token, });
+        const token = this.getToken;
+        const { ok, songs, } = await this.$store.dispatch("profile/getAudio", { userId: parseInt(id), token, });
           
-          if (ok) {
-            const audioPromises = songs.map((song) => {
-              const pPoster = this.$store.dispatch("audio/getValidAudioAndPosterUrl", song.poster);
-              const pAudio = this.$store.dispatch("audio/getValidAudioAndPosterUrl", song.audio);
+        if (ok) {
+          const audioPromises = songs.map((song) => {
+            const pPoster = this.$store.dispatch("audio/getValidAudioAndPosterUrl", song.poster);
+            const pAudio = this.$store.dispatch("audio/getValidAudioAndPosterUrl", song.audio);
 
-              return Promise.all([pPoster, pAudio])
-                .then(([poster, audio]) => ({ ...song, poster, audio, }))
-                .catch((err) => {
-                  throw err;
-                });
-            });
-            
-            Promise.all(audioPromises)
-              .then((audio) => {
-                this.songs = audio;
-                this.$store.commit("playlist/setPlaylist", audio);
-              }).catch((err) => {
+            return Promise.all([pPoster, pAudio])
+              .then(([poster, audio]) => ({ ...song, poster, audio, }))
+              .catch((err) => {
                 throw err;
               });
-          }
+          });
+            
+          Promise.all(audioPromises)
+            .then((audio) => {
+              this.songs = audio;
+              this.$store.commit("playlist/setPlaylist", audio);
+            }).catch((err) => {
+              throw err;
+            });
         }
       } catch (err) {
         throw err;

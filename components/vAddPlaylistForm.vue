@@ -55,32 +55,15 @@
         </h4>
         <div class="form__data">
           <main class="form__data-main">
-            <ul
-              v-if="audio.length"
-              class="form__data-list"
-            >
-              <li
+            <ul class="list-audio-column">
+              <vAudio
                 v-for="(song, index) in audio"
                 :key="index"
-                class="form__data-list-item"
-                :style="`background-image: url(${song.poster})`"
-                @click.stop="$store.dispatch('audio/setActionForAudio', song)"
-              >
-                <div class="form__data-list-block">
-                  <span class="form__data-list-text">{{ song.name }}</span>
-                </div>
-                <div class="form__data-list-block">
-                  <button
-                    class="form__data-list-btn add-btn"
-                    type="button"
-                    :class="{
-                      'add-btn--remove': audioForPlaylist.includes(song.id),
-                      'add-btn--add': !audioForPlaylist.includes(song.id),
-                    }"
-                    @click.stop="addAudio(song)"
-                  ></button>
-                </div>
-              </li>
+                :is-remove="song.have"
+                :audio="song"
+                @setActiveAudio="$store.dispatch('audio/setActionForAudio', song)"
+                @remove="$emit('setStateAudioAtPlaylist', song)"
+              />
             </ul>
           </main>
         </div>
@@ -97,11 +80,18 @@
 </template>
 
 <script>
+  import vAudio from "@/components/vAudio";
+
   export default {
     name: "AddPlaylistFormComponent",
+    components: { vAudio, },
     props: {
       pending: {
         type: Boolean,
+        required: true,
+      },
+      audio: {
+        type: Array,
         required: true,
       },
     },
@@ -121,65 +111,24 @@
             model: "",
           },
         },
-        audio: [],
-        audioForPlaylist: [],
       };
     },
-    // Gets all of the user's audio, including favorites
-    async fetch() {
-      try {
-        const token = this.getToken;
-        const { id: userId, } = this.getUser;
-        const { ok, songs, } = await this.$store.dispatch("profile/getAudioAndFavorite", { token, userId, });
-        
-        if (ok) {
-          // Populate the audio array with only a valid poster
-          songs.map((song) => {
-            const pPoster = this.$store.dispatch("audio/getValidAudioAndPosterUrl", song.poster);
-            const pAudio = this.$store.dispatch("audio/getValidAudioAndPosterUrl", song.audio);
-
-            Promise.all([pPoster, pAudio])
-              .then(([poster, audio]) => {
-                this.audio.push({ ...song, poster, audio, });
-              }).catch((err) => {
-                throw err;
-              });
-          });
-        }
-      } catch (err) {
-        throw err;
-      }
-    },
     computed: {
-      getUser() {
-        return this.$store.getters["profile/getUser"];
-      },
-      getToken() {
-        return this.$store.getters["auth/getToken"];
+      getAddedSongsId() {
+        return this.audio.filter(({ have, }) => have).map(({ id, }) => id);
       },
     },
     methods: {
       // Sends an emit with playlist data for its further addition
       addPlaylist() {
-        if ([...Object.values(this.poster), this.validations.name.model, this.audioForPlaylist.length].every(Boolean)) {
+        if ([...Object.values(this.poster), this.validations.name.model, this.getAddedSongsId.length].every(Boolean)) {
           this.$emit("add", {
             poster: this.poster.file,
+            audio: JSON.stringify(this.getAddedSongsId),
             name: this.validations.name.model,
-            audio: JSON.stringify(this.audioForPlaylist),
           });
         } else {
           alert("Все поля должны быть заполнены");
-        }
-      },
-      /**
-       * Adds audio to the array, which will later be in the playlist
-       * @param {object} audio Audio object
-       */
-      addAudio(audio) {
-        if (this.audioForPlaylist.includes(audio.id)) {
-          this.audioForPlaylist = this.audioForPlaylist.filter((id) => id !== audio.id);
-        } else {
-          this.audioForPlaylist.push(audio.id);
         }
       },
       /**

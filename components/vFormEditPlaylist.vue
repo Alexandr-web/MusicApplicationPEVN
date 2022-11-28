@@ -46,35 +46,15 @@
       </div>
     </div>
     <div class="playlist__edit-bottom">
-      <ul class="playlist__edit-audio-list">
-        <li
+      <ul class="list-audio-column">
+        <vAudio
           v-for="(song, index) in audio"
           :key="index"
-          class="playlist__edit-audio"
-          @click.stop="$emit('setAudio', song)"
-        >
-          <div class="playlist__edit-audio-block">
-            <div class="playlist__edit-audio-authorname">
-              {{ song.author }}
-            </div>
-            <div class="playlist__edit-audio-songname">
-              {{ song.name }}
-            </div>
-          </div>
-          <div class="playlist__edit-audio-block">
-            <div class="playlist__edit-audio-time">
-              {{ song.time }}
-            </div>
-            <button
-              class="playlist__edit-audio-btn add-btn"
-              :class="{
-                'add-btn--add': !song.have,
-                'add-btn--remove': song.have,
-              }"
-              @click.stop="$emit('setStateAudioAtPlaylist', song)"
-            ></button>
-          </div>
-        </li>
+          :audio="song"
+          :is-remove="song.have"
+          @setActiveAudio="setAudio"
+          @remove="$emit('setStateAudioAtPlaylist', song)"
+        />
       </ul>
       <button
         class="playlist__edit-submit form__submit"
@@ -88,9 +68,11 @@
 </template>
 
 <script>
+  import vAudio from "@/components/vAudio";
 
   export default {
     name: "FormEditPlaylistComponent",
+    components: { vAudio, },
     props: {
       playlist: {
         type: Object,
@@ -135,6 +117,9 @@
         });
     },
     methods: {
+      setAudio(audioData) {
+        this.$store.dispatch("audio/setActionForAudio", audioData);
+      },
       /**
        * Uploading a poster file
        * @param {object} e Event object

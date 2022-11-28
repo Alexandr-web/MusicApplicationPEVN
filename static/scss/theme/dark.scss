@@ -103,18 +103,6 @@ body {
       }
     }
 
-    .playlist {
-      &__edit {
-        &-audio {
-          background: $darkTheme_backgroundAudio;
-
-          &-songname {
-            color: $darkTheme_colorAudioName;
-          }
-        }
-      }
-    }
-
     .audio {
       &__list {
         &-item {
@@ -183,18 +171,6 @@ body {
     .form {
       &__block-avatar {
         box-shadow: inset $darkTheme_boxShadowBlockAvatar 0 0 30px 4px;
-      }
-
-      &__data {
-        &-list {
-          &-item {
-            background-color: $darkTheme_backgroundFormDataListItem;
-          }
-
-          &-text {
-            background: $darkTheme_backgroundFormDataListText;
-          }
-        }
       }
 
       &__block-poster,

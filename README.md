@@ -51,6 +51,16 @@ This project was created in order to listen not only to your own music, but also
 
 <img src="./readmeImages/addPlaylistPage.jpg" alt="add playlist page" />
 
+## ENV Params
+```
+USER_NAME=myUserDatabaseName
+USER_PASSWORD=myUserDatabasePassword
+DATABASE_NAME=myDatabaseName
+SERVER_PORT=myServerPort
+SERVER_HOST=myServerHost
+SECRET_KEY=mySecretKey
+```
+
 ## Build Setup
 
 ```bash
