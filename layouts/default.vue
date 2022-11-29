@@ -13,7 +13,6 @@
 </template>
 
 <script>
-  import setThemeMixin from "@/mixins/setThemeMixin";
   import vHeader from "@/components/vHeader";
   import vSidebar from "@/components/vSidebar";
   import vAudioplayer from "@/components/vAudioplayer";
@@ -25,7 +24,6 @@
       vSidebar,
       vAudioplayer,
     },
-    mixins: [setThemeMixin],
     middleware: "checkAuth",
     computed: {
       getAudioData() {

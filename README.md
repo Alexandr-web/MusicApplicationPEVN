@@ -33,11 +33,7 @@ This project was created in order to listen not only to your own music, but also
 
 ### User settings page
 
-<img src="./readmeImages/ProfileSettingsPage1.jpg" alt="user settings page" />
-
-### User settings page with light theme
-
-<img src="./readmeImages/ProfileSettingsPage2.jpg" alt="user settings page with light theme" />
+<img src="./readmeImages/ProfileSettingsPage.jpg" alt="user settings page" />
 
 ### Edit playlist page
 
