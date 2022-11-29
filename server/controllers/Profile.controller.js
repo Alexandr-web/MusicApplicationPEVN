@@ -53,7 +53,7 @@ class Profile {
       if (req.file) {
         updates.avatar = req.file.filename;
 
-        removeFile([__dirname, "../../", "avatars", candidate.avatar.replace(/^\/\_nuxt\/avatars\//, "")], res);
+        removeFile([__dirname, "../../", "avatars", candidate.avatar], res);
       }
 
       await candidate.update(updates);

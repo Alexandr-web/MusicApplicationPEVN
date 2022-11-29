@@ -18,8 +18,7 @@ export default {
   ],
 
   plugins: [
-    { src: "~/plugins/vue-awesome-swiper.js", ssr: false, },
-    { src: "~/plugins/validation.js", }
+    { src: "~/plugins/vue-awesome-swiper.js", ssr: false, }
   ],
 
   components: true,

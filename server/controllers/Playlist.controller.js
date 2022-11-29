@@ -103,7 +103,7 @@ class Playlist {
         return res.status(403).json({ ok: false, message: "У вас нет доступа для удаления этого плейлиста", });
       }
 
-      removeFile([__dirname, "../../", "playlistPosters", playlist.poster.replace(/^\/\_nuxt\/playlistPosters\//, "")], res);
+      removeFile([__dirname, "../../", "playlistPosters", playlist.poster], res);
 
       await playlist.destroy();
 
@@ -134,12 +134,12 @@ class Playlist {
       }
 
       const { audio, } = req.body;
-      const updates = { ...req.body, };
+      const updates = req.body;
 
       if (req.file) {
         updates.poster = req.file.filename;
 
-        removeFile([__dirname, "../../", "playlistPosters", playlist.poster.replace(/^\/\_nuxt\/playlistPosters\//, "")], res);
+        removeFile([__dirname, "../../", "playlistPosters", playlist.poster], res);
       }
 
       updates.audio = JSON.parse(audio);

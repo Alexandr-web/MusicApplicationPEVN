@@ -136,7 +136,7 @@ class Audio {
       const files = [song.poster, song.audio];
 
       files.map((file) => {
-        removeFile([__dirname, "../../", "audio", file.replace(/^\/\_nuxt\/audio\//, "")], res);
+        removeFile([__dirname, "../../", "audio", file], res);
       });
 
       await song.destroy();

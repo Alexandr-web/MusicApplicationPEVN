@@ -5,23 +5,48 @@
         v-if="(audio || []).length"
         class="playlist__inner"
       >
-        <vAddPlaylistForm
+        <vForm
+          :classes="['playlist__form']"
+          :fields="fields"
           :pending="pendingAdd"
-          :audio="audio"
-          @add="add"
-          @setStateAudioAtPlaylist="setStateAudioAtPlaylist"
-        />
+          text-button="Добавить"
+          @sendReq="add"
+        >
+          <template v-slot:additionalField>
+            <div class="form__field">
+              <h4 class="playlist__form-title form__field-title">Список аудио</h4>
+              <div class="form__data">
+                <main class="form__data-main">
+                  <ul class="list-audio-column">
+                    <vAudio
+                      v-for="(song, index) in audio"
+                      :key="index"
+                      :is-remove="song.have"
+                      :audio="song"
+                      @setActiveAudio="$store.dispatch('audio/setActionForAudio', song)"
+                      @remove="setStateAudioAtPlaylist(song)"
+                    />
+                  </ul>
+                </main>
+              </div>
+            </div>
+          </template>
+        </vForm>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import vAddPlaylistForm from "@/components/vAddPlaylistForm";
+  import vAudio from "@/components/vAudio";
+  import vForm from "@/components/vForm";
 
   export default {
     name: "AddPlaylistPage",
-    components: { vAddPlaylistForm, },
+    components: {
+      vAudio,
+      vForm,
+    },
     layout: "default",
     // Gets all of the user's audio, including favorites
     async asyncData({ store, }) {
@@ -64,12 +89,34 @@
       }
     },
     data() {
-      return { pendingAdd: false, };
+      return {
+        fields: {
+          name: {
+            title: "Название",
+            placeholder: "Написать название",
+            matchRegexpStr: "^.{4,25}$",
+            type: "text",
+            required: true,
+          },
+          poster: {
+            title: "Загрузить постер",
+            accept: ["image/jpeg", "image/png", "image/jpg", "image/webp"],
+            type: "file",
+            typeFile: "img",
+            isPoster: true,
+            required: true,
+          },
+        },
+        pendingAdd: false,
+      };
     },
     head: { title: "Добавление плейлиста", },
     computed: {
       getToken() {
         return this.$store.getters["auth/getToken"];
+      },
+      getAddedSongsId() {
+        return this.audio.filter(({ have, }) => have).map(({ id, }) => id);
       },
     },
     methods: {
@@ -87,10 +134,27 @@
        * @param {object} data playlist we want to add
        */
       add(data) {
+        if (!Object.keys(this.fields).every((key) => key in data) || !this.getAddedSongsId.length) {
+          alert("Все поля должны быть заполнены правильно");
+          return;
+        }
+
         const fd = new FormData();
         const token = this.getToken;
+        const playlistData = {
+          ...data,
+          audio: JSON.stringify(this.getAddedSongsId),
+        };
 
-        Object.keys(data).map((key) => fd.append(key, data[key]));
+        Object.keys(playlistData).map((key) => {
+          const item = playlistData[key];
+
+          if (typeof item === "string") {
+            fd.append(key, item);
+          } else {
+            fd.append(key, item["file" in item ? "file" : "model"]);
+          }
+        });
         
         const res = this.$store.dispatch("playlist/add", { token, fd, });
 
