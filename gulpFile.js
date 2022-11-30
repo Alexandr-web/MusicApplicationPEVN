@@ -9,6 +9,7 @@ const paths = {
   scss: {
     from: ["./static/scss/*.scss", "!./static/scss/_*.scss"],
     to: "./static/css/",
+    watchSrc: "./static/scss/**/*.scss",
   },
 };
 
@@ -23,7 +24,7 @@ const styles = () => {
 };
 
 const watching = () => {
-  watch(paths.scss.from, parallel(styles));
+  watch(paths.scss.watchSrc, parallel(styles));
 };
 
 const buildFunc = () => parallel(styles);

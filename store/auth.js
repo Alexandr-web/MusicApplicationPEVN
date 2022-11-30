@@ -30,7 +30,7 @@ export default {
      */
     async registration({ }, fd) {
       try {
-        const res = await fetch(`${host}/auth/registration`, {
+        const res = await fetch(`${host}/api/auth/registration`, {
           method: "POST",
           headers: { "Accept-Type": "application/json", },
           body: fd,
@@ -49,7 +49,7 @@ export default {
      */
     async login({ commit, }, fd) {
       try {
-        const res = await fetch(`${host}/auth/login`, {
+        const res = await fetch(`${host}/api/auth/login`, {
           method: "POST",
           headers: {
             "Accept-Type": "application/json",

@@ -15,6 +15,28 @@ export default {
   getters: { getPlaylist: (state) => state.playlist, },
   actions: {
     /**
+     * Gets data to change the playlist
+     * @param {string|number} playlistId Playlist id
+     * @param {string} token User token
+     * @returns {promise} Request result
+     */
+    async getDataForEditPlaylist({ }, { playlistId, token, }) {
+      try {
+        const res = await fetch(`${host}/api/playlist/${playlistId}/edit`, {
+          method: "GET",
+          headers: {
+            "Accept-Type": "application/json",
+            Authorization: `Bearer ${token || ""}`,
+          },
+        });
+
+        return res.json();
+      } catch (err) {
+        throw err;
+      }
+    },
+
+    /**
      * Gets a playlist by id
      * @param {string} token User token
      * @param {string|number} playlistId Playlist id
@@ -22,7 +44,7 @@ export default {
      */
     async getOne({ }, { token, playlistId, }) {
       try {
-        const res = await fetch(`${host}/playlist/api/${playlistId}`, {
+        const res = await fetch(`${host}/api/playlist/${playlistId}`, {
           method: "GET",
           headers: {
             "Accept-Type": "application/json",
@@ -43,7 +65,7 @@ export default {
      */
     async getAll({ }, { token, }) {
       try {
-        const res = await fetch(`${host}/playlist/api`, {
+        const res = await fetch(`${host}/api/playlist`, {
           method: "GET",
           headers: {
             "Accept-Type": "application/json",
@@ -65,7 +87,7 @@ export default {
      */
     async add({ }, { token, fd, }) {
       try {
-        const res = await fetch(`${host}/playlist/add`, {
+        const res = await fetch(`${host}/api/playlist/add`, {
           method: "POST",
           headers: {
             "Accept-Type": "application/json",
@@ -87,7 +109,7 @@ export default {
      */
     async getAudio({ }, { playlistId, }) {
       try {
-        const res = await fetch(`${host}/playlist/api/${playlistId}/audio`, {
+        const res = await fetch(`${host}/api/playlist/${playlistId}/audio`, {
           method: "GET",
           headers: { "Accept-Type": "application/json", },
         });
@@ -106,7 +128,7 @@ export default {
      */
     async remove({ }, { playlistId, token, }) {
       try {
-        const res = await fetch(`${host}/playlist/${playlistId}/remove`, {
+        const res = await fetch(`${host}/api/playlist/${playlistId}/remove`, {
           method: "DELETE",
           headers: {
             "Accept-Type": "application/json",
@@ -130,7 +152,7 @@ export default {
      */
     async edit({ }, { token, playlistId, fd, }) {
       try {
-        const res = await fetch(`${host}/playlist/edit/${playlistId}`, {
+        const res = await fetch(`${host}/api/playlist/${playlistId}/edit`, {
           method: "PUT",
           headers: {
             "Accept-Type": "application/json",

@@ -16,7 +16,7 @@ export default async ({ store, redirect, }) => {
     }
 
     const data = jwtDecode(token);
-    const res = await store.dispatch("profile/getOne", data.dataValues.id);
+    const res = await store.dispatch("profile/getOne", data.id);
 
     if (!res.user) {
       store.commit("auth/clearToken");
@@ -24,7 +24,7 @@ export default async ({ store, redirect, }) => {
       return redirect("/auth/login");
     }
 
-    const { id, } = data.dataValues;
+    const { id, } = data;
     const { ok, user, } = await store.dispatch("profile/getOne", id);
 
     if (ok) {

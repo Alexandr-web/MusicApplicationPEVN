@@ -5,24 +5,6 @@ const removeFile = require("../removeFile");
 const { Op, } = require("sequelize");
 
 class Audio {
-  // Gets a audio by his id from the database
-  async getOne(req, res) {
-    try {
-      if (!req.isAuth) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
-      }
-
-      const { id, } = req.params;
-      const song = await Song.findOne({ where: { id, }, });
-
-      return res.status(200).json({ ok: true, song, });
-    } catch (err) {
-      console.log(err);
-
-      return res.status(500).json({ ok: false, message: "Произошла ошибка сервера", });
-    }
-  }
-
   // Gets all audios from the database
   async getAll(req, res) {
     try {
@@ -71,8 +53,7 @@ class Audio {
         return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
-      const { id: playlistId, } = req.params;
-      const { audioId, } = req.body;
+      const { playlistId, id: audioId, } = req.params;
       const playlist = await Playlist.findOne({ where: { id: playlistId, }, });
       const audio = await Song.findOne({ where: { id: audioId, }, });
 

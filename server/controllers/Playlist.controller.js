@@ -3,6 +3,37 @@ const Song = require("../models/Song");
 const removeFile = require("../removeFile");
 
 class Playlist {
+  // Getting data to edit a playlist
+  async getDataForEditPlaylist(req, res) {
+    try {
+      if (!req.isAuth) {
+        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+      }
+
+      const { id, } = req.params;
+      const playlist = await ModelPlaylist.findOne({ where: { id, }, });
+
+      if (!playlist) {
+        return res.status(404).json({ ok: false, message: "Данного плейлиста не существует", });
+      }
+
+      if (req.userId !== playlist.userId) {
+        return res.status(403).json({ ok: false, message: "У вас нет доступа для получения данных другого пользователя", });
+      }
+
+      const allAudio = await Song.findAll();
+      const filterAudio = allAudio
+        .filter((audio) => audio.userId === req.userId || audio.likes.includes(req.userId) || playlist.audio.includes(audio.id))
+        .map((audio) => ({ ...audio.dataValues, have: playlist.audio.includes(audio.id), }));
+
+      return res.status(200).json({ ok: true, audio: filterAudio, playlist, });
+    } catch (err) {
+      console.log(err);
+
+      return res.status(500).json({ ok: false, message: "Произошла ошибка сервера", });
+    }
+  }
+
   // Getting a playlist by its id
   async getOne(req, res) {
     try {

@@ -24,7 +24,7 @@ export default {
      */
     async edit({ }, { fd, userId, token, }) {
       try {
-        const res = await fetch(`${host}/profile/edit/${userId}`, {
+        const res = await fetch(`${host}/api/profile/${userId}/edit`, {
           method: "PUT",
           headers: {
             "Accept-Type": "application/json",
@@ -47,7 +47,7 @@ export default {
      */
     async getAudio({ }, { userId, token, }) {
       try {
-        const res = await fetch(`${host}/profile/api/${userId}/audio`, {
+        const res = await fetch(`${host}/api/profile/${userId}/audio`, {
           method: "GET",
           headers: {
             "Accept-Type": "application/json",
@@ -69,29 +69,7 @@ export default {
      */
     async getPlaylists({ }, { userId, token, }) {
       try {
-        const res = await fetch(`${host}/profile/api/${userId}/playlists`, {
-          method: "GET",
-          headers: {
-            "Accept-Type": "application/json",
-            Authorization: `Bearer ${token || ""}`,
-          },
-        });
-
-        return res.json();
-      } catch (err) {
-        throw err;
-      }
-    },
-
-    /**
-     * Gets data to change the playlist
-     * @param {string|number} playlistId Playlist id
-     * @param {string} token User token
-     * @returns {promise} Request result
-     */
-    async getDataForEditPlaylist({ }, { playlistId, token, }) {
-      try {
-        const res = await fetch(`${host}/profile/api/edit/playlist/${playlistId}`, {
+        const res = await fetch(`${host}/api/profile/${userId}/playlists`, {
           method: "GET",
           headers: {
             "Accept-Type": "application/json",
@@ -113,7 +91,7 @@ export default {
      */
     async getAudioAndFavorite({ }, { userId, token, }) {
       try {
-        const res = await fetch(`${host}/profile/api/${userId}/audio?favorite=true`, {
+        const res = await fetch(`${host}/api/profile/${userId}/audio?favorite=true`, {
           method: "GET",
           headers: {
             "Accept-Type": "application/json",
@@ -135,7 +113,7 @@ export default {
     async getOne({ }, id) {
       try {
         const sendReq = async (userId) => {
-          const res = await fetch(`${host}/profile/api/${userId}`, {
+          const res = await fetch(`${host}/api/profile/${userId}`, {
             method: "GET",
             headers: { "Accept-Type": "application/json", },
           });
@@ -152,7 +130,7 @@ export default {
         const res = jwtDecode(findToken.token);
 
         if (Object.keys(res).length) {
-          return sendReq(res.dataValues.id);
+          return sendReq(res.id);
         }
 
         return {};
@@ -169,7 +147,7 @@ export default {
      */
     async getFavorites({ }, { token, id, }) {
       try {
-        const res = await fetch(`${host}/profile/api/${id}/favorites`, {
+        const res = await fetch(`${host}/api/profile/${id}/favorites`, {
           method: "GET",
           headers: {
             "Accept-Type": "application/json",

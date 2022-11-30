@@ -67,7 +67,7 @@
     async asyncData({ store, params: { id: playlistId, }, }) {
       try {
         const token = store.getters["auth/getToken"];
-        const { ok, audio, playlist, } = await store.dispatch("profile/getDataForEditPlaylist", { token, playlistId, });
+        const { ok, audio, playlist, } = await store.dispatch("playlist/getDataForEditPlaylist", { token, playlistId, });
 
         if (!ok) {
           return {

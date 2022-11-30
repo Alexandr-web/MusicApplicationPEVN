@@ -14,11 +14,11 @@ module.exports = async (req, res, next) => {
       const token = /^Bearer\s/.test(auth) ? auth.replace(/^Bearer\s/, "") : "";
 
       if (token) {
-        const { dataValues, } = await jwtDecode(token);
-        const candidate = await User.findOne({ where: { id: dataValues.id, }, });
+        const dataToken = await jwtDecode(token);
+        const candidate = await User.findOne({ where: { id: dataToken.id, }, });
 
         req.isAuth = Boolean(candidate);
-        req.userId = dataValues.id;
+        req.userId = dataToken.id;
       } else {
         req.isAuth = false;
       }

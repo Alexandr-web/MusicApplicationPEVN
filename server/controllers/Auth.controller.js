@@ -52,7 +52,14 @@ class Auth {
         return res.status(400).json({ ok: false, message: "Неверный пароль", });
       }
 
-      const token = jwt.sign({ ...candidate, }, process.env.SECRET_KEY, { expiresIn: Math.floor(Date.now() / 1000) + (60 * 60), });
+      const candidateDataExpectPassword = Object
+        .keys(candidate.dataValues)
+        .filter((key) => key !== "password")
+        .reduce((acc, key) => {
+          acc[key] = candidate.dataValues[key];
+          return acc;
+        }, {});
+      const token = jwt.sign(candidateDataExpectPassword, process.env.SECRET_KEY, { expiresIn: Math.floor(Date.now() / 1000) + (60 * 60), });
 
       return res.status(200).json({ ok: true, message: "Вход выполнен успешно", token: `Bearer ${token}`, });
     } catch (err) {

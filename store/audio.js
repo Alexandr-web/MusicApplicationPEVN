@@ -88,7 +88,7 @@ export default {
      */
     async add({ }, { token, fd, }) {
       try {
-        const res = await fetch(`${host}/audio/add`, {
+        const res = await fetch(`${host}/api/audio/add`, {
           method: "POST",
           headers: {
             "Accept-Type": "application/json",
@@ -112,14 +112,13 @@ export default {
      */
     async addToPlaylist({ }, { token, audioId, playlistId, }) {
       try {
-        const res = await fetch(`${host}/audio/add/playlist/${playlistId}`, {
+        const res = await fetch(`${host}/api/audio/${audioId}/add/playlist/${playlistId}`, {
           method: "POST",
           headers: {
             "Accept-Type": "application/json",
             "Content-Type": "application/json",
             Authorization: `Bearer ${token || ""}`,
           },
-          body: JSON.stringify({ audioId, }),
         });
 
         return res.json();
@@ -136,7 +135,7 @@ export default {
      */
     async remove({ }, { token, audioId, }) {
       try {
-        const res = await fetch(`${host}/audio/${audioId}/remove`, {
+        const res = await fetch(`${host}/api/audio/${audioId}/remove`, {
           method: "DELETE",
           headers: {
             "Accept-Type": "application/json",
@@ -159,7 +158,7 @@ export default {
      */
     async setFavorite({ }, { token, audioId, }) {
       try {
-        const res = await fetch(`${host}/audio/${audioId}/favorite`, {
+        const res = await fetch(`${host}/api/audio/${audioId}/favorite`, {
           method: "POST",
           headers: {
             "Accept-Type": "application/json",
@@ -181,7 +180,7 @@ export default {
      */
     async getAll({ }, { token, }) {
       try {
-        const res = await fetch(`${host}/audio/api`, {
+        const res = await fetch(`${host}/api/audio`, {
           method: "GET",
           headers: {
             "Accept-Type": "application/json",

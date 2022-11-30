@@ -14,10 +14,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage, });
 
-router.get("/api", isAuth, AudioController.getAll);
-router.get("/api/:id", isAuth, AudioController.getOne);
+router.get("/", isAuth, AudioController.getAll);
 router.post("/add", isAuth, upload.fields([{ name: "audio", maxCount: 1, }, { name: "poster", maxCount: 1, }]), AudioController.add);
-router.post("/add/playlist/:id", isAuth, AudioController.addToPlaylist);
+router.post("/:id/add/playlist/:playlistId", isAuth, AudioController.addToPlaylist);
 router.post("/:id/favorite", isAuth, AudioController.setFavorite);
 router.delete("/:id/remove", isAuth, AudioController.remove);
 

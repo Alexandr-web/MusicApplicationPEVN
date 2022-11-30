@@ -30,9 +30,9 @@ const connectToDatabase = async () => {
 
 connectToDatabase();
 
-app.use("/auth", authRoute);
-app.use("/profile", profileRoute);
-app.use("/audio", audioRoute);
-app.use("/playlist", playlistRoute);
+app.use("/api/auth", authRoute);
+app.use("/api/profile", profileRoute);
+app.use("/api/audio", audioRoute);
+app.use("/api/playlist", playlistRoute);
 
 module.exports = app;

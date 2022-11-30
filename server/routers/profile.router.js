@@ -14,12 +14,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage, });
 
-router.put("/edit/:id", isAuth, upload.single("avatar"), ProfileController.edit);
-router.get("/api/:id/audio", isAuth, ProfileController.getAudio);
-router.get("/api/:id/playlists", isAuth, ProfileController.getPlaylists);
-router.get("/api/edit/playlist/:playlistId", isAuth, ProfileController.getDataForEditPlaylist);
-router.get("/api/", ProfileController.getAll);
-router.get("/api/:id", ProfileController.getOne);
-router.get("/api/:id/favorites", isAuth, ProfileController.getFavorites);
+router.put("/:id/edit/", isAuth, upload.single("avatar"), ProfileController.edit);
+router.get("/:id/audio", isAuth, ProfileController.getAudio);
+router.get("/:id/playlists", isAuth, ProfileController.getPlaylists);
+router.get("/:id", ProfileController.getOne);
+router.get("/:id/favorites", isAuth, ProfileController.getFavorites);
 
 module.exports = router;
