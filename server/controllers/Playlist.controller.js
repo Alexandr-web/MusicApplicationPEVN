@@ -11,6 +11,11 @@ class Playlist {
       }
 
       const { id, } = req.params;
+
+      if (!id || isNaN(+id)) {
+        return res.status(400).json({ ok: false, message: "Некорректные данные", });
+      }
+
       const playlist = await ModelPlaylist.findOne({ where: { id, }, });
 
       if (!playlist) {
@@ -42,6 +47,11 @@ class Playlist {
       }
 
       const { id, } = req.params;
+
+      if (!id || isNaN(+id)) {
+        return res.status(400).json({ ok: false, message: "Некорректные данные", });
+      }
+
       const playlist = await ModelPlaylist.findOne({ where: { id, }, });
 
       return res.status(200).json({ ok: true, playlist, });
@@ -76,10 +86,18 @@ class Playlist {
         return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
-      const playlistData = { ...req.body, userId: req.userId, };
+      const body = req.body;
+      const keysBody = Object.keys(body);
+      const requiredData = ["name", "poster", "audio"];
+
+      if (!keysBody.length || !keysBody.every((key) => requiredData.includes(key))) {
+        return res.status(400).json({ ok: false, message: "Некорректные данные", });
+      }
+
+      const playlistData = { ...body, userId: req.userId, };
       const songs = await Song.findAll();
 
-      playlistData.audio = songs.filter(({ id, }) => req.body.audio.includes(id)).map(({ id, }) => id);
+      playlistData.audio = songs.filter(({ id, }) => body.audio.includes(id)).map(({ id, }) => id);
 
       if (req.file) {
         playlistData.poster = req.file.filename;
@@ -99,6 +117,11 @@ class Playlist {
   async getAudio(req, res) {
     try {
       const { id, } = req.params;
+
+      if (!id || isNaN(+id)) {
+        return res.status(400).json({ ok: false, message: "Некорректные данные", });
+      }
+
       const songs = await Song.findAll();
       const playlist = await ModelPlaylist.findOne({ where: { id, }, });
 
@@ -124,6 +147,11 @@ class Playlist {
       }
 
       const { id, } = req.params;
+
+      if (!id || isNaN(+id)) {
+        return res.status(400).json({ ok: false, message: "Некорректные данные", });
+      }
+
       const playlist = await ModelPlaylist.findOne({ where: { id, }, });
 
       if (!playlist) {
@@ -154,6 +182,14 @@ class Playlist {
       }
 
       const { id: playlistId, } = req.params;
+      const body = req.body;
+      const keysBody = Object.keys(body);
+      const requiredData = ["name", "poster", "audio"];
+
+      if ([!playlistId, isNaN(+playlistId), !keysBody.length, !keysBody.some((key) => requiredData.includes(key))].some(Boolean)) {
+        return res.status(400).json({ ok: false, message: "Некорректные данные", });
+      }
+
       const playlist = await ModelPlaylist.findOne({ where: { id: playlistId, }, });
 
       if (!playlist) {
@@ -164,8 +200,8 @@ class Playlist {
         return res.status(403).json({ ok: false, message: "У вас нет доступа для изменения этого плейлиста", });
       }
 
-      const { audio, } = req.body;
-      const updates = req.body;
+      const updates = body;
+      const { audio, } = updates;
 
       if (req.file) {
         updates.poster = req.file.filename;

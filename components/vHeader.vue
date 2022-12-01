@@ -13,9 +13,6 @@
               :src="getUser.avatar"
             >
           </div>
-          <h4 class="header__user-name">
-            {{ getUser.name }}
-          </h4>
         </nuxt-link>
       </div>
     </nav>

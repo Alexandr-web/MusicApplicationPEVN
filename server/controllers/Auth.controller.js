@@ -6,10 +6,18 @@ class Auth {
   // Registers a user in the system
   async registration(req, res) {
     try {
-      const { password, email, name, } = req.body;
-      const userData = Object.keys(req.body).reduce((acc, key) => {
+      const body = req.body;
+      const requiredData = ["name", "password", "avatar", "email"];
+      const keysBody = Object.keys(body);
+
+      if (!keysBody.length || !keysBody.every((key) => requiredData.includes(key))) {
+        return res.status(400).json({ ok: false, message: "Некорректные данные", });
+      }
+
+      const { password, email, name, } = body;
+      const userData = Object.keys(body).reduce((acc, key) => {
         if (!["password", "avatar"].includes(key)) {
-          acc[key] = req.body[key];
+          acc[key] = body[key];
         }
 
         return acc;
@@ -39,7 +47,15 @@ class Auth {
   // Authorizes the user
   async login(req, res) {
     try {
-      const { email, password, } = req.body;
+      const body = req.body;
+      const requiredData = ["email", "password"];
+      const keysBody = Object.keys(body);
+
+      if (!keysBody.length || !keysBody.every((key) => requiredData.includes(key))) {
+        return res.status(400).json({ ok: false, message: "Некорректные данные", });
+      }
+
+      const { email, password, } = body;
       const candidate = await User.findOne({ where: { email, }, });
 
       if (!candidate) {
@@ -52,14 +68,14 @@ class Auth {
         return res.status(400).json({ ok: false, message: "Неверный пароль", });
       }
 
-      const candidateDataExpectPassword = Object
+      const candidateDataExceptPassword = Object
         .keys(candidate.dataValues)
         .filter((key) => key !== "password")
         .reduce((acc, key) => {
           acc[key] = candidate.dataValues[key];
           return acc;
         }, {});
-      const token = jwt.sign(candidateDataExpectPassword, process.env.SECRET_KEY, { expiresIn: Math.floor(Date.now() / 1000) + (60 * 60), });
+      const token = jwt.sign(candidateDataExceptPassword, process.env.SECRET_KEY, { expiresIn: Math.floor(Date.now() / 1000) + (60 * 60), });
 
       return res.status(200).json({ ok: true, message: "Вход выполнен успешно", token: `Bearer ${token}`, });
     } catch (err) {

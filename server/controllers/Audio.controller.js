@@ -29,8 +29,16 @@ class Audio {
         return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
+      const body = req.body;
+      const requiredData = ["name", "author", "audio", "poster", "time", "duration"];
+      const bodyKeys = Object.keys(body);
+
+      if (!bodyKeys.length || !bodyKeys.every((key) => requiredData.includes(key))) {
+        return res.status(400).json({ ok: false, message: "Некорректные данные", });
+      }
+
       const user = await User.findOne({ where: { id: req.userId, }, });
-      const audioData = { ...req.body, author: user.name, userId: req.userId, };
+      const audioData = { ...body, author: user.name, userId: req.userId, };
 
       if (req.files) {
         Object.keys(req.files).map((key) => audioData[key] = req.files[key][0].filename);
@@ -54,6 +62,11 @@ class Audio {
       }
 
       const { playlistId, id: audioId, } = req.params;
+
+      if ([!playlistId, !audioId, isNaN(+playlistId), isNaN(+audioId)].some(Boolean)) {
+        return res.status(400).json({ ok: false, message: "Некорректные данные", });
+      }
+
       const playlist = await Playlist.findOne({ where: { id: playlistId, }, });
       const audio = await Song.findOne({ where: { id: audioId, }, });
 
@@ -93,6 +106,11 @@ class Audio {
       }
 
       const { id: audioId, } = req.params;
+
+      if (!audioId || isNaN(+audioId)) {
+        return res.status(400).json({ ok: false, message: "Некорректные данные", });
+      }
+
       const song = await Song.findOne({ where: { id: audioId, }, });
 
       if (!song) {
@@ -138,6 +156,11 @@ class Audio {
       }
 
       const { id: audioId, } = req.params;
+
+      if (!audioId || isNaN(+audioId)) {
+        return res.status(400).json({ ok: false, message: "Некорректные данные", });
+      }
+
       const audio = await Song.findOne({ where: { id: audioId, }, });
 
       if (!audio) {

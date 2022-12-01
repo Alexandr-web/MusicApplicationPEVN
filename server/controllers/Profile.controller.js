@@ -14,6 +14,14 @@ class Profile {
       }
 
       const { id, } = req.params;
+      const body = req.body;
+      const keysBody = Object.keys(body);
+      const requiredData = ["name", "password", "avatar", "email"];
+
+      if ([!id, isNaN(+id), !keysBody.length, !keysBody.some((key) => requiredData.includes(key))].some(Boolean)) {
+        return res.status(400).json({ ok: false, message: "Некорректные данные", });
+      }
+
       const candidate = await User.findOne({ where: { id, }, });
 
       // This is where the data that needs to be changed will be stored.
@@ -30,8 +38,8 @@ class Profile {
       const allAudio = await Song.findAll();
       const userAudio = allAudio.filter(({ userId, }) => userId === parseInt(id));
 
-      Object.keys(req.body).map(async (key) => {
-        updates[key] = key !== "password" ? req.body[key] : await bcrypt.hash(req.body[key], 7);
+      keysBody.map(async (key) => {
+        updates[key] = key !== "password" ? body[key] : await bcrypt.hash(body[key], 7);
       });
 
       // Check for originality
@@ -69,6 +77,11 @@ class Profile {
   async getAudio(req, res) {
     try {
       const { id, } = req.params;
+
+      if (!id || isNaN(+id)) {
+        return res.status(400).json({ ok: false, message: "Некорректные данные", });
+      }
+
       const { favorite, } = req.query;
 
       if (!req.isAuth) {
@@ -111,6 +124,10 @@ class Profile {
     try {
       const { id, } = req.params;
 
+      if (!id || isNaN(+id)) {
+        return res.status(400).json({ ok: false, message: "Некорректные данные", });
+      }
+
       if (!req.isAuth) {
         return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
@@ -133,6 +150,11 @@ class Profile {
   async getOne(req, res) {
     try {
       const { id, } = req.params;
+
+      if (!id || isNaN(+id)) {
+        return res.status(400).json({ ok: false, message: "Некорректные данные", });
+      }
+
       const user = await User.findOne({ where: { id, }, });
 
       return res.status(200).json({ ok: true, user, });
@@ -151,6 +173,11 @@ class Profile {
       }
 
       const { id, } = req.params;
+
+      if (!id || isNaN(+id)) {
+        return res.status(400).json({ ok: false, message: "Некорректные данные", });
+      }
+
       const user = await User.findOne({ where: { id, }, });
 
       if (!user) {

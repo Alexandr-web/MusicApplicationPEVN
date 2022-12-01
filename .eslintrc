@@ -91,6 +91,7 @@
     "dot-notation": "off",
     "vue/multiline-html-element-content-newline": "off",
     "vue/v-slot-style": "off",
-    "vue/singleline-html-element-content-newline": "off"
+    "vue/singleline-html-element-content-newline": "off",
+    "no-restricted-globals": "off"
   }
 }

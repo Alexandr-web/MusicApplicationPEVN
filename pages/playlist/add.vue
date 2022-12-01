@@ -1,11 +1,9 @@
 <template>
   <div class="gaps-t-b playlist">
     <div class="container">
-      <div
-        v-if="(audio || []).length"
-        class="playlist__inner"
-      >
+      <div class="playlist__inner">
         <vForm
+          v-if="(audio || []).length"
           :classes="['playlist__form']"
           :fields="fields"
           :pending="pendingAdd"
@@ -32,6 +30,15 @@
             </div>
           </template>
         </vForm>
+        <vNothing
+          v-else
+          text="Нет аудио для создания плейлиста"
+          :gaps="true"
+          :link="{
+            to: '/audio/add',
+            text: 'Добавить',
+          }"
+        />
       </div>
     </div>
   </div>
@@ -40,12 +47,14 @@
 <script>
   import vAudio from "@/components/vAudio";
   import vForm from "@/components/vForm";
+  import vNothing from "@/components/vNothing";
 
   export default {
     name: "AddPlaylistPage",
     components: {
       vAudio,
       vForm,
+      vNothing,
     },
     layout: "default",
     // Gets all of the user's audio, including favorites

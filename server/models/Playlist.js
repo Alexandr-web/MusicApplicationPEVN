@@ -2,8 +2,14 @@ const sequelize = require("../db");
 const { DataTypes, } = require("sequelize");
 
 const Playlist = sequelize.define("playlist", {
-  name: { type: DataTypes.STRING, },
-  poster: { type: DataTypes.TEXT, },
+  name: {
+    type: DataTypes.STRING,
+    required: true,
+  },
+  poster: {
+    type: DataTypes.TEXT,
+    required: true,
+  },
   audio: {
     type: DataTypes.ARRAY(DataTypes.INTEGER),
     defaultValue: [],
