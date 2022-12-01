@@ -20,10 +20,17 @@
     layout: "default",
     // Checking if the user exists
     validate({ params: { id, }, store, query: { tab, }, }) {
+      if (!id || isNaN(+id)) {
+        return false;
+      }
+
       const res = store.dispatch("profile/getOne", id);
+      const currentUser = store.getters["profile/getUser"];
 
       return res.then(({ ok, user, }) => {
-        return [ok, user, ["settings", "audio", "playlists", "favorite"].includes(tab)].every(Boolean);
+        const isGuest = (user || {}).id !== currentUser.id;
+
+        return [ok, user, !isGuest, ["settings", "audio", "playlists", "favorite"].includes(tab)].every(Boolean);
       }).catch((err) => {
         throw err;
       });
