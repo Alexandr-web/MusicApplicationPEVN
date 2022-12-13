@@ -18,12 +18,26 @@ const upload = multer({ storage, });
 const addLimit = rateLimit({
   windowMs: 30 * 60 * 1000,
   max: 30,
-  message: "Слишком много попыток добавления аудио. Повторите еще раз через 30 минут",
+  message: (req, res) => {
+    return res.status(429).json({
+      status: 429,
+      message: "Слишком много попыток добавления аудио. Повторите еще раз через 30 минут",
+      type: "error",
+      ok: false,
+    });
+  },
 });
 const removeLimit = rateLimit({
   windowMs: 30 * 60 * 1000,
   max: 10,
-  message: "Слишком много попыток удаления аудио. Повторите еще раз через 30 минут",
+  message: (req, res) => {
+    return res.status(429).json({
+      status: 429,
+      message: "Слишком много попыток удаления аудио. Повторите еще раз через 30 минут",
+      type: "error",
+      ok: false,
+    });
+  },
 });
 
 router.get("/", serverIsTooBusy, isAuth, AudioController.getAll);

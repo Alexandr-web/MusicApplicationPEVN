@@ -18,7 +18,14 @@ const upload = multer({ storage, });
 const editLimit = rateLimit({
   windowMs: 30 * 60 * 1000,
   max: 5,
-  message: "Слишком много попыток изменения данных пользователя. Повторите еще раз через 30 минут",
+  message: (req, res) => {
+    return res.status(429).json({
+      status: 429,
+      message: "Слишком много попыток изменения данных пользователя. Повторите еще раз через 30 минут",
+      type: "error",
+      ok: false,
+    });
+  },
 });
 
 router.put("/:id/edit/", editLimit, serverIsTooBusy, isAuth, upload.single("avatar"), ProfileController.edit);

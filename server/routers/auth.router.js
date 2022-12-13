@@ -17,12 +17,26 @@ const upload = multer({ storage, });
 const registrationLimit = rateLimit({
   windowMs: 60 * 60 * 1000,
   max: 10,
-  message: "Слишком много попыток регистрации. Повторите еще раз через 1 час",
+  message: (req, res) => {
+    return res.status(429).json({
+      status: 429,
+      message: "Слишком много попыток регистрации. Повторите еще раз через 1 час",
+      type: "error",
+      ok: false,
+    });
+  },
 });
 const loginLimit = rateLimit({
   windowMs: 30 * 60 * 1000,
   max: 10,
-  message: "Слишком много попыток входа. Повторите еще раз через 30 минут",
+  message: (req, res) => {
+    return res.status(429).json({
+      status: 429,
+      message: "Слишком много попыток входа. Повторите еще раз через 30 минут",
+      type: "error",
+      ok: false,
+    });
+  },
 });
 
 router.post("/registration", registrationLimit, serverIsTooBusy, upload.single("avatar"), AuthController.registration);

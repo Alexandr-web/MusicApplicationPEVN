@@ -18,17 +18,38 @@ const upload = multer({ storage, });
 const addLimit = rateLimit({
   windowMs: 30 * 60 * 1000,
   max: 10,
-  message: "Слишком много попыток добавления плейлиста. Повторите еще раз через 30 минут",
+  message: (req, res) => {
+    return res.status(429).json({
+      status: 429,
+      message: "Слишком много попыток добавления плейлиста. Повторите еще раз через 30 минут",
+      type: "error",
+      ok: false,
+    });
+  },
 });
 const editLimit = rateLimit({
   windowMs: 30 * 60 * 1000,
   max: 5,
-  message: "Слишком много попыток изменения плейлиста. Повторите еще раз через 30 минут",
+  message: (req, res) => {
+    return res.status(429).json({
+      status: 429,
+      message: "Слишком много попыток изменения плейлиста. Повторите еще раз через 30 минут",
+      type: "error",
+      ok: false,
+    });
+  },
 });
 const removeLimit = rateLimit({
   windowMs: 30 * 60 * 1000,
   max: 5,
-  message: "Слишком много попыток удаления плейлиста. Повторите еще раз через 30 минут",
+  message: (req, res) => {
+    return res.status(429).json({
+      status: 429,
+      message: "Слишком много попыток удаления плейлиста. Повторите еще раз через 30 минут",
+      type: "error",
+      ok: false,
+    });
+  },
 });
 
 router.get("/:id", serverIsTooBusy, isAuth, PlaylistController.getOne);
