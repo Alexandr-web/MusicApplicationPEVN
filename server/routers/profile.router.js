@@ -3,6 +3,8 @@ const isAuth = require("../middleware/isAuth");
 const router = express.Router();
 const ProfileController = require("../controllers/Profile.controller");
 const multer = require("multer");
+const serverIsTooBusy = require("../middleware/serverIsTooBusy");
+const rateLimit = require("express-rate-limit");
 const storage = multer.diskStorage({
   destination(req, file, cb) {
     cb(null, "avatars");
@@ -13,11 +15,16 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage, });
+const editLimit = rateLimit({
+  windowMs: 30 * 60 * 1000,
+  max: 5,
+  message: "Слишком много попыток изменения данных пользователя. Повторите еще раз через 30 минут",
+});
 
-router.put("/:id/edit/", isAuth, upload.single("avatar"), ProfileController.edit);
-router.get("/:id/audio", isAuth, ProfileController.getAudio);
-router.get("/:id/playlists", isAuth, ProfileController.getPlaylists);
-router.get("/:id", ProfileController.getOne);
-router.get("/:id/favorites", isAuth, ProfileController.getFavorites);
+router.put("/:id/edit/", editLimit, serverIsTooBusy, isAuth, upload.single("avatar"), ProfileController.edit);
+router.get("/:id/audio", serverIsTooBusy, isAuth, ProfileController.getAudio);
+router.get("/:id/playlists", serverIsTooBusy, isAuth, ProfileController.getPlaylists);
+router.get("/:id", serverIsTooBusy, ProfileController.getOne);
+router.get("/:id/favorites", serverIsTooBusy, isAuth, ProfileController.getFavorites);
 
 module.exports = router;

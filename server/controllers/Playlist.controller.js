@@ -7,7 +7,7 @@ class Playlist {
   async getDataForEditPlaylist(req, res) {
     try {
       if (!req.isAuth) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+        return res.status(401).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
       const { id, } = req.params;
@@ -43,7 +43,7 @@ class Playlist {
   async getOne(req, res) {
     try {
       if (!req.isAuth) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+        return res.status(401).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
       const { id, } = req.params;
@@ -66,7 +66,7 @@ class Playlist {
   async getAll(req, res) {
     try {
       if (!req.isAuth) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+        return res.status(401).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
       const playlists = await ModelPlaylist.findAll();
@@ -83,7 +83,7 @@ class Playlist {
   async add(req, res) {
     try {
       if (!req.isAuth) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+        return res.status(401).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
       const body = req.body;
@@ -143,7 +143,7 @@ class Playlist {
   async remove(req, res) {
     try {
       if (!req.isAuth) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+        return res.status(401).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
       const { id, } = req.params;
@@ -178,7 +178,7 @@ class Playlist {
   async edit(req, res) {
     try {
       if (!req.isAuth) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+        return res.status(401).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
       const { id: playlistId, } = req.params;

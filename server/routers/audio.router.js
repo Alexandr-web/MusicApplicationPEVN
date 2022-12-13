@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const AudioController = require("../controllers/Audio.controller");
 const isAuth = require("../middleware/isAuth");
+const serverIsTooBusy = require("../middleware/serverIsTooBusy");
+const rateLimit = require("express-rate-limit");
 const multer = require("multer");
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -13,11 +15,21 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage, });
+const addLimit = rateLimit({
+  windowMs: 30 * 60 * 1000,
+  max: 30,
+  message: "Слишком много попыток добавления аудио. Повторите еще раз через 30 минут",
+});
+const removeLimit = rateLimit({
+  windowMs: 30 * 60 * 1000,
+  max: 10,
+  message: "Слишком много попыток удаления аудио. Повторите еще раз через 30 минут",
+});
 
-router.get("/", isAuth, AudioController.getAll);
-router.post("/add", isAuth, upload.fields([{ name: "audio", maxCount: 1, }, { name: "poster", maxCount: 1, }]), AudioController.add);
-router.post("/:id/add/playlist/:playlistId", isAuth, AudioController.addToPlaylist);
-router.post("/:id/favorite", isAuth, AudioController.setFavorite);
-router.delete("/:id/remove", isAuth, AudioController.remove);
+router.get("/", serverIsTooBusy, isAuth, AudioController.getAll);
+router.post("/add", addLimit, serverIsTooBusy, isAuth, upload.fields([{ name: "audio", maxCount: 1, }, { name: "poster", maxCount: 1, }]), AudioController.add);
+router.post("/:id/add/playlist/:playlistId", serverIsTooBusy, isAuth, AudioController.addToPlaylist);
+router.post("/:id/favorite", addLimit, serverIsTooBusy, isAuth, AudioController.setFavorite);
+router.delete("/:id/remove", removeLimit, serverIsTooBusy, isAuth, AudioController.remove);
 
 module.exports = router;

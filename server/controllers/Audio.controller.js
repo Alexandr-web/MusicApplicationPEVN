@@ -9,7 +9,7 @@ class Audio {
   async getAll(req, res) {
     try {
       if (!req.isAuth) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+        return res.status(401).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
       const songs = await Song.findAll();
@@ -26,7 +26,7 @@ class Audio {
   async add(req, res) {
     try {
       if (!req.isAuth) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+        return res.status(401).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
       const body = req.body;
@@ -58,7 +58,7 @@ class Audio {
   async addToPlaylist(req, res) {
     try {
       if (!req.isAuth) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+        return res.status(401).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
       const { playlistId, id: audioId, } = req.params;
@@ -102,7 +102,7 @@ class Audio {
   async remove(req, res) {
     try {
       if (!req.isAuth) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+        return res.status(401).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
       const { id: audioId, } = req.params;
@@ -152,7 +152,7 @@ class Audio {
   async setFavorite(req, res) {
     try {
       if (!req.isAuth) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+        return res.status(401).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
       const { id: audioId, } = req.params;

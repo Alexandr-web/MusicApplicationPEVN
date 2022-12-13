@@ -10,7 +10,7 @@ class Profile {
   async edit(req, res) {
     try {
       if (!req.isAuth) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+        return res.status(401).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
       const { id, } = req.params;
@@ -85,7 +85,7 @@ class Profile {
       const { favorite, } = req.query;
 
       if (!req.isAuth) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+        return res.status(401).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
       if (req.userId !== parseInt(id)) {
@@ -129,7 +129,7 @@ class Profile {
       }
 
       if (!req.isAuth) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+        return res.status(401).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
       if (req.userId !== +id) {
@@ -169,7 +169,7 @@ class Profile {
   async getFavorites(req, res) {
     try {
       if (!req.isAuth) {
-        return res.status(403).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
+        return res.status(401).json({ ok: false, message: "Для выполнения данной оперции нужно авторизоваться", });
       }
 
       const { id, } = req.params;
